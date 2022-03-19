@@ -1,5 +1,5 @@
-from   Logger import *
 import bluetooth
+from   Logger import *
 
 class BleServerComm:
     Uuid  = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
@@ -10,7 +10,6 @@ class BleServerComm:
         self.sock.listen                      (1)
         port      = self.sock.getsockname     ()[1]
 
-        
         bluetooth.advertise_service (self.sock,
                                      "BleServer",
                                      service_id      = self.Uuid,
