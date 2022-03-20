@@ -1,8 +1,8 @@
 import json
-#from   Settings import Settings
+from   Settings import Settings
 
 class BleParserAndSerializer:
-    def __init__ (self, vSettings):
+    def __init__ (self, vSettings: Settings):
         self.settings = vSettings
     
     def parse (self, vMsg):

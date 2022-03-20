@@ -29,6 +29,20 @@ class Task:
     def keyboardProcess (self):
         keyboard = Keyboard (self.rtos, self.settings, self.bleParserAndSerializer)
         LOGI                ("Enter message")
+    
+    def appProcess (self):
+        app = App (self.settings)
+        
+        try:
+            while True:
+                msg = self.rtos.getMsg ()
+                #LOGI (f"Received: {msg}")
+                self.bleParserAndSerializer.parse (msg)
+                app.process ()
+        except OSError:
+                pass
+        
+        LOGE ("Disconnected.")
 '''
     def bleServerProcess (self):
         bleServerComm = BleServerComm ()
@@ -46,15 +60,3 @@ class Task:
             
         LOGE ("Disconnected.")
 '''
-    def appProcess (self):
-        app = App (self.settings)
-        
-        try:
-            while True:
-                msg = self.rtos.getMsg ()
-                LOGI        (f"Received: {msg}")
-                app.process (msg)
-        except OSError:
-                pass
-            
-        LOGE ("Disconnected.")
