@@ -1,13 +1,14 @@
 import rcpy 
 import rcpy.motor as motor
-from   Logger   import *
-from   Settings import Settings
+from   Logger     import *
+from   Settings   import Settings
+
 class App:
-    def __init__(self, vSettings: Settings):
-        self.settings = vSettings
-        self.leftWheel  = Motor(1)
-        self.rightWheel = Motor(2)
-        rcpy.set_state(rcpy.RUNNING)
+    def __init__ (self, vSettings: Settings):
+        self.settings   = vSettings
+        self.leftWheel  = Motor (1)
+        self.rightWheel = Motor (2)
+        rcpy.set_state (rcpy.RUNNING)
     
     def update (self):
         self.validate ()
@@ -49,7 +50,7 @@ class App:
             LOGI ("Move right")
             self.settings.motors ["LeftWheel" ][0]["Duty"] = self.settings.motors ["LeftWheel" ][0]["Duty"] - 0.1
         else:
-            LOGE ("Stop")
+            LOGI ("Stop")
             self.settings.motors ["LeftWheel" ][0]["Duty"] = 0
             self.settings.motors ["RightWheel"][0]["Duty"] = 0
         

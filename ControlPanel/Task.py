@@ -29,7 +29,7 @@ class Task:
     
         while True:
             msg = self.rtos.getMsg ()
-            LOGI (f"Send: {msg}")
+            LOGI (f"Send: { msg }")
             bleClient.sock.send (msg)
         
         bleClient.sock.close()

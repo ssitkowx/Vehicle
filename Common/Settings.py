@@ -17,10 +17,3 @@ class Settings:
     motors    = { "LeftWheel"  : [{ "Duty" : 0 }, { "Brake" : False }, { "FreeSpin" : True }],
                   "RightWheel" : [{ "Duty" : 0 }, { "Brake" : False }, { "FreeSpin" : True }]
                 }
-
-if __name__ == '__main__':
-    motors    = { "LeftWheel"  : [{ "Duty" : 0 }, { "Brake" : False }, { "FreeSpin" : True }],
-                  "RightWheel" : [{ "Duty" : 0 }, { "Brake" : False }, { "FreeSpin" : True }]
-                }
-    motors ["LeftWheel"][0]["Duty"] = 34
-    print (motors ["LeftWheel"][0]["Duty"])

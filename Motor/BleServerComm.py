@@ -2,7 +2,7 @@ import bluetooth
 from   Logger import *
 
 class BleServerComm:
-    Uuid  = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
+    Uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
     
     def __init__ (self):
         self.sock = bluetooth.BluetoothSocket (bluetooth.RFCOMM)

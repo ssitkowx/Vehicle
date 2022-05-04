@@ -1,11 +1,10 @@
-from   Paths                  import *
-from   App                    import App
-from   Rtos                   import Rtos
-from   Logger                 import *
-from   Settings               import Settings
-from   Keyboard               import Keyboard
-from   BleServerComm          import BleServerComm
-from   BleParserAndSerializer import BleParserAndSerializer
+from Paths                  import *
+from App                    import App
+from Rtos                   import Rtos
+from Logger                 import *
+from Settings               import Settings
+from BleServerComm          import BleServerComm
+from BleParserAndSerializer import BleParserAndSerializer
 
 class Task:
     def __init__ (self):
@@ -13,39 +12,17 @@ class Task:
         self.settings               = Settings               ()
         self.bleParserAndSerializer = BleParserAndSerializer (self.settings)
         
-        keyboardThread = self.rtos.createThread (self.keyboardProcess)
-        keyboardThread .start ()
+        self.bleServerThread = self.rtos.createThread (self.bleServerProcess)
+        self.bleServerThread.start ()
         
-        #bleServerThread = self.rtos.createThread (self.bleServerProcess)
-        #bleServerThread.start ()
-        
-        appThread      = self.rtos.createThread (self.appProcess)
-        appThread      .start ()
+        self.appThread       = self.rtos.createThread (self.appProcess)
+        self.appThread      .start ()
     
-        keyboardThread .join  ()
-        #bleServerThread.join  ()
-        appThread      .join  ()
-        
-    def keyboardProcess (self):
-        keyboard = Keyboard (self.rtos, self.settings, self.bleParserAndSerializer)
-        LOGI                ("Enter message")
-    
-    def appProcess (self):
-        app = App (self.settings)
-        
-        try:
-            while True:
-                msg = self.rtos.getMsg ()
-                #LOGI (f"Received: {msg}")
-                self.bleParserAndSerializer.parse (msg)
-                app.process ()
-        except OSError:
-                pass
-        
-        LOGE ("Disconnected.")
-'''
+        self.bleServerThread.join  ()
+        self.appThread      .join  ()
+
     def bleServerProcess (self):
-        bleServerComm = BleServerComm ()
+        BleServerComm ()
         
         try:
             while True:
@@ -53,10 +30,22 @@ class Task:
                 if not msg:
                     break
                 
-                LOGI (f"Send: {msg}")
+                LOGI (f"Received: {msg}")
                 self.rtos.sendMsg (msg)
         except OSError:
             pass
             
         LOGE ("Disconnected.")
-'''
+
+    def appProcess (self):
+        app = App (self.settings)
+        
+        try:
+            while True:
+                msg = self.rtos.getMsg ()
+                self.bleParserAndSerializer.parse (msg)
+                app.process ()
+        except OSError:
+                pass
+        
+        LOGE ("Disconnected.")

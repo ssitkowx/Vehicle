@@ -1,5 +1,4 @@
-import queue
-import threading
+import queue, threading
 
 class Rtos:
     def __init__ (self):
