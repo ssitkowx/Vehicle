@@ -4,6 +4,12 @@ from   Logger     import *
 from   Settings   import Settings
 
 class App:
+    duty       = 0
+    brake      = False
+    freeSpin   = False
+    turnLeft   = False
+    turnRight  = False
+    
     def __init__ (self, vSettings: Settings):
         self.settings   = vSettings
         self.leftWheel  = Motor (1)
@@ -13,45 +19,49 @@ class App:
     def update (self):
         self.validate ()
         
-        self.leftWheel .set       (self.settings.motors ["LeftWheel"][0]["Duty"])
-        self.leftWheel .brake     (self.settings.motors ["LeftWheel"][1]["Brake"])
-        self.leftWheel .free_spin (self.settings.motors ["LeftWheel"][2]["FreeSpin"])
+        msg = f'Duty {self.duty}'
+        print (msg)
         
-        self.rightWheel.set       (self.settings.motors ["RightWheel"][0]["Duty"])
-        self.rightWheel.brake     (self.settings.motors ["RightWheel"][1]["Brake"])
-        self.rightWheel.free_spin (self.settings.motors ["RightWheel"][2]["FreeSpin"])
+        if self.turnLeft == True:
+            self.turnLeft = False
+            self.leftWheel.set (self.settings.MOTORS ["LeftWheel"], self.duty - self.settings.DUTY_STEP)
+        else:
+           self.leftWheel.set (self.settings.MOTORS ["LeftWheel"], self.duty)
+           
+        if self.turnLeft == True:
+            self.turnLeft = False
+            self.rightWheel.set (self.settings.MOTORS ["RightWheel"], self.duty - self.settings.DUTY_STEP)
+        else:
+           self.rightWheel .set (self.settings.MOTORS ["RightWheel"], self.duty)
+        
+        if self.brake == True:
+            self.brake = False
+            self.leftWheel .brake (self.settings.MOTORS ["LeftWheel" ])
+            self.rightWheel.brake (self.settings.MOTORS ["RightWheel"])
+        
+        if self.freeSpin == True:
+            self.freeSpin = False
+            self.leftWheel .free_spin (self.settings.MOTORS ["RightWheel"])
+            self.rightWheel.free_spin (self.settings.MOTORS ["LeftWheel" ])
         
     def validate (self):
-        if self.settings.motors ["LeftWheel"][0]["Duty"] >= 1:
-            self.settings.motors ["LeftWheel"][0]["Duty"] = 1
+        if self.duty >= self.settings.DUTY_RANGE ["Top"]:
+            self.duty = self.settings.DUTY_RANGE ["Top"]
         
-        if self.settings.motors ["RightWheel"][0]["Duty"] >= 1:
-            self.settings.motors ["RightWheel"][0]["Duty"] = 1
-        
-        if self.settings.motors ["LeftWheel"][0]["Duty"] <= -1:
-            self.settings.motors ["LeftWheel"][0]["Duty"] = -1
-        
-        if self.settings.motors ["RightWheel"][0]["Duty"] <= -1:
-            self.settings.motors ["RightWheel"][0]["Duty"] = -1
-        
+        if self.duty <= self.settings.DUTY_RANGE ["Bottom"]:
+            self.duty = self.settings.DUTY_RANGE ["Bottom"]
+    
     def process (self):
-        if self.settings.direction == "EDirection.eForward":
-            LOGI ("Move forward")
-            self.settings.motors ["LeftWheel" ][0]["Duty"] = self.settings.motors ["LeftWheel" ][0]["Duty"] + 0.1
-            self.settings.motors ["RightWheel"][0]["Duty"] = self.settings.motors ["RightWheel"][0]["Duty"] + 0.1
-        elif self.settings.direction == "EDirection.eBackward":
-            LOGI ("Move backward")
-            self.settings.motors ["LeftWheel" ][0]["Duty"] = self.settings.motors ["LeftWheel" ][0]["Duty"] - 0.1
-            self.settings.motors ["RightWheel"][0]["Duty"] = self.settings.motors ["RightWheel"][0]["Duty"] - 0.1
-        elif self.settings.direction == "EDirection.eLeft":
-            LOGI ("Move left")
-            self.settings.motors ["RightWheel"][0]["Duty"] = self.settings.motors ["RightWheel"][0]["Duty"] - 0.1
-        elif self.settings.direction == "EDirection.eRight":
-            LOGI ("Move right")
-            self.settings.motors ["LeftWheel" ][0]["Duty"] = self.settings.motors ["LeftWheel" ][0]["Duty"] - 0.1
+        if self.settings.direction == "EMoveDirection.Forward":
+            self.duty += self.settings.DUTY_STEP
+        elif self.direction == "EMoveDirection.Backward":
+            self.duty -= self.settings.DUTY_STEP
+        elif self.direction == "EMoveDirection.Left":
+            self.turnLeft = True
+        elif self.direction == "EMoveDirection.Right":
+            self.turnRight = True
         else:
-            LOGI ("Stop")
-            self.settings.motors ["LeftWheel" ][0]["Duty"] = 0
-            self.settings.motors ["RightWheel"][0]["Duty"] = 0
+            self.duty     = 0
+            self.freeSpin = True
         
         self.update ()
