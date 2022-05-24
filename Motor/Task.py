@@ -9,6 +9,7 @@ from BleParserAndSerializer import BleParserAndSerializer
 class Task:
     rtos                   = Rtos                   ()
     settings               = Settings               ()
+    app                    = App                    (settings)
     bleParserAndSerializer = BleParserAndSerializer (settings)
     
     def __init__ (self):
@@ -45,12 +46,11 @@ class Task:
         LOGE ("bleServerProcess disconnected")
 
     def appProcess (self):  
-        app = App (self.settings)
         while self.isAppProcessRunning ():
             try:
                 msg = self.rtos.getMsg ()
                 self.bleParserAndSerializer.parse (msg)
-                app.process ()
+                self.app.process ()
             except OSError:
                 pass
         
