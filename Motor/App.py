@@ -12,6 +12,13 @@ class App:
         #self.leftWheel  = Motor (1)
         #self.rightWheel = Motor (2)
         rcpy.set_state (rcpy.RUNNING)
+        
+    def limit (self, vData: int, vTopLimit: int, vBottomLimit: int):
+        if vData > vTopLimit:
+            return vTopLimit
+        if vData < vBottomLimit:
+            return vBottomLimit
+        return vData
     
     def update (self):
         self.validate ()
@@ -21,13 +28,15 @@ class App:
         
         if self.turnLeft == True:
             self.turnLeft = False
-            self.leftWheel.set (self.settings.MOTORS ["LeftWheel"], self.settings.duty - self.settings.DUTY_STEP)
+            duty = self.limit (self.settings.duty - self.settings.DUTY_STEP, 1, 0)
+            self.leftWheel.set (self.settings.MOTORS ["LeftWheel"], duty)
         else:
             self.leftWheel.set (self.settings.MOTORS ["LeftWheel"], self.settings.duty)
            
-        if self.turnLeft == True:
-            self.turnLeft = False
-            self.rightWheel.set (self.settings.MOTORS ["RightWheel"], self.settings.duty - self.settings.DUTY_STEP)
+        if self.turnRight == True:
+            self.turnRight = False
+            duty = self.limit (self.settings.duty - self.settings.DUTY_STEP, 1, 0)
+            self.rightWheel.set (self.settings.MOTORS ["RightWheel"], duty)
         else:
            self.rightWheel.set (self.settings.MOTORS ["RightWheel"], self.settings.duty)
         

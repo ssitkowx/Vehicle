@@ -5,10 +5,12 @@ from ParserAndSerializerFixture import ParserAndSerializerFixture
 
 def testSuit ():
     testSuit = unittest.TestSuite()
-    #testSuit.addTest (ParserAndSerializerFixture ('Parse'))
-    #testSuit.addTest (ParserAndSerializerFixture ('Serialize'))
-    #testSuit.addTest (MotorFixture               ('MoveForwardUntilMaxSpeedLimit'))
-    #testSuit.addTest (MotorFixture               ('MoveBackwardUntilMaxSpeedLimit'))
+    testSuit.addTest (ParserAndSerializerFixture ('Parse'))
+    testSuit.addTest (ParserAndSerializerFixture ('Serialize'))
+    testSuit.addTest (MotorFixture               ('MoveLeftUntilMaxSpeedLimit'))
+    testSuit.addTest (MotorFixture               ('MoveRightUntilMaxSpeedLimit'))
+    testSuit.addTest (MotorFixture               ('MoveForwardUntilMaxSpeedLimit'))
+    testSuit.addTest (MotorFixture               ('MoveBackwardUntilMaxSpeedLimit'))
     return testSuit
 
 if __name__ == "__main__":
