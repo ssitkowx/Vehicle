@@ -50,9 +50,11 @@ class MotorFixture (unittest.TestCase):
         LOGI ("MoveForwardUntilMaxSpeedLimit")
         vClientSockMock.recv.return_value = '{"MoveDirection": "EMoveDirection.Forward"}'
         self.task.settings.duty = 0
-        self.task = Task ()
-        vClientSockMock.recv.assert_called ()
-        self.assertEqual (self.task.settings.duty, 1, "Incorrect duty cycle")
+        self.task = Task                                ()
+        vClientSockMock.recv.assert_called              ()
+        self.task.app.leftWheel.set.assert_called_with  (Settings.EChannel.One, 1)
+        self.task.app.rightWheel.set.assert_called_with (Settings.EChannel.Two, 1)
+        self.assertEqual                                (self.task.settings.duty, 1, "Incorrect duty cycle")
         
     @mock.patch ('Task.Task.isAppProcessRunning'       , side_effect=([True for i in range (25)] + [False]))
     @mock.patch ('Task.Task.isBleServerProcessRunning' , side_effect=([True for i in range (25)] + [False]))
@@ -65,10 +67,11 @@ class MotorFixture (unittest.TestCase):
         LOGI ("MoveBackwardUntilMaxSpeedLimit")
         vClientSockMock.recv.return_value = '{"MoveDirection": "EMoveDirection.Backward"}'
         self.task.settings.duty = 0
-        self.task.__init__()
-        vClientSockMock.recv.assert_called ()
-        self.assertEqual (self.task.settings.duty, -1, "Incorrect duty cycle")
-        
-
+        self.task.__init__                              ()
+        vClientSockMock.recv.assert_called              ()
+        self.task.app.leftWheel.set.assert_called_with  (Settings.EChannel.One, -1)
+        self.task.app.rightWheel.set.assert_called_with (Settings.EChannel.Two, -1)
+        self.assertEqual                                (self.task.settings.duty, -1, "Incorrect() duty cycle")
+    
     def tearDown (self) -> None:
         return super().tearDown ()
