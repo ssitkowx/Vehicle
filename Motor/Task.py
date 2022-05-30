@@ -26,7 +26,7 @@ class Task:
         return True
 
     def isAppProcessRunning (self): 
-        return False
+        return True
     
     def bleServerProcess (self):
         BleServerComm ()

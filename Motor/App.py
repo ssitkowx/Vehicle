@@ -1,6 +1,5 @@
 import rcpy 
-import rcpy.motor as motor
-from   Logger     import *
+from   rcpy.motor import motor1, motor2
 from   Settings   import Settings
 
 class App: 
@@ -9,8 +8,8 @@ class App:
     
     def __init__ (self, vSettings: Settings):
         self.settings   = vSettings
-        #self.leftWheel  = Motor (1)
-        #self.rightWheel = Motor (2)
+        self.leftWheel  = motor1
+        self.rightWheel = motor2
         rcpy.set_state (rcpy.RUNNING)
         
     def limit (self, vData: int, vTopLimit: int, vBottomLimit: int):
