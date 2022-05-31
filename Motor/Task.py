@@ -29,11 +29,11 @@ class Task:
         return True
     
     def bleServerProcess (self):
-        BleServerComm (self.settings)
+        bleServerComm = BleServerComm (self.settings)
         
         while self.isBleServerProcessRunning ():
             try:
-                msg = self.bleServerThread.clientSock.recv (1024)
+                msg = bleServerComm.clientSock.recv (1024)
                 if not msg:
                     break
                 

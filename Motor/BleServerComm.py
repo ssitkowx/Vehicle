@@ -3,6 +3,8 @@ from   Logger   import *
 from   Settings import Settings
 
 class BleServerComm:
+    clientSock = 0
+    
     def __init__ (self, vSettings: Settings):
         self.sock = bluetooth.BluetoothSocket (bluetooth.RFCOMM)
         self.sock.bind                        (("", bluetooth.PORT_ANY))

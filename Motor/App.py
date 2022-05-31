@@ -41,13 +41,13 @@ class App:
         
         if self.settings.brake == True:
             self.settings  .brake = False
-            self.leftWheel .brake (self.settings.MOTORS ["LeftWheel" ])
-            self.rightWheel.brake (self.settings.MOTORS ["RightWheel"])
+            self.leftWheel .brake ()
+            self.rightWheel.brake ()
         
         if self.settings.freeSpin == True:
             self.settings  .freeSpin = False
-            self.leftWheel .free_spin (self.settings.MOTORS ["RightWheel"])
-            self.rightWheel.free_spin (self.settings.MOTORS ["LeftWheel" ])
+            self.leftWheel .free_spin ()
+            self.rightWheel.free_spin ()
         
     def validate (self):
         if self.settings.duty >= self.settings.DUTY_RANGE ["Top"]:
