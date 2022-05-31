@@ -28,8 +28,8 @@ class Task:
         bleClientComm = BleClientComm (self.settings)
     
         while True:
-            msg = self.rtos.getMsg ()
-            LOGI (f"Send: { msg }")
-            bleClient.sock.send (msg)
+            msg = self.rtos.getMsg  ()
+            LOGI                    (f"Send: { msg }")
+            bleClientComm.sock.send (msg)
         
         bleClient.sock.close()

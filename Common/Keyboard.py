@@ -12,13 +12,13 @@ class Keyboard:
         
     def press (self, vKey):
         try:
-            if   vKey.name == 'left' : self.settings.direction = self.settings.EDirection.eLeft
-            elif vKey.name == 'right': self.settings.direction = self.settings.EDirection.eRight
-            elif vKey.name == 'up'   : self.settings.direction = self.settings.EDirection.eForward
-            elif vKey.name == 'down' : self.settings.direction = self.settings.EDirection.eBackward
+            if   vKey.name == 'left' : self.settings.direction = self.settings.EMoveDirection.Left
+            elif vKey.name == 'right': self.settings.direction = self.settings.EMoveDirection.Right
+            elif vKey.name == 'up'   : self.settings.direction = self.settings.EMoveDirection.Forward
+            elif vKey.name == 'down' : self.settings.direction = self.settings.EMoveDirection.Backward
             else: pass
         except AttributeError:
-            if vKey.char == 's': self.settings.direction = self.settings.EDirection.eStop
+            if vKey.char == 's': self.settings.direction = self.settings.EMoveDirection.Stop
             else: pass
         
         self.rtos.sendMsg (self.bleParserAndSerializer.serialize ())

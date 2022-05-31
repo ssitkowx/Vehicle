@@ -23,7 +23,7 @@ class Settings:
     MOTORS              = { "LeftWheel"  : EChannel.One,
                             "RightWheel" : EChannel.Two
                           }
-    ADDRESS             = {}
+    ADDRESS             = "98:84:E3:E0:A6:92"
     UUID                = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
     
     duty                = 0
