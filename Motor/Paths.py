@@ -1,4 +1,4 @@
 import sys
 
-sys.path.append ('Common')
 sys.path.append ('Motor')
+sys.path.append ('Common')
