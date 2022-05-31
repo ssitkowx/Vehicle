@@ -29,7 +29,7 @@ class Task:
         return True
     
     def bleServerProcess (self):
-        BleServerComm ()
+        BleServerComm (self.settings)
         
         while self.isBleServerProcessRunning ():
             try:
@@ -37,7 +37,7 @@ class Task:
                 if not msg:
                     break
                 
-                #LOGI (f"Received: {msg}")
+                LOGI (f"Received: {msg}")
                 self.rtos.sendMsg (msg)
             except OSError:
                 LOGI ('My exception')

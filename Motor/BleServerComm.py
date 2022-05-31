@@ -1,10 +1,9 @@
 import bluetooth
-from   Logger import *
+from   Logger   import *
+from   Settings import Settings
 
 class BleServerComm:
-    Uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
-    
-    def __init__ (self):
+    def __init__ (self, vSettings: Settings):
         self.sock = bluetooth.BluetoothSocket (bluetooth.RFCOMM)
         self.sock.bind                        (("", bluetooth.PORT_ANY))
         self.sock.listen                      (1)
@@ -12,16 +11,16 @@ class BleServerComm:
 
         bluetooth.advertise_service (self.sock,
                                      "BleServer",
-                                     service_id      = self.Uuid,
-                                     service_classes = [self.Uuid, bluetooth.SERIAL_PORT_CLASS],
+                                     service_id      = vSettings.UUID,
+                                     service_classes = [vSettings.UUID, bluetooth.SERIAL_PORT_CLASS],
                                      profiles        = [bluetooth.SERIAL_PORT_PROFILE],
                                      # protocols=[bluetooth.OBEX_UUID]
                                     )
         
-        print ("Waiting for connection on RFCOMM channel", port)
+        LOGI ("Waiting for connection on RFCOMM channel", port)
         
         self.clientSock, clientInfo = self.sock.accept ()
-        print ("Accepted connection from", clientInfo)
+        LOGI ("Accepted connection from", clientInfo)
         
     def __del__ (self):
         LOGI                  ("DeInit")
