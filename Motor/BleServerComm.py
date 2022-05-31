@@ -17,10 +17,10 @@ class BleServerComm:
                                      # protocols=[bluetooth.OBEX_UUID]
                                     )
         
-        LOGI ("Waiting for connection on RFCOMM channel", port)
+        LOGI (f"Waiting for connection on RFCOMM channel. Port: {port}")
         
         self.clientSock, clientInfo = self.sock.accept ()
-        LOGI ("Accepted connection from", clientInfo)
+        LOGI (f"Accepted connection from. Client info: {clientInfo}")
         
     def __del__ (self):
         LOGI                  ("DeInit")

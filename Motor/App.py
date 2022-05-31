@@ -28,16 +28,16 @@ class App:
         if self.turnLeft == True:
             self.turnLeft = False
             duty = self.limit (self.settings.duty - self.settings.DUTY_STEP, 1, 0)
-            self.leftWheel.set (self.settings.MOTORS ["LeftWheel"], duty)
+            self.leftWheel.set (duty)
         else:
-            self.leftWheel.set (self.settings.MOTORS ["LeftWheel"], self.settings.duty)
+            self.leftWheel.set (self.settings.duty)
            
         if self.turnRight == True:
             self.turnRight = False
             duty = self.limit (self.settings.duty - self.settings.DUTY_STEP, 1, 0)
-            self.rightWheel.set (self.settings.MOTORS ["RightWheel"], duty)
+            self.rightWheel.set (duty)
         else:
-           self.rightWheel.set (self.settings.MOTORS ["RightWheel"], self.settings.duty)
+           self.rightWheel.set (self.settings.duty)
         
         if self.settings.brake == True:
             self.settings  .brake = False
