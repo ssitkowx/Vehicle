@@ -20,7 +20,6 @@ class ParserAndSerializerFixture (unittest.TestCase):
     
     def Serialize (self):
         LOGI ('Serialize')
-        self.settings.duty      = 0.1
         self.settings.direction = "EMoveDirection.Forward"
         jsonMsg                 = self.bleParserAndSerializer.serialize ()
         self.assertEqual (jsonMsg, '{"MoveDirection": "EMoveDirection.Forward"}')
