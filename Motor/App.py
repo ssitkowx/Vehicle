@@ -57,13 +57,13 @@ class App:
             self.settings.duty = self.settings.DUTY_RANGE ["Bottom"]
     
     def process (self):
-        if self.settings.direction == "EMoveDirection.Forward":
+        if self.settings.direction == self.settings.EMoveDirection.Forward:
             self.settings.duty += self.settings.DUTY_STEP
-        elif self.settings.direction == "EMoveDirection.Backward":
+        elif self.settings.direction == self.settings.EMoveDirection.Backward:
             self.settings.duty -= self.settings.DUTY_STEP
-        elif self.settings.direction == "EMoveDirection.Left":
+        elif self.settings.direction == self.settings.EMoveDirection.Left:
             self.turnLeft = True
-        elif self.settings.direction == "EMoveDirection.Right":
+        elif self.settings.direction == self.settings.EMoveDirection.Right:
             self.turnRight = True
         else:
             self.settings.duty     = 0
