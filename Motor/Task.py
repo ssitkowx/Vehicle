@@ -40,10 +40,9 @@ class Task:
                 LOGI (f"Received: {msg}")
                 self.rtos.sendMsg (msg)
             except OSError:
-                LOGI ('My exception')
-                pass
-            
-        LOGE ("bleServerProcess disconnected")
+                LOGE ("appProcess disconnected")
+                bleServerComm.clientSock.close ()
+                bleServerComm.sock      .close ()
 
     def appProcess (self):  
         while self.isAppProcessRunning ():

@@ -3,6 +3,7 @@ from   Logger   import *
 from   Settings import Settings
 
 class BleServerComm:
+    sock       = 0
     clientSock = 0
     
     def __init__ (self, vSettings: Settings):
@@ -23,9 +24,4 @@ class BleServerComm:
         
         self.clientSock, clientInfo = self.sock.accept ()
         LOGI (f"Accepted connection from. Client info: {clientInfo}")
-        
-    def __del__ (self):
-        LOGI                  ("DeInit")
-        self.clientSock.close ()
-        self.sock      .close ()
 
