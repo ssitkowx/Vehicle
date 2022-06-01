@@ -1,11 +1,11 @@
-from Paths                  import *
-from time                   import time
-from App                    import App
-from Rtos                   import Rtos
-from Logger                 import *
-from Settings               import Settings
-from BleServerComm          import BleServerComm
-from BleParserAndSerializer import BleParserAndSerializer
+from   Paths                  import *
+import time
+from   App                    import App
+from   Rtos                   import Rtos
+from   Logger                 import *
+from   Settings               import Settings
+from   BleServerComm          import BleServerComm
+from   BleParserAndSerializer import BleParserAndSerializer
 
 class Task:
     rtos                   = Rtos                   ()
