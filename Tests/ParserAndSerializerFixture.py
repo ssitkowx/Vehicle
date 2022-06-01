@@ -12,17 +12,15 @@ class ParserAndSerializerFixture (unittest.TestCase):
 
     def Parse (self):
         LOGI ('Parse')
-        jsonMsg = '{"MoveDirection": "EMoveDirection.Backward"}'
+        jsonMsg = '{"MoveDirection": 1}'
         self.bleParserAndSerializer.parse (jsonMsg)
-        self.assertEqual                  (self.settings.direction, "EMoveDirection.Backward")
-        LOGI                              (self.settings.direction)
+        self.assertEqual                  (self.settings.direction, Settings.EMoveDirection.Backward)
     
     def Serialize (self):
         LOGI ('Serialize')
-        self.settings.direction = "EMoveDirection.Forward"
+        self.settings.direction = Settings.EMoveDirection.Forward
         jsonMsg                 = self.bleParserAndSerializer.serialize ()
-        self.assertEqual (jsonMsg, '{"MoveDirection": "EMoveDirection.Forward"}')
-        LOGI             (jsonMsg)
+        self.assertEqual (jsonMsg, '{"MoveDirection": 0}')
 
     def tearDown (self) -> None:
         return super().tearDown ()

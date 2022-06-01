@@ -48,10 +48,8 @@ class Task:
     def appProcess (self):  
         while self.isAppProcessRunning ():
             try:
-                msg = self.rtos.getMsg ()
+                msg = self.rtos.getMsg            ()
                 self.bleParserAndSerializer.parse (msg)
-                self.app.process ()
+                self.app.process                  ()
             except OSError:
-                pass
-        
-        LOGE ("appProcess disconnected")
+                LOGE ("appProcess disconnected")

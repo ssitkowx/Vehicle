@@ -28,8 +28,10 @@ class Task:
         bleClientComm = BleClientComm (self.settings)
     
         while True:
-            msg = self.rtos.getMsg  ()
-            LOGI                    (f"Send: { msg }")
-            bleClientComm.sock.send (msg)
-        
-        bleClient.sock.close()
+            try:
+                msg = self.rtos.getMsg  ()
+                LOGI                    (f"Send: { msg }")
+                bleClientComm.sock.send (msg)
+            except OSError:
+                bleClientComm.sock.close ()
+                LOGE                     ("bleClientProcess disconnected")

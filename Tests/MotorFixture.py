@@ -31,7 +31,7 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
     def MoveLeftUntilMaxSpeedLimit (self, vBleInitMock, vBleDelMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
         LOGI ("MoveLeftUntilMaxSpeedLimit")
-        vClientSockMock.recv.return_value = '{"MoveDirection": "EMoveDirection.Left"}'
+        vClientSockMock.recv.return_value = '{"MoveDirection": 2}'
         self.task.settings.duty = 1
         self.task.__init__                              ()
         vClientSockMock.recv.assert_called              ()
@@ -45,7 +45,7 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
     def MoveRightUntilMaxSpeedLimit (self, vBleInitMock, vBleDelMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
         LOGI ("MoveRightUntilMaxSpeedLimit")
-        vClientSockMock.recv.return_value = '{"MoveDirection": "EMoveDirection.Right"}'
+        vClientSockMock.recv.return_value = '{"MoveDirection": 3}'
         self.task.settings.duty = 1
         self.task.__init__                              ()
         vClientSockMock.recv.assert_called              ()
@@ -59,7 +59,7 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
     def MoveForwardUntilMaxSpeedLimit (self, vBleInitMock, vBleDelMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
         LOGI ("MoveForwardUntilMaxSpeedLimit")
-        vClientSockMock.recv.return_value = '{"MoveDirection": "EMoveDirection.Forward"}'
+        vClientSockMock.recv.return_value = '{"MoveDirection": 0}'
         self.task.settings.duty = 0
         self.task.__init__                              ()
         vClientSockMock.recv.assert_called              ()
@@ -74,7 +74,7 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
     def MoveBackwardUntilMaxSpeedLimit (self, vBleInitMock, vBleDelMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
         LOGI ("MoveBackwardUntilMaxSpeedLimit")
-        vClientSockMock.recv.return_value = '{"MoveDirection": "EMoveDirection.Backward"}'
+        vClientSockMock.recv.return_value = '{"MoveDirection": 1}'
         self.task.settings.duty = 0
         self.task.__init__                              ()
         vClientSockMock.recv.assert_called              ()

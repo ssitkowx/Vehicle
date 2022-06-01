@@ -27,14 +27,14 @@ class App:
         
         if self.turnLeft == True:
             self.turnLeft = False
-            duty = self.limit (self.settings.duty - self.settings.DUTY_STEP, 1, 0)
+            duty = self.limit (self.settings.duty - Settings.DUTY_STEP, 1, 0)
             self.leftWheel.set (duty)
         else:
             self.leftWheel.set (self.settings.duty)
            
         if self.turnRight == True:
             self.turnRight = False
-            duty = self.limit (self.settings.duty - self.settings.DUTY_STEP, 1, 0)
+            duty = self.limit (self.settings.duty - Settings.DUTY_STEP, 1, 0)
             self.rightWheel.set (duty)
         else:
            self.rightWheel.set (self.settings.duty)
@@ -50,20 +50,20 @@ class App:
             self.rightWheel.free_spin ()
         
     def validate (self):
-        if self.settings.duty >= self.settings.DUTY_RANGE ["Top"]:
-            self.settings.duty = self.settings.DUTY_RANGE ["Top"]
+        if self.settings.duty >= Settings.DUTY_RANGE ["Top"]:
+            self.settings.duty = Settings.DUTY_RANGE ["Top"]
         
-        if self.settings.duty <= self.settings.DUTY_RANGE ["Bottom"]:
-            self.settings.duty = self.settings.DUTY_RANGE ["Bottom"]
+        if self.settings.duty <= Settings.DUTY_RANGE ["Bottom"]:
+            self.settings.duty = Settings.DUTY_RANGE ["Bottom"]
     
     def process (self):
-        if self.settings.direction == self.settings.EMoveDirection.Forward:
-            self.settings.duty += self.settings.DUTY_STEP
-        elif self.settings.direction == self.settings.EMoveDirection.Backward:
-            self.settings.duty -= self.settings.DUTY_STEP
-        elif self.settings.direction == self.settings.EMoveDirection.Left:
+        if self.settings.direction == Settings.EMoveDirection.Forward:
+            self.settings.duty += Settings.DUTY_STEP
+        elif self.settings.direction == Settings.EMoveDirection.Backward:
+            self.settings.duty -= Settings.DUTY_STEP
+        elif self.settings.direction == Settings.EMoveDirection.Left:
             self.turnLeft = True
-        elif self.settings.direction == self.settings.EMoveDirection.Right:
+        elif self.settings.direction == Settings.EMoveDirection.Right:
             self.turnRight = True
         else:
             self.settings.duty     = 0
