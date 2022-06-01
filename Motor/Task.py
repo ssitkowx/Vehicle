@@ -1,4 +1,5 @@
 from Paths                  import *
+from time                   import time
 from App                    import App
 from Rtos                   import Rtos
 from Logger                 import *
@@ -50,5 +51,6 @@ class Task:
                 msg = self.rtos.getMsg            ()
                 self.bleParserAndSerializer.parse (msg)
                 self.app.process                  ()
+                time.sleep(0.02)
             except OSError:
                 LOGE ("appProcess disconnected")

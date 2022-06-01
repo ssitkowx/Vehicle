@@ -8,8 +8,6 @@ class App:
     
     def __init__ (self, vSettings: Settings):
         self.settings   = vSettings
-        self.leftWheel  = motor1
-        self.rightWheel = motor2
         rcpy.set_state (rcpy.RUNNING)
         
     def limit (self, vData: int, vTopLimit: int, vBottomLimit: int):
@@ -27,28 +25,26 @@ class App:
         if self.turnLeft == True:
             self.turnLeft = False
             duty = self.limit (self.settings.duty - Settings.DUTY_STEP, 1, 0)
-            self.leftWheel.set (duty)
+            motor1.set (duty)
         else:
-            self.leftWheel.set (self.settings.duty)
-            #motor1.set (self.settings.duty)
+            motor1.set (self.settings.duty)
         
         if self.turnRight == True:
             self.turnRight = False
             duty = self.limit (self.settings.duty - Settings.DUTY_STEP, 1, 0)
-            self.rightWheel.set (duty)
+            motor2.set (duty)
         else:
-            #self.rightWheel.set (self.settings.duty)
             motor2.set (self.settings.duty)
         
         if self.settings.brake == True:
             self.settings  .brake = False
-            self.leftWheel .brake ()
-            self.rightWheel.brake ()
+            motor1.brake ()
+            motor2.brake ()
         
         if self.settings.freeSpin == True:
             self.settings  .freeSpin = False
-            self.leftWheel .free_spin ()
-            self.rightWheel.free_spin ()
+            motor1.free_spin ()
+            motor2.free_spin ()
         
     def validate (self):
         if self.settings.duty >= Settings.DUTY_RANGE ["Top"]:
