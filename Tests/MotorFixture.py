@@ -18,18 +18,16 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Task.Task.isAppProcessRunning'         , return_value=False)
     @mock.patch ('Task.Task.isBleServerProcessRunning'   , return_value=False)
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
-    @mock.patch ('BleServerComm.BleServerComm.__del__'   , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
-    def setUpClass (self, vBleInitMock, vBleDelMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
+    def setUpClass (self, vBleInitMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
         LOGI ("MotorFixture")
         self.task = Task ()
     
     @mock.patch ('Task.Task.isAppProcessRunning'         , side_effect=([True, False]))
     @mock.patch ('Task.Task.isBleServerProcessRunning'   , side_effect=([True, False]))
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
-    @mock.patch ('BleServerComm.BleServerComm.__del__'   , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
-    def MoveLeftUntilMaxSpeedLimit (self, vBleInitMock, vBleDelMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
+    def MoveLeftUntilMaxSpeedLimit (self, vBleInitMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
         LOGI ("MoveLeftUntilMaxSpeedLimit")
         vClientSockMock.recv.return_value = '{"MoveDirection": 2}'
         self.task.settings.duty = 1
@@ -41,9 +39,8 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Task.Task.isAppProcessRunning'         , side_effect=([True, False]))
     @mock.patch ('Task.Task.isBleServerProcessRunning'   , side_effect=([True, False]))
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
-    @mock.patch ('BleServerComm.BleServerComm.__del__'   , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
-    def MoveRightUntilMaxSpeedLimit (self, vBleInitMock, vBleDelMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
+    def MoveRightUntilMaxSpeedLimit (self, vBleInitMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
         LOGI ("MoveRightUntilMaxSpeedLimit")
         vClientSockMock.recv.return_value = '{"MoveDirection": 3}'
         self.task.settings.duty = 1
@@ -55,9 +52,8 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Task.Task.isAppProcessRunning'         , side_effect=([True for i in range (20)] + [False]))
     @mock.patch ('Task.Task.isBleServerProcessRunning'   , side_effect=([True for i in range (20)] + [False]))
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
-    @mock.patch ('BleServerComm.BleServerComm.__del__'   , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
-    def MoveForwardUntilMaxSpeedLimit (self, vBleInitMock, vBleDelMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
+    def MoveForwardUntilMaxSpeedLimit (self, vBleInitMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
         LOGI ("MoveForwardUntilMaxSpeedLimit")
         vClientSockMock.recv.return_value = '{"MoveDirection": 0}'
         self.task.settings.duty = 0
@@ -70,9 +66,8 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Task.Task.isAppProcessRunning'         , side_effect=([True for i in range (20)] + [False]))
     @mock.patch ('Task.Task.isBleServerProcessRunning'   , side_effect=([True for i in range (20)] + [False]))
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
-    @mock.patch ('BleServerComm.BleServerComm.__del__'   , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
-    def MoveBackwardUntilMaxSpeedLimit (self, vBleInitMock, vBleDelMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
+    def MoveBackwardUntilMaxSpeedLimit (self, vBleInitMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
         LOGI ("MoveBackwardUntilMaxSpeedLimit")
         vClientSockMock.recv.return_value = '{"MoveDirection": 1}'
         self.task.settings.duty = 0
