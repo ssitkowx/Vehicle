@@ -1,5 +1,4 @@
 from   Paths                  import *
-import time
 from   App                    import App
 from   Rtos                   import Rtos
 from   Logger                 import *
@@ -35,7 +34,6 @@ class Task:
                 if not msg:
                     break
                 
-                LOGI (f"Received: {msg}")
                 self.rtos.sendMsg (msg)
             except OSError:
                 LOGE ("appProcess disconnected")
@@ -47,14 +45,11 @@ class Task:
             try:
                 if self.app.isRunning () == True:
                     msg = self.rtos.getMsg            ()
+                    LOGI                              (f"Received: {msg}")
                     self.bleParserAndSerializer.parse (msg)
                     self.app.process                  ()
-                    LOGE ("AAAAAAAAAAAAAAAAAAA")
                 elif self.app.isPaused () == True:
                     self.settings.freeSpin = True
-                    LOGE ("BBBBBBBBBBBBBBBBBBBBBB")
-
-                time.sleep (0.3)
 
             except OSError:
                 LOGE ("appProcess disconnected")

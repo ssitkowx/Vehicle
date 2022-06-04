@@ -1,3 +1,4 @@
+import time
 import rcpy 
 from   rcpy.motor import motor1, motor2
 from   Logger     import *
@@ -35,19 +36,20 @@ class App:
         
         LOGI (f'Duty {self.settings.duty}')
 
+        duty = self.limit (self.settings.duty, 1, -1)
         if self.turnLeft == True:
             self.turnLeft = False
-            duty = self.limit (self.settings.duty - Settings.DUTY_STEP, 1, 0)
-            #motor1.set (duty)
-        #else:
-            #motor1.set (self.settings.duty)
+            motor1.set (duty - Settings.DUTY_STEP)
+        else:
+            motor1.set (duty)
+        time.sleep (0.3)
         
         if self.turnRight == True:
             self.turnRight = False
-            duty = self.limit (self.settings.duty - Settings.DUTY_STEP, 1, 0)
-            #motor2.set (duty)
-        #else:
-            #motor2.set (self.settings.duty)
+            motor2.set (duty - Settings.DUTY_STEP)
+        else:
+            motor2.set (duty)
+        time.sleep (0.3)
         
         if self.settings.brake == True:
             self.settings.brake = False

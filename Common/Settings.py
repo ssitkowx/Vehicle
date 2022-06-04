@@ -17,7 +17,7 @@ class Settings:
     DUTY_RANGE          = { "Top"    : 1,
                             "Bottom" : -1
                           }
-    DUTY_STEP           = 0.05
+    DUTY_STEP           = 0.1
     DUTY_TO_SPEED_COEFF = 100
     ADDRESS             = "98:84:E3:E0:A6:92"
     UUID                = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
