@@ -9,6 +9,7 @@ class BleServerComm (Ble):
     clientSock = 0
     
     def __init__ (self, vSettings: Settings):
+        super ().__init__ ()
         self.sock = bluetooth.BluetoothSocket (bluetooth.RFCOMM)
         self.sock.bind                        (("", bluetooth.PORT_ANY))
         self.sock.listen                      (1)

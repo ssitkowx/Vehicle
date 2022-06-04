@@ -1,5 +1,4 @@
 import os
-from Logger import *
 
 class Ble:
     def __init__ (self):

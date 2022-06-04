@@ -10,7 +10,7 @@ class App:
     def __init__ (self, vSettings: Settings):
         self.settings   = vSettings
         rcpy.set_state (rcpy.RUNNING)
-        
+
     def limit (self, vData: int, vTopLimit: int, vBottomLimit: int):
         if vData > vTopLimit:
             return vTopLimit
@@ -50,7 +50,7 @@ class App:
             #motor2.set (self.settings.duty)
         
         if self.settings.brake == True:
-            self.settings  .brake = False
+            self.settings.brake = False
             #motor1.brake ()
             #motor2.brake ()
         
