@@ -1,5 +1,6 @@
 import rcpy 
 from   rcpy.motor import motor1, motor2
+from   Logger     import *
 from   Settings   import Settings
 
 class App: 
@@ -32,14 +33,14 @@ class App:
     def update (self):
         self.validate ()
         
-        msg = f'Duty {self.settings.duty}'
-        print (msg)
+        LOGI (f'Duty {self.settings.duty}')
+
         if self.turnLeft == True:
             self.turnLeft = False
             duty = self.limit (self.settings.duty - Settings.DUTY_STEP, 1, 0)
-            motor1.set (duty)
-        else:
-            motor1.set (self.settings.duty)
+            #motor1.set (duty)
+        #else:
+            #motor1.set (self.settings.duty)
         
         if self.turnRight == True:
             self.turnRight = False
