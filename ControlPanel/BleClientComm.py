@@ -1,9 +1,11 @@
+from cgitb import enable
 from   Paths    import *
+from   Ble      import Ble
 from   Logger   import *
 from   Settings import Settings  
 import bluetooth 
 
-class BleClientComm:
+class BleClientComm (Ble):
     def __init__ (self, vSettings: Settings):
         serviceMatches = bluetooth.find_service (uuid = vSettings.UUID, address = vSettings.ADDRESS)
         if len (serviceMatches) == 0:

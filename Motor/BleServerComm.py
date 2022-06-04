@@ -1,14 +1,14 @@
 import os
 import bluetooth
+from   Ble      import Ble
 from   Logger   import *
 from   Settings import Settings
 
-class BleServerComm:
+class BleServerComm (Ble):
     sock       = 0
     clientSock = 0
     
     def __init__ (self, vSettings: Settings):
-        self.enable ()
         self.sock = bluetooth.BluetoothSocket (bluetooth.RFCOMM)
         self.sock.bind                        (("", bluetooth.PORT_ANY))
         self.sock.listen                      (1)
@@ -26,15 +26,3 @@ class BleServerComm:
         
         self.clientSock, clientInfo = self.sock.accept ()
         LOGI (f"Accepted connection from. Client info: {clientInfo}")
-
-    def __del__ (self):
-        self.restart ()
-
-    def restart (self):
-        os.system ('sudo systemctl restart bluetooth')
-
-    def enable (self):
-         os.system ('sudo hcitool dev')
-         os.system ('sudo sdptool add SP')
-         os.system ('sudo hciconfig hci0 piscan')
-
