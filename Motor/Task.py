@@ -49,8 +49,10 @@ class Task:
                     msg = self.rtos.getMsg            ()
                     self.bleParserAndSerializer.parse (msg)
                     self.app.process                  ()
+                    LOGE ("AAAAAAAAAAAAAAAAAAA")
                 elif self.app.isPaused () == True:
                     self.settings.freeSpin = True
+                    LOGE ("BBBBBBBBBBBBBBBBBBBBBB")
 
                 time.sleep (0.3)
 
