@@ -45,19 +45,19 @@ class App:
         if self.turnRight == True:
             self.turnRight = False
             duty = self.limit (self.settings.duty - Settings.DUTY_STEP, 1, 0)
-            motor2.set (duty)
+            #motor2.set (duty)
         #else:
             #motor2.set (self.settings.duty)
         
         if self.settings.brake == True:
             self.settings.brake = False
-            #motor1.brake ()
-            #motor2.brake ()
+            motor1.brake ()
+            motor2.brake ()
         
         if self.settings.freeSpin == True:
             self.settings  .freeSpin = False
-            #motor1.free_spin ()
-            #motor2.free_spin ()
+            motor1.free_spin ()
+            motor2.free_spin ()
         
     def validate (self):
         if self.settings.duty >= Settings.DUTY_RANGE ["Top"]:

@@ -58,6 +58,3 @@ class Task:
 
             except OSError:
                 LOGE ("appProcess disconnected")
-
-            finally:
-                LOGE ("appProcess disconnected finally")
