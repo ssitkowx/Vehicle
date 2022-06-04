@@ -3,6 +3,7 @@ from   Settings import Settings
 
 class BleParserAndSerializer:
     def __init__ (self, vSettings: Settings):
+        super ().__init__ ()
         self.settings = vSettings
     
     def parse (self, vMsg):

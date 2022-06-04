@@ -7,6 +7,7 @@ import bluetooth
 
 class BleClientComm (Ble):
     def __init__ (self, vSettings: Settings):
+        super ().__init__ ()
         serviceMatches = bluetooth.find_service (uuid = vSettings.UUID, address = vSettings.ADDRESS)
         if len (serviceMatches) == 0:
             LOGE ("Couldn't find the BleServer service.")
