@@ -16,6 +16,18 @@ class App:
         if vData < vBottomLimit:
             return vBottomLimit
         return vData
+
+    @staticmethod
+    def isExiting ():
+        return rcpy.get_state () == rcpy.EXITING
+
+    @staticmethod
+    def isRunning ():
+        return rcpy.get_state () == rcpy.RUNNING
+
+    @staticmethod
+    def isPaused ():
+        return rcpy.get_state () == rcpy.PAUSED
     
     def update (self):
         self.validate ()

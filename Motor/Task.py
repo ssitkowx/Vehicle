@@ -11,6 +11,7 @@ class Task:
     rtos                   = Rtos                   ()
     settings               = Settings               ()
     app                    = App                    (settings)
+    bleServerComm          = BleServerComm          (settings)
     bleParserAndSerializer = BleParserAndSerializer (settings)
     
     def __init__ (self):
@@ -25,16 +26,12 @@ class Task:
         
     def isBleServerProcessRunning (self):
         return True
-
-    def isAppProcessRunning (self): 
-        return True
     
     def bleServerProcess (self):
-        bleServerComm = BleServerComm (self.settings)
         
         while self.isBleServerProcessRunning ():
             try:
-                msg = bleServerComm.clientSock.recv (1024)
+                msg = self.bleServerComm.clientSock.recv (1024)
                 if not msg:
                     break
                 
@@ -42,15 +39,23 @@ class Task:
                 self.rtos.sendMsg (msg)
             except OSError:
                 LOGE ("appProcess disconnected")
-                bleServerComm.clientSock.close ()
-                bleServerComm.sock      .close ()
+                self.bleServerComm.clientSock.close ()
+                self.bleServerComm.sock      .close ()
 
     def appProcess (self):  
-        while self.isAppProcessRunning ():
+        while self.app.isExiting () == False:
             try:
-                msg = self.rtos.getMsg            ()
-                self.bleParserAndSerializer.parse (msg)
-                self.app.process                  ()
-                time.sleep(0.02)
+                if self.app.isRunning () == True:
+                    msg = self.rtos.getMsg            ()
+                    self.bleParserAndSerializer.parse (msg)
+                    self.app.process                  ()
+                elif self.app.isPaused () == True:
+                    self.settings.freeSpin = True
+
+                time.sleep (0.3)
+
             except OSError:
                 LOGE ("appProcess disconnected")
+
+            finally:
+                LOGE ("appProcess disconnected finally")
