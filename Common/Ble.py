@@ -4,6 +4,7 @@ from Logger import *
 class Ble:
     def __init__ (self):
          os.system ('sudo hciconfig hci0 piscan')
+         LOGI ("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
 
     def __del__ (self):
          os.system ('sudo systemctl restart bluetooth')
