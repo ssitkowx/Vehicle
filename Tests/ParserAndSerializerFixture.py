@@ -10,14 +10,14 @@ class ParserAndSerializerFixture (unittest.TestCase):
         self.bleParserAndSerializer = BleParserAndSerializer (self.settings)
         return super ().setUp ()
 
-    def Parse (self):
-        LOGI ('Parse')
+    def parse (self):
+        LOGI ('parse')
         jsonMsg = '{"MoveDirection": 1}'
         self.bleParserAndSerializer.parse (jsonMsg)
         self.assertEqual                  (self.settings.direction, Settings.EMoveDirection.Backward)
     
-    def Serialize (self):
-        LOGI ('Serialize')
+    def serialize (self):
+        LOGI ('serialize')
         self.settings.direction = Settings.EMoveDirection.Forward
         jsonMsg                 = self.bleParserAndSerializer.serialize ()
         self.assertEqual (jsonMsg, '{"MoveDirection": 0}')

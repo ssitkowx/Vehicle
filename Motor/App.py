@@ -1,9 +1,8 @@
-import math
 import time
 import rcpy 
-from   rcpy.motor import motor1, motor2
 from   Logger     import *
 from   Settings   import Settings
+from   rcpy.motor import motor1, motor2
 
 class App: 
     turnLeft  = False

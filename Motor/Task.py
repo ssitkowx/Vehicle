@@ -24,7 +24,7 @@ class Task:
         self.appThread      .join  ()
 
     def isBleProcessRunning ():
-        return True;
+        return True
     
     def bleServerProcess (self):
         while self.isBleProcessRunning ():
