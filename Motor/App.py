@@ -75,3 +75,9 @@ class App:
             self.settings.freeSpin = True
         
         self.update ()
+
+    @staticmethod
+    def isMsgDoubled (vMsg: str):
+        if vMsg.find ("MoveDirection", 20, 40) == -1:
+            return False
+        return True

@@ -30,16 +30,16 @@ class Task:
         while self.isBleProcessRunning ():
             try:
                 msg = self.bleServerComm.clientSock.recv (1024)
-                if not msg:
-                    break
-                
+                if self.app.isMsgDoubled (msg.decode ('UTF-8')) == True:
+                    continue
+
                 self.rtos.sendMsg (msg)
             except OSError:
                 LOGE ("appProcess disconnected")
                 self.bleServerComm.clientSock.close ()
                 self.bleServerComm.sock      .close ()
 
-    def appProcess (self):  
+    def appProcess (self): 
         while self.app.isExiting () == False:
             try:
                 if self.app.isRunning () == True:
