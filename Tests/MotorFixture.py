@@ -15,67 +15,84 @@ from Settings import Settings
 
 class MotorFixture (unittest.TestCase):
     @classmethod
-    @mock.patch ('Task.Task.isAppProcessRunning'         , return_value=False)
-    @mock.patch ('Task.Task.isBleServerProcessRunning'   , return_value=False)
-    @mock.patch ('BleServerComm.BleServerComm.clientSock')
+    @mock.patch ('App.App.isPaused'                      , return_value=False)
+    @mock.patch ('App.App.isRunning'                     , return_value=False)
+    @mock.patch ('App.App.isExiting'                     , return_value=True)
+    @mock.patch ('Task.Task.isBleProcessRunning'         , return_value=False)
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
-    def setUpClass (self, vBleInitMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
+    @mock.patch ('BleServerComm.BleServerComm.clientSock')
+    def setUpClass (self, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock):
         LOGI ("MotorFixture")
         self.task = Task ()
-    
-    @mock.patch ('Task.Task.isAppProcessRunning'         , side_effect=([True, False]))
-    @mock.patch ('Task.Task.isBleServerProcessRunning'   , side_effect=([True, False]))
-    @mock.patch ('BleServerComm.BleServerComm.clientSock')
+
+    @mock.patch ('App.motor1'                            , create=True)
+    @mock.patch ('App.motor2'                            , create=True)
+    @mock.patch ('App.App.isPaused'                      , return_value=False)
+    @mock.patch ('App.App.isRunning'                     , side_effect =[True, False])
+    @mock.patch ('App.App.isExiting'                     , side_effect =[False, True])
+    @mock.patch ('Task.Task.isBleProcessRunning'         , side_effect =[True, False])
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
-    def MoveLeftUntilMaxSpeedLimit (self, vBleInitMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
+    @mock.patch ('BleServerComm.BleServerComm.clientSock')
+    def MoveLeftUntilMaxSpeedLimit (self, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1):
         LOGI ("MoveLeftUntilMaxSpeedLimit")
         vClientSockMock.recv.return_value = '{"MoveDirection": 2}'
-        self.task.settings.duty = 1
-        self.task.__init__                              ()
-        vClientSockMock.recv.assert_called              ()
-        self.task.app.leftWheel .set.assert_called_with (0.95)
-        self.task.app.rightWheel.set.assert_called_with (1)
-    
-    @mock.patch ('Task.Task.isAppProcessRunning'         , side_effect=([True, False]))
-    @mock.patch ('Task.Task.isBleServerProcessRunning'   , side_effect=([True, False]))
-    @mock.patch ('BleServerComm.BleServerComm.clientSock')
+        self.task.settings.duty           = 10
+        self.task.__init__                 ()
+        vClientSockMock.recv.assert_called ()
+        vMotor1.set.assert_called_with     (0.9)
+        vMotor2.set.assert_called_with     (1)
+
+    @mock.patch ('App.motor1'                            , create=True)
+    @mock.patch ('App.motor2'                            , create=True)
+    @mock.patch ('App.App.isPaused'                      , return_value=False)
+    @mock.patch ('App.App.isRunning'                     , side_effect =[True, False])
+    @mock.patch ('App.App.isExiting'                     , side_effect =[False, True])
+    @mock.patch ('Task.Task.isBleProcessRunning'         , side_effect =[True, False])
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
-    def MoveRightUntilMaxSpeedLimit (self, vBleInitMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
+    @mock.patch ('BleServerComm.BleServerComm.clientSock')
+    def MoveRightUntilMaxSpeedLimit (self, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1):
         LOGI ("MoveRightUntilMaxSpeedLimit")
         vClientSockMock.recv.return_value = '{"MoveDirection": 3}'
-        self.task.settings.duty = 1
-        self.task.__init__                              ()
-        vClientSockMock.recv.assert_called              ()
-        self.task.app.leftWheel .set.assert_called_with (1)
-        self.task.app.rightWheel.set.assert_called_with (0.95)
+        self.task.settings.duty           = 10
+        self.task.__init__                 ()
+        vClientSockMock.recv.assert_called ()
+        vMotor1.set.assert_called_with     (1)
+        vMotor2.set.assert_called_with     (0.9)
 
-    @mock.patch ('Task.Task.isAppProcessRunning'         , side_effect=([True for i in range (20)] + [False]))
-    @mock.patch ('Task.Task.isBleServerProcessRunning'   , side_effect=([True for i in range (20)] + [False]))
-    @mock.patch ('BleServerComm.BleServerComm.clientSock')
+    @mock.patch ('App.motor1'                            , create=True)
+    @mock.patch ('App.motor2'                            , create=True)
+    @mock.patch ('App.App.isPaused'                      , return_value=False)
+    @mock.patch ('App.App.isRunning'                     , side_effect=([True  for i in range (10)] + [False]))
+    @mock.patch ('App.App.isExiting'                     , side_effect=([False for i in range (10)] + [True]))
+    @mock.patch ('Task.Task.isBleProcessRunning'         , side_effect=([True  for i in range (10)] + [False]))
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
-    def MoveForwardUntilMaxSpeedLimit (self, vBleInitMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
+    @mock.patch ('BleServerComm.BleServerComm.clientSock')
+    def MoveForwardUntilMaxSpeedLimit (self, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1):
         LOGI ("MoveForwardUntilMaxSpeedLimit")
         vClientSockMock.recv.return_value = '{"MoveDirection": 0}'
-        self.task.settings.duty = 0
-        self.task.__init__                              ()
-        vClientSockMock.recv.assert_called              ()
-        self.task.app.leftWheel .set.assert_called_with (1)
-        self.task.app.rightWheel.set.assert_called_with (1)
-        self.assertEqual                                (self.task.settings.duty, 1, "Incorrect duty cycle")
-        
-    @mock.patch ('Task.Task.isAppProcessRunning'         , side_effect=([True for i in range (20)] + [False]))
-    @mock.patch ('Task.Task.isBleServerProcessRunning'   , side_effect=([True for i in range (20)] + [False]))
-    @mock.patch ('BleServerComm.BleServerComm.clientSock')
+        self.task.settings.duty           = 0
+        self.task.__init__                 ()
+        vClientSockMock.recv.assert_called ()
+        vMotor1.set.assert_called_with     (1)
+        vMotor2.set.assert_called_with     (1)
+
+    @mock.patch ('App.motor1'                            , create=True)
+    @mock.patch ('App.motor2'                            , create=True)
+    @mock.patch ('App.App.isPaused'                      , return_value=False)
+    @mock.patch ('App.App.isRunning'                     , side_effect=([True  for i in range (10)] + [False]))
+    @mock.patch ('App.App.isExiting'                     , side_effect=([False for i in range (10)] + [True]))
+    @mock.patch ('Task.Task.isBleProcessRunning'         , side_effect=([True  for i in range (10)] + [False]))
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
-    def MoveBackwardUntilMaxSpeedLimit (self, vBleInitMock, vClientSockMock, isBleServerProcessRunningMock, isAppProcessRunningMock):
+    @mock.patch ('BleServerComm.BleServerComm.clientSock')
+    def MoveBackwardUntilMaxSpeedLimit (self, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1):
         LOGI ("MoveBackwardUntilMaxSpeedLimit")
         vClientSockMock.recv.return_value = '{"MoveDirection": 1}'
-        self.task.settings.duty = 0
-        self.task.__init__                              ()
-        vClientSockMock.recv.assert_called              ()
-        self.task.app.leftWheel .set.assert_called_with (-1)
-        self.task.app.rightWheel.set.assert_called_with (-1)
-        self.assertEqual                                (self.task.settings.duty, -1, "Incorrect() duty cycle")
-    
+        self.task.settings.duty           = 0
+        self.task.__init__                 ()
+        vClientSockMock.recv.assert_called ()
+        vMotor1.set.assert_called_with     (-1)
+        vMotor2.set.assert_called_with     (-1)
+
     def tearDown (self) -> None:
         return super().tearDown ()
+    

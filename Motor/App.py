@@ -1,3 +1,4 @@
+import math
 import time
 import rcpy 
 from   rcpy.motor import motor1, motor2
@@ -11,13 +12,6 @@ class App:
     def __init__ (self, vSettings: Settings):
         self.settings   = vSettings
         rcpy.set_state (rcpy.RUNNING)
-
-    def limit (self, vData: int, vTopLimit: int, vBottomLimit: int):
-        if vData > vTopLimit:
-            return vTopLimit
-        if vData < vBottomLimit:
-            return vBottomLimit
-        return vData
 
     @staticmethod
     def isExiting ():
@@ -34,21 +28,21 @@ class App:
     def update (self):
         self.validate ()
         
-        LOGI (f'Duty {self.settings.duty}')
+        duty = self.settings.duty
+        LOGI (f'Duty {duty / Settings.DUTY_FACTOR}')
 
-        duty = self.limit (self.settings.duty, 1, -1)
         if self.turnLeft == True:
             self.turnLeft = False
-            motor1.set (duty - Settings.DUTY_STEP)
+            motor1.set ((duty - Settings.DUTY_STEP) / Settings.DUTY_FACTOR)
         else:
-            motor1.set (duty)
+            motor1.set (duty / Settings.DUTY_FACTOR)
         time.sleep (0.3)
         
         if self.turnRight == True:
             self.turnRight = False
-            motor2.set (duty - Settings.DUTY_STEP)
+            motor2.set ((duty - Settings.DUTY_STEP) / Settings.DUTY_FACTOR)
         else:
-            motor2.set (duty)
+            motor2.set (duty / Settings.DUTY_FACTOR)
         time.sleep (0.3)
         
         if self.settings.brake == True:

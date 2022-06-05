@@ -9,9 +9,9 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
+            "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
-            "justMyCode": true,
-            "sudo": true
+            "justMyCode": true
         }
     ]
 }

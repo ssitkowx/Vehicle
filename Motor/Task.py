@@ -10,10 +10,10 @@ class Task:
     rtos                   = Rtos                   ()
     settings               = Settings               ()
     app                    = App                    (settings)
-    bleServerComm          = BleServerComm          (settings)
     bleParserAndSerializer = BleParserAndSerializer (settings)
     
     def __init__ (self):
+        self.bleServerComm   = BleServerComm          (self.settings)
         self.bleServerThread = self.rtos.createThread (self.bleServerProcess)
         self.bleServerThread.start ()
 
@@ -22,13 +22,12 @@ class Task:
     
         self.bleServerThread.join  ()
         self.appThread      .join  ()
-        
-    def isBleServerProcessRunning (self):
-        return True
+
+    def isBleProcessRunning ():
+        return True;
     
     def bleServerProcess (self):
-        
-        while self.isBleServerProcessRunning ():
+        while self.isBleProcessRunning ():
             try:
                 msg = self.bleServerComm.clientSock.recv (1024)
                 if not msg:
