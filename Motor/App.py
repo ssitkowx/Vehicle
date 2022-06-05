@@ -35,7 +35,7 @@ class App:
             motor1.set ((duty - Settings.DUTY_STEP) / Settings.DUTY_FACTOR)
         else:
             motor1.set (duty / Settings.DUTY_FACTOR)
-        time.sleep (0.2)
+        time.sleep (0.1)
         
         if self.turnRight == True:
             self.turnRight = False
