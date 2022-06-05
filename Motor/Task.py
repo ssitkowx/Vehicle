@@ -23,7 +23,7 @@ class Task:
         self.bleServerThread.join  ()
         self.appThread      .join  ()
 
-    def isBleProcessRunning ():
+    def isBleProcessRunning (self):
         return True
     
     def bleServerProcess (self):
@@ -44,6 +44,7 @@ class Task:
             try:
                 if self.app.isRunning () == True:
                     msg = self.rtos.getMsg            ()
+                    if msg == None: continue
                     LOGI                              (f"Received: {msg}")
                     self.bleParserAndSerializer.parse (msg)
                     self.app.process                  ()

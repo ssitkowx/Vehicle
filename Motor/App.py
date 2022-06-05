@@ -9,7 +9,7 @@ class App:
     turnRight = False
     
     def __init__ (self, vSettings: Settings):
-        self.settings   = vSettings
+        self.settings = vSettings
         rcpy.set_state (rcpy.RUNNING)
 
     @staticmethod
@@ -35,14 +35,14 @@ class App:
             motor1.set ((duty - Settings.DUTY_STEP) / Settings.DUTY_FACTOR)
         else:
             motor1.set (duty / Settings.DUTY_FACTOR)
-        time.sleep (0.3)
+        time.sleep (0.2)
         
         if self.turnRight == True:
             self.turnRight = False
             motor2.set ((duty - Settings.DUTY_STEP) / Settings.DUTY_FACTOR)
         else:
             motor2.set (duty / Settings.DUTY_FACTOR)
-        time.sleep (0.3)
+        time.sleep (0.1)
         
         if self.settings.brake == True:
             self.settings.brake = False
@@ -50,7 +50,7 @@ class App:
             motor2.brake ()
         
         if self.settings.freeSpin == True:
-            self.settings  .freeSpin = False
+            self.settings.freeSpin = False
             motor1.free_spin ()
             motor2.free_spin ()
         
