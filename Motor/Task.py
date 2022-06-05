@@ -44,7 +44,6 @@ class Task:
             try:
                 if self.app.isRunning () == True:
                     msg = self.rtos.getMsg            ()
-                    if msg == None: continue
                     LOGI                              (f"Received: {msg}")
                     self.bleParserAndSerializer.parse (msg)
                     self.app.process                  ()

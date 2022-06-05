@@ -2,7 +2,7 @@ import queue, threading
 
 class Rtos:
     def __init__ (self):
-        self.bleMsgQueue = queue.Queue ()
+        self.bleMsgQueue = queue.Queue (maxsize=1)
         self.bleMsgQueue.join          ()
     
     def createThread (self, vHandler):
