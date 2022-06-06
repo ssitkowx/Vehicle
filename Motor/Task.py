@@ -3,6 +3,7 @@ from   App                    import App
 from   Rtos                   import Rtos
 from   Logger                 import *
 from   Settings               import Settings
+from   Accelerometer          import Accelerometer
 from   BleServerComm          import BleServerComm
 from   BleParserAndSerializer import BleParserAndSerializer
 
@@ -13,15 +14,20 @@ class Task:
     bleParserAndSerializer = BleParserAndSerializer (settings)
     
     def __init__ (self):
-        self.bleServerComm   = BleServerComm          (self.settings)
-        self.bleServerThread = self.rtos.createThread (self.bleServerProcess)
-        self.bleServerThread.start ()
+        self.accelerometer      = Accelerometer          ()
+        self.bleServerComm      = BleServerComm          (self.settings)
+        self.bleServerThread    = self.rtos.createThread (self.bleServerProcess)
+        self.bleServerThread    .start ()
 
-        self.appThread       = self.rtos.createThread (self.appProcess)
-        self.appThread      .start ()
+        self.appThread           = self.rtos.createThread (self.appProcess)
+        self.appThread          .start ()
+
+        self.accelerometerThread = self.rtos.createThread (self.accelerometerProcess)
+        self.accelerometerThread.start ()
     
-        self.bleServerThread.join  ()
-        self.appThread      .join  ()
+        self.bleServerThread    .join  ()
+        self.appThread          .join  ()
+        self.accelerometerThread.join  ()
 
     def isBleProcessRunning (self):
         return True
@@ -52,3 +58,10 @@ class Task:
 
             except OSError:
                 LOGE ("appProcess disconnected")
+    
+    def accelerometerProcess (self):
+        while self.accelerometer.isExiting () == False:
+            try:
+                self.accelerometer.process ()
+            except OSError:
+                LOGE ("accelerometerProcess disconnected")

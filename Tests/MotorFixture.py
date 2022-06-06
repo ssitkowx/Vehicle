@@ -2,14 +2,16 @@ import unittest
 from   MotorPaths import *
 from   unittest   import mock
 
-sys.modules ['rcpy'      ] = mock.MagicMock ()
-sys.modules ['bluetooth' ] = mock.MagicMock ()
-sys.modules ['rcpy.motor'] = mock.MagicMock ()
+sys.modules ['rcpy'        ] = mock.MagicMock ()
+sys.modules ['bluetooth'   ] = mock.MagicMock ()
+sys.modules ['rcpy.motor'  ] = mock.MagicMock ()
+sys.modules ['rcpy.mpu9250'] = mock.MagicMock ()
 
-from App      import App
-from Task     import Task
-from Logger   import *
-from Settings import Settings
+from App           import App
+from Task          import Task
+from Logger        import *
+from Settings      import Settings
+from Accelerometer import Accelerometer
 
 class MotorFixture (unittest.TestCase):
     @classmethod
@@ -20,7 +22,8 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Task.Task.isBleProcessRunning'         , return_value=False)
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
-    def setUpClass (self, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMockSleep):
+    @mock.patch ('Accelerometer.Accelerometer.isExiting' , return_value=True)
+    def setUpClass (self, isAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMockSleep):
         LOGI ("MotorFixture")
         self.task = Task ()
 
@@ -33,7 +36,8 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Task.Task.isBleProcessRunning'         , side_effect =[True, False])
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
-    def moveLeftUntilMaxSpeedLimit (self, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
+    @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
+    def moveLeftUntilMaxSpeedLimit (self, isAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
         LOGI ("moveLeftUntilMaxSpeedLimit")
         vClientSockMock.recv.return_value = b'{"MoveDirection": 2}'
         self.task.settings.duty           = 10

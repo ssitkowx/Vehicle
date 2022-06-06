@@ -27,6 +27,9 @@ class Settings:
     brake               = False
     freeSpin            = False
     direction           = EMoveDirection.Stop
+    acceleroemterX      = 0
+    acceleroemterY      = 0
+    acceleroemterZ      = 0
     
     
 
