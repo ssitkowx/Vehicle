@@ -14,7 +14,7 @@ class Task:
     bleParserAndSerializer = BleParserAndSerializer (settings)
     
     def __init__ (self):
-        self.accelerometer      = Accelerometer          ()
+        self.accelerometer      = Accelerometer          (self.settings)
         self.bleServerComm      = BleServerComm          (self.settings)
         self.bleServerThread    = self.rtos.createThread (self.bleServerProcess)
         self.bleServerThread    .start ()
