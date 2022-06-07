@@ -1,3 +1,4 @@
+import time
 from   Paths                  import *
 from   App                    import App
 from   Rtos                   import Rtos
@@ -63,5 +64,6 @@ class Task:
         while self.accelerometer.isExiting () == False:
             try:
                 self.accelerometer.process ()
+                time.sleep (3)
             except OSError:
                 LOGE ("accelerometerProcess disconnected")
