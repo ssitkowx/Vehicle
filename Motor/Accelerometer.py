@@ -1,5 +1,6 @@
-import rcpy 
+import rcpy
 import rcpy.mpu9250 as mpu9250
+from   Logger import *
 
 class Accelerometer:
     data = 0
@@ -13,4 +14,5 @@ class Accelerometer:
 
     def process (self):
         data = mpu9250.read ()
-        print ('{0[0]:6.2f} {0[1]:6.2f} {0[2]:6.2f} |'.format (data['accel']), end='')
+        #data = {'accel': [9, 8, 4]}
+        LOGI ('{0[0]:6.2f} {0[1]:6.2f} {0[2]:6.2f}'.format (data ['accel']))

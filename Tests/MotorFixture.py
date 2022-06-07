@@ -23,7 +23,7 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
     @mock.patch ('Accelerometer.Accelerometer.isExiting' , return_value=True)
-    def setUpClass (self, isAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMockSleep):
+    def setUpClass (self, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMockSleep):
         LOGI ("MotorFixture")
         self.task = Task ()
 
@@ -37,8 +37,10 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
     @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
-    def moveLeftUntilMaxSpeedLimit (self, isAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
+    @mock.patch ('Accelerometer.mpu9250'   )
+    def moveLeftUntilMaxSpeedLimit (self, vMpu9250Mock, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
         LOGI ("moveLeftUntilMaxSpeedLimit")
+        vMpu9250Mock.read.return_value    = {'accel': [10, -10, 5]}
         vClientSockMock.recv.return_value = b'{"MoveDirection": 2}'
         self.task.settings.duty           = 10
         self.task.__init__                 ()
@@ -55,8 +57,11 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Task.Task.isBleProcessRunning'         , side_effect =[True, False])
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
-    def moveRightUntilMaxSpeedLimit (self, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
+    @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
+    @mock.patch ('Accelerometer.mpu9250'   )
+    def moveRightUntilMaxSpeedLimit (self, vMpu9250Mock, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
         LOGI ("moveRightUntilMaxSpeedLimit")
+        vMpu9250Mock.read.return_value    = {'accel': [10, -10, 5]}
         vClientSockMock.recv.return_value = b'{"MoveDirection": 3}'
         self.task.settings.duty           = 10
         self.task.__init__                 ()
@@ -73,8 +78,12 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Task.Task.isBleProcessRunning'         , side_effect=([True  for i in range (10)] + [False]))
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
-    def moveForwardUntilMaxSpeedLimit (self, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
+    @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
+    @mock.patch ('Accelerometer.mpu9250'   )
+    def moveForwardUntilMaxSpeedLimit (self, vMpu9250Mock, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
         LOGI ("moveForwardUntilMaxSpeedLimit")
+        vMpu9250Mock.read.return_value    = {'accel': [10, -10, 5]}
+        vClientSockMock.recv.return_value = b'{"MoveDirection": 3}'
         vClientSockMock.recv.return_value = b'{"MoveDirection": 0}'
         self.task.settings.duty           = 0
         self.task.__init__                 ()
@@ -91,8 +100,12 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Task.Task.isBleProcessRunning'         , side_effect=([True  for i in range (10)] + [False]))
     @mock.patch ('BleServerComm.BleServerComm.__init__'  , return_value=None)
     @mock.patch ('BleServerComm.BleServerComm.clientSock')
-    def moveBackwardUntilMaxSpeedLimit (self, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
+    @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
+    @mock.patch ('Accelerometer.mpu9250'   )
+    def moveBackwardUntilMaxSpeedLimit (self, vMpu9250Mock, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
         LOGI ("moveBackwardUntilMaxSpeedLimit")
+        vMpu9250Mock.read.return_value    = {'accel': [10, -10, 5]}
+        vClientSockMock.recv.return_value = b'{"MoveDirection": 3}'
         vClientSockMock.recv.return_value = b'{"MoveDirection": 1}'
         self.task.settings.duty           = 0
         self.task.__init__                 ()
