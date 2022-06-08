@@ -17,7 +17,13 @@ class Accelerometer:
 
     def process (self):
         data = mpu9250.read ()
-        (self.settings.accelerometerX, self.settings.accelerometerY, self.settings.accelerometerZ) = data ['accel']
-        LOGI ('X:{0:6.2f}, Y:{1:6.2f}, Z:{2:6.2f}'.format (self.settings.accelerometerX,
-                                                           self.settings.accelerometerY,
-                                                           self.settings.accelerometerZ))
+        (self.settings.Accelerometer.X, self.settings.Accelerometer.Y, self.settings.Accelerometer.Z) = data ['accel']
+        (self.settings.Gyroscop.X     , self.settings.Gyroscop.Y     , self.settings.Gyroscop.Z)      = data ['gyro']
+        
+        LOGI ('X:{0:6.2f}, Y:{1:6.2f}, Z:{2:6.2f} [m/s^2]'.format (self.settings.Accelerometer.X,
+                                                                   self.settings.Accelerometer.Y,
+                                                                   self.settings.Accelerometer.Z))
+        
+        LOGI ('X:{0:6.2f}, Y:{1:6.2f}, Z:{2:6.2f} [deg/s]'.format (self.settings.Gyroscop.X,
+                                                                   self.settings.Gyroscop.Y,
+                                                                   self.settings.Gyroscop.Z))

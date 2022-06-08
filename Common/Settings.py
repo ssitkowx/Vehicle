@@ -13,23 +13,33 @@ class Settings:
     class EChannel (IntEnum):
         One = 1
         Two = 2
-    
-    DUTY_RANGE          = { "Top"    : 10,
+
+    class Gyroscop:
+        X = 0
+        Y = 0
+        Z = 0
+
+    class Accelerometer:
+        X = 0
+        Y = 0
+        Z = 0
+
+    class Duty:
+        RANGE          = { "Top"     : 10,
                             "Bottom" : -10
                           }
-    DUTY_STEP           = 1
-    DUTY_FACTOR         = 10
-    DUTY_TO_SPEED_COEFF = 100
-    ADDRESS             = "98:84:E3:E0:A6:92"
-    UUID                = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
+        STEP           = 1
+        FACTOR         = 10
+        TO_SPEED_COEFF = 100
     
-    duty                = 0
-    brake               = False
-    freeSpin            = False
-    direction           = EMoveDirection.Stop
-    accelerometerX      = 0
-    accelerometerY      = 0
-    accelerometerZ      = 0
+
+    ADDRESS   = "98:84:E3:E0:A6:92"
+    UUID      = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
+    
+    duty      = 0
+    brake     = False
+    freeSpin  = False
+    direction = EMoveDirection.Stop
     
     
 
