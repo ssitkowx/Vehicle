@@ -45,6 +45,7 @@ class Task:
                 LOGE ("appProcess disconnected")
                 self.bleServerComm.clientSock.close ()
                 self.bleServerComm.sock      .close ()
+                break
 
     def appProcess (self): 
         while self.app.isExiting () == False:
@@ -59,6 +60,7 @@ class Task:
 
             except OSError:
                 LOGE ("appProcess disconnected")
+                break
     
     def accelerometerProcess (self):
         while self.accelerometer.isExiting () == False:
@@ -67,3 +69,4 @@ class Task:
                 time.sleep (3)
             except OSError:
                 LOGE ("accelerometerProcess disconnected")
+                break
