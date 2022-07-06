@@ -1,16 +1,14 @@
-from cgitb import enable
 from   Paths    import *
 from   Ble      import Ble
 from   Logger   import *
-from   Settings import Settings  
-import bluetooth 
+import bluetooth
 
 class BleClientComm (Ble):
-    def __init__ (self, vSettings: Settings):
-        super ().__init__ ()
-        serviceMatches = bluetooth.find_service (uuid = vSettings.UUID, address = vSettings.ADDRESS)
+    def Open (self, vUuid: str, vAddress: str):
+        serviceMatches = bluetooth.find_service (uuid = vUuid, address = vAddress)
         if len (serviceMatches) == 0:
             LOGE ("Couldn't find the BleServer service.")
+            return
         
         firstMatch = serviceMatches [0]
         port       = firstMatch ["port"]
@@ -22,3 +20,9 @@ class BleClientComm (Ble):
         # Create the client socket
         self.sock = bluetooth.BluetoothSocket (bluetooth.RFCOMM)
         self.sock.connect                     ((host, port))
+
+    def Send (self, vData):
+        self.sock.send (vData)
+
+    def Close (self):
+        self.sock.close ()

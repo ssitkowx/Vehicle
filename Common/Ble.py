@@ -1,7 +1,7 @@
 import os
 
 class Ble:
-    def __init__ (self):
+    def Enable (self):
         os.system ('sudo systemctl restart bluetooth')
         os.system ('sudo sdptool add SP')
         os.system ('sudo hcitool dev')
