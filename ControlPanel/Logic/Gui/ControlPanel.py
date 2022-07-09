@@ -1,21 +1,22 @@
-from Uart                   import Uart
-from MenuBar                import MenuBar
-from Buttons                import Buttons
-from Layouts                import Layouts
-from BleComm                import BleComm
-from Settings               import Settings
-from LineEdit               import LineEdit
-from ComboBox               import ComboBox
-from CheckBox               import CheckBox
-from TextBrowser            import TextBrowser
-from PySide6.QtCore         import QSize
-from PySide6.QtWidgets      import QMainWindow
-from Logic.Ble.BlePanel     import BlePanel
-from Logic.Uart.UartPanel   import UartPanel
-from BleParserAndSerializer import BleParserAndSerializer
+from Uart                            import Uart
+from Panel                           import Panel
+from MenuBar                         import MenuBar
+from Buttons                         import Buttons
+from Layouts                         import Layouts
+from BleComm                         import BleComm
+from Settings                        import Settings
+from LineEdit                        import LineEdit
+from ComboBox                        import ComboBox
+from CheckBox                        import CheckBox
+from TextBrowser                     import TextBrowser
+from PySide6.QtCore                  import QSize
+from PySide6.QtWidgets               import QMainWindow
+from BleParserAndSerializer          import BleParserAndSerializer
+from Logic.Gui.Panels.Ble.BlePanel   import BlePanel
+from Logic.Gui.Panels.Uart.UartPanel import UartPanel
 
 class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit, TextBrowser, Layouts):
-    interface = False
+    #interface = False
 
     def __init__ (self, vSettings: Settings):
         QMainWindow.__init__ (self)
@@ -33,6 +34,7 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
         self.bleComm                = BleComm                ()
         self.uartPanel              = UartPanel              (self.uart)
         self.blePanel               = BlePanel               (self.bleComm, self.settings)
+        self.panel                  = self.uartPanel
 
         self.setGeometry      (500, 200, 500, 500)
         self.setWindowTitle   ('Control Panel')
@@ -73,16 +75,10 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
 
     def ConnectButtonClicked (self, vChecked):
         if (self.connectButton.text () == "Connect"):
-            if self.interface == False:
-                if self.uartPanel.Connect () == False: return
-            else:
-                if self.blePanel.Connect () == False: return
+            if self.panel.Connect () == False: return
             self.connectButton.setText ("Disconnect")
         else:
-            if self.interface == False:
-                self.uart.Close (self.uartPanel.port)
-            else:
-                self.bleComm.Close   ()
+            self.panel.Disconnect ()
             self.connectButton.setText ("Connect")
 
     def ClearButtonClicked (self, vChecked):
@@ -96,8 +92,8 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
 
     def ChooseInterface (self, vState):
         if vState == 0:
-            self.interface = False
+            self.panel = self.uartPanel
             self.interfaceCheckBox.setText ("To uart")
         else:
-            self.interface = True
+            self.panel = self.blePanel
             self.interfaceCheckBox.setText ("To bluetooth")

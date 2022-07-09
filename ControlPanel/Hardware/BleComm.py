@@ -1,10 +1,8 @@
-from   Paths         import *
 import bluetooth
-from   Ble           import Ble
-from   Logger        import *
-from   Communication import Communication
+from   Ble    import Ble
+from   Logger import *
 
-class BleComm (Ble, Communication):
+class BleComm (Ble):
     def Open (self, vUuid: str, vAddress: str) -> bool:
         serviceMatches = bluetooth.find_service (uuid = vUuid, address = vAddress)
         if len (serviceMatches) == 0:

@@ -1,13 +1,15 @@
-from   Uart                          import Uart
-from   PySide6.QtCore                import QSize
-from   PySide6.QtWidgets             import QWidget
-from   Logic.Uart.Widgets.Button     import Button
-from   Logic.Uart.Widgets.Labels     import Labels
-from   Logic.Uart.Widgets.Layouts    import Layouts
-from   Logic.Uart.Widgets.LineEdit   import LineEdit
-from   Logic.Uart.Widgets.ComboBoxes import ComboBoxes
+import os
+from   Uart                                     import Uart
+from   Panel                                    import Panel
+from   PySide6.QtCore                           import QSize
+from   PySide6.QtWidgets                        import QWidget
+from   Logic.Gui.Panels.Uart.Widgets.Button     import Button
+from   Logic.Gui.Panels.Uart.Widgets.Labels     import Labels
+from   Logic.Gui.Panels.Uart.Widgets.Layouts    import Layouts
+from   Logic.Gui.Panels.Uart.Widgets.LineEdit   import LineEdit
+from   Logic.Gui.Panels.Uart.Widgets.ComboBoxes import ComboBoxes
 
-class UartPanel (QWidget, Button, Layouts, LineEdit, ComboBoxes, Labels):
+class UartPanel (QWidget, Panel, Button, Layouts, LineEdit, ComboBoxes, Labels):
     def __init__ (self, vUart: Uart):
         QWidget   .__init__ (self)
         Button    .__init__ (self)
@@ -26,7 +28,7 @@ class UartPanel (QWidget, Button, Layouts, LineEdit, ComboBoxes, Labels):
         self.setFixedSize   (dimensions.width (), dimensions.height ())
         self.FillCommandComboBoxPorts ()
 
-    def Connect (self):
+    def Connect (self) -> bool:
         self.PortEnable               ()
         self.FillCommandComboBoxPorts ()
         
@@ -39,6 +41,9 @@ class UartPanel (QWidget, Button, Layouts, LineEdit, ComboBoxes, Labels):
         
         self.uart.Update (self.port, speed, dataBits, stopBits, parityBits, flowControl)
         return self.uart.Open (self.port)
+
+    def Disconnect (self):
+        self.uart.Close ()
 
     def FillCommandComboBoxPorts (self):
         self.portComboBox.clear ()

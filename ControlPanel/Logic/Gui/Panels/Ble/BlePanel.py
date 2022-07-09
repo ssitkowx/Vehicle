@@ -1,13 +1,14 @@
-from BleComm                    import BleComm
-from Settings                   import Settings
-from PySide6.QtCore             import QSize
-from PySide6.QtWidgets          import QWidget
-from Logic.Ble.Widgets.Button   import Button
-from Logic.Ble.Widgets.Labels   import Labels
-from Logic.Ble.Widgets.Layouts  import Layouts
-from Logic.Ble.Widgets.ComboBox import ComboBox
+from Panel                                 import Panel
+from BleComm                               import BleComm
+from Settings                              import Settings
+from PySide6.QtCore                        import QSize
+from PySide6.QtWidgets                     import QWidget
+from Logic.Gui.Panels.Ble.Widgets.Button   import Button
+from Logic.Gui.Panels.Ble.Widgets.Labels   import Labels
+from Logic.Gui.Panels.Ble.Widgets.Layouts  import Layouts
+from Logic.Gui.Panels.Ble.Widgets.ComboBox import ComboBox
 
-class BlePanel (QWidget, Button, Labels, ComboBox, Layouts):
+class BlePanel (QWidget, Panel, Button, Labels, ComboBox, Layouts):
     def __init__ (self, vbleComm: BleComm, vSettings: Settings):
         QWidget .__init__ (self)
         Button  .__init__ (self)
@@ -31,7 +32,10 @@ class BlePanel (QWidget, Button, Labels, ComboBox, Layouts):
         uuid    = self.uuidComboBox   .currentText ()
         address = self.addressComboBox.currentText ()
         self.FillCommandComboBoxPorts ()
-        return self.bluetooth.Open    (uuid, address)
+        return self.bleComm.Open      (uuid, address)
+
+    def Disconnect (self):
+        self.bleComm.Close ()
 
     def FillCommandComboBoxPorts (self):
         self.uuidComboBox   .clear    ()

@@ -1,7 +1,6 @@
-from Communication        import Communication
 from PySide6.QtSerialPort import QSerialPort, QSerialPortInfo
 
-class Uart (Communication):
+class Uart:
     def Update (self, vPort, vSpeed, vDataBits, vStopBits, vPairtyBits, vFlowControl):
         self.serialPort = QSerialPort    ()
         self.serialPort.readyRead.connect(self.Receive)
