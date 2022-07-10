@@ -1,6 +1,4 @@
-import logging
-from   enum        import IntEnum
-#from   TextBrowser import TextBrowser
+from enum import IntEnum
 
 class ELogLevel (IntEnum):
     Debug    = 0
@@ -18,18 +16,12 @@ def LOGC (vMsg: str): Logger ().Log (ELogLevel.Critical, vMsg)
 class Logger:
     _instance = None
 
-    def __new__(self):
-        if self._instance is None:
-            self._instance = super (Logger, self).__new__(self)
-        return self._instance
-
     def SetLogger (self, vTextBrowser):
         self.textBrowser = vTextBrowser
     
     def Log (self, vLogLevel: ELogLevel, vMsg: str):
-        msg = "Module: " + __name__ + ". "
-        msg =  msg + vMsg
-        
+        msg = "Module: " + __name__ + ". "    #Add Module to logger
+
         if vLogLevel == ELogLevel.Debug:
             self.textBrowser.setTextColor ("black")
         elif vLogLevel == ELogLevel.Info:
@@ -41,4 +33,4 @@ class Logger:
         elif vLogLevel == ELogLevel.Critical:
             self.textBrowser.setTextColor ("purple")
 
-        self.textBrowser.append (vMsg)
+        self.textBrowser.append (msg + vMsg)

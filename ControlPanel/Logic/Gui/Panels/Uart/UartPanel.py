@@ -1,6 +1,5 @@
 import os
 from   Uart                                     import Uart
-from   Panel                                    import Panel
 from   PySide6.QtCore                           import QSize
 from   PySide6.QtWidgets                        import QWidget
 from   Logic.Gui.Panels.Uart.Widgets.Button     import Button
@@ -9,7 +8,7 @@ from   Logic.Gui.Panels.Uart.Widgets.Layouts    import Layouts
 from   Logic.Gui.Panels.Uart.Widgets.LineEdit   import LineEdit
 from   Logic.Gui.Panels.Uart.Widgets.ComboBoxes import ComboBoxes
 
-class UartPanel (QWidget, Panel, Button, Layouts, LineEdit, ComboBoxes, Labels):
+class UartPanel (QWidget, Button, Layouts, LineEdit, ComboBoxes, Labels):
     def __init__ (self, vUart: Uart):
         QWidget   .__init__ (self)
         Button    .__init__ (self)
@@ -26,14 +25,19 @@ class UartPanel (QWidget, Panel, Button, Layouts, LineEdit, ComboBoxes, Labels):
                              'selection-color: black;'
                              'selection-background-color: gray;')
         self.setFixedSize   (dimensions.width (), dimensions.height ())
-        self.FillCommandComboBoxPorts ()
+        self.__fillCommandComboBoxPorts ()
+
+    def __fillCommandComboBoxPorts (self):
+        self.portComboBox.clear ()
+        for port in self.uart.GetPortNames ():
+            self.portComboBox.addItem (port)
 
     def Send (self, vJson):
         self.uart.Send (vJson)
 
     def Connect (self) -> bool:
         self.PortEnable               ()
-        self.FillCommandComboBoxPorts ()
+        self.__fillCommandComboBoxPorts ()
         
         speed       = self.speedComboBox      .currentText ()
         dataBits    = self.dataBitsComboBox   .currentText ()
@@ -48,13 +52,8 @@ class UartPanel (QWidget, Panel, Button, Layouts, LineEdit, ComboBoxes, Labels):
     def Disconnect (self):
         self.uart.Close ()
 
-    def FillCommandComboBoxPorts (self):
-        self.portComboBox.clear ()
-        for port in self.uart.GetPortNames ():
-            self.portComboBox.addItem (port)
-
     def SaveClicked (self, vChecked):
-        self.FillCommandComboBoxPorts ()
+        self.__fillCommandComboBoxPorts ()
         self.PortEnable               ()
         self.close                    ()
 

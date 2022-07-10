@@ -1,4 +1,4 @@
-from Panel                                 import Panel
+from lib2to3.pgen2.token import GREATER
 from BleComm                               import BleComm
 from Settings                              import Settings
 from PySide6.QtCore                        import QSize
@@ -8,7 +8,7 @@ from Logic.Gui.Panels.Ble.Widgets.Labels   import Labels
 from Logic.Gui.Panels.Ble.Widgets.Layouts  import Layouts
 from Logic.Gui.Panels.Ble.Widgets.ComboBox import ComboBox
 
-class BlePanel (QWidget, Panel, Button, Labels, ComboBox, Layouts):
+class BlePanel (QWidget, Button, Labels, ComboBox, Layouts):
     def __init__ (self, vbleComm: BleComm, vSettings: Settings):
         QWidget .__init__ (self)
         Button  .__init__ (self)
@@ -26,7 +26,7 @@ class BlePanel (QWidget, Panel, Button, Labels, ComboBox, Layouts):
                              'selection-color: black;'
                              'selection-background-color: gray;')
         self.setFixedSize   (dimensions.width (), dimensions.height ())
-        self.FillCommandComboBoxPorts ()
+        self.__fillCommandComboBoxPorts ()
 
     def Send (self, vJson):
         self.bleComm.Send (vJson)
@@ -40,12 +40,12 @@ class BlePanel (QWidget, Panel, Button, Labels, ComboBox, Layouts):
     def Disconnect (self):
         self.bleComm.Close ()
 
-    def FillCommandComboBoxPorts (self):
+    def __fillCommandComboBoxPorts (self):
         self.uuidComboBox   .clear    ()
         self.addressComboBox.clear    ()
         self.uuidComboBox   .addItems (self.settings.UUID)
         self.addressComboBox.addItems (self.settings.ADDRESS)
 
     def SaveClicked (self, vChecked):
-        self.FillCommandComboBoxPorts ()
+        self.__fillCommandComboBoxPorts ()
         self.close                    ()

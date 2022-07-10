@@ -1,7 +1,6 @@
 import unittest
-
-from MotorFixture               import MotorFixture
-from ParserAndSerializerFixture import ParserAndSerializerFixture
+from   MotorFixture               import MotorFixture
+from   ParserAndSerializerFixture import ParserAndSerializerFixture
 
 def testSuit ():
     testSuit = unittest.TestSuite()
