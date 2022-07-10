@@ -1,3 +1,4 @@
+from Logger               import *
 from PySide6.QtSerialPort import QSerialPort, QSerialPortInfo
 
 class Uart:
@@ -14,7 +15,7 @@ class Uart:
     def Send (self, vData):
         dataLen = len (vData)
         if dataLen <= 0 or self.serialPort.isOpen () == False:
-            print ("Error: Can't send data over Uart")
+            LOGE ("Can't send data over Uart")
             return
         self.serialPort.writeData (vData, dataLen)
 
@@ -28,15 +29,14 @@ class Uart:
 
     def Open (self, vPort) -> bool:
         if self.serialPort.open (QSerialPort.ReadWrite) == True:
-            print ("Success: Connected to port: {0}".format (vPort))
+            LOGI ("Connected to port: {0}".format (vPort))
             return True
         else:
-            print ("Error: Can't connect to port: {0}".format (vPort))
+            LOGE ("Can't connect to port: {0}".format (vPort))
             return False
         
-    def Close (self, vPort):
+    def Close (self):
         self.serialPort.close ()
-        print ("Error: Disconnected from port: {0}".format (vPort))
 
     def GetDataBits (self, vDataBits):
         if   vDataBits == '5': return QSerialPort.Data5
@@ -44,7 +44,7 @@ class Uart:
         elif vDataBits == '7': return QSerialPort.Data7
         elif vDataBits == '8': return QSerialPort.Data8
         else:
-            print ('Error: Unknown data bits. Expected: {0}, set: 1'.format (vDataBits))
+            LOGE ('Unknown data bits. Expected: {0}, set: 1'.format (vDataBits))
             return QSerialPort.OneStop
 
     def GetStopBits (self, vStopBits):
@@ -52,7 +52,7 @@ class Uart:
         elif vStopBits == '2'  : return QSerialPort.TwoStop
         elif vStopBits == '1.5': return QSerialPort.OneAndHalfStop
         else:
-            print ('Error: Unknown stop bits. Expected: {0}, set: 1'.format (vStopBits))
+            LOGE ('Unknown stop bits. Expected: {0}, set: 1'.format (vStopBits))
             return QSerialPort.OneStop
 
     def GetParityBits (self, vParityBits):
@@ -62,7 +62,7 @@ class Uart:
         elif vParityBits == 'Space': return QSerialPort.SpaceParity
         elif vParityBits == 'Mark' : return QSerialPort.MarkParity
         else:
-            print ('Error: Unknown parity. Expected: {0}, set: No'.format (vParityBits))
+            LOGE ('Unknown parity. Expected: {0}, set: No'.format (vParityBits))
             return QSerialPort.NoParity
 
     def GetFlowControl (self, vFlowControl):
@@ -70,5 +70,5 @@ class Uart:
         elif vFlowControl == 'Hardware(RTS/CTS)' : return QSerialPort.HardwareControl
         elif vFlowControl == 'Software(XON/XOFF)': return QSerialPort.SoftwareControl
         else:
-            print ('Error: Unknown flow control. Expected: {0}, set: No'.format (vFlowControl))
+            LOGE ('Unknown flow control. Expected: {0}, set: No'.format (vFlowControl))
             return QSerialPort.NoFlowControl

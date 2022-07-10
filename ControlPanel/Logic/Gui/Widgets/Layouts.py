@@ -15,7 +15,7 @@ class Layouts:
         layout.addLayout  (msgLayout)
         layout.addLayout  (buttonLayout)
         layout.addWidget  (self.interfaceCheckBox)
-        layout.addWidget  (self.logOutputTextBrowser)
+        layout.addWidget  (self.textBrowser)
         layout.setSpacing (20)
         
         self.widgetLayout = QWidget ()

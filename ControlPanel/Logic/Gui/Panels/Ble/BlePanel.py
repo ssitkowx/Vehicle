@@ -28,7 +28,10 @@ class BlePanel (QWidget, Panel, Button, Labels, ComboBox, Layouts):
         self.setFixedSize   (dimensions.width (), dimensions.height ())
         self.FillCommandComboBoxPorts ()
 
-    def Connect (self):
+    def Send (self, vJson):
+        self.bleComm.Send (vJson)
+
+    def Connect (self) -> bool:
         uuid    = self.uuidComboBox   .currentText ()
         address = self.addressComboBox.currentText ()
         self.FillCommandComboBoxPorts ()

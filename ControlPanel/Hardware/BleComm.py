@@ -14,7 +14,7 @@ class BleComm (Ble):
         name       = firstMatch ["name"]
         host       = firstMatch ["host"]
         
-        LOGI ("Connecting to \"{0}\" on {1}".format (name, host))
+        LOGI ("Found \"{0}\" on {1}".format (name, host))
         
         # Create the client socket
         self.sock = bluetooth.BluetoothSocket (bluetooth.RFCOMM)

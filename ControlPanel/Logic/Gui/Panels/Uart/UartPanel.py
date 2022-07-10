@@ -28,6 +28,9 @@ class UartPanel (QWidget, Panel, Button, Layouts, LineEdit, ComboBoxes, Labels):
         self.setFixedSize   (dimensions.width (), dimensions.height ())
         self.FillCommandComboBoxPorts ()
 
+    def Send (self, vJson):
+        self.uart.Send (vJson)
+
     def Connect (self) -> bool:
         self.PortEnable               ()
         self.FillCommandComboBoxPorts ()

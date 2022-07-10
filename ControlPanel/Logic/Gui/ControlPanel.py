@@ -10,14 +10,15 @@ from ComboBox                        import ComboBox
 from CheckBox                        import CheckBox
 from TextBrowser                     import TextBrowser
 from PySide6.QtCore                  import QSize
+from CommandConverter                import CommandConverter
 from PySide6.QtWidgets               import QMainWindow
 from BleParserAndSerializer          import BleParserAndSerializer
 from Logic.Gui.Panels.Ble.BlePanel   import BlePanel
 from Logic.Gui.Panels.Uart.UartPanel import UartPanel
 
-class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit, TextBrowser, Layouts):
-    #interface = False
+from Logger import *
 
+class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit, TextBrowser, Layouts):
     def __init__ (self, vSettings: Settings):
         QMainWindow.__init__ (self)
         Buttons    .__init__ (self)
@@ -28,12 +29,13 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
         TextBrowser.__init__ (self)
         Layouts    .__init__ (self)
         
-        self.settings               = vSettings
-        self.bleParserAndSerializer = BleParserAndSerializer (self.settings)
+        Logger                                               ().SetLogger (self.textBrowser)
         self.uart                   = Uart                   ()
         self.bleComm                = BleComm                ()
+        self.blePanel               = BlePanel               (self.bleComm, vSettings)
         self.uartPanel              = UartPanel              (self.uart)
-        self.blePanel               = BlePanel               (self.bleComm, self.settings)
+        self.commandConverter       = CommandConverter       (vSettings)
+        self.bleParserAndSerializer = BleParserAndSerializer (vSettings)
         self.panel                  = self.uartPanel
 
         self.setGeometry      (500, 200, 500, 500)
@@ -45,33 +47,19 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
         self.setMaximumSize   (QSize(800, 800))
         self.setCentralWidget (self.widgetLayout)
 
-    def LogData (self):
-        self.logOutputTextBrowser.append (str (self.uart.Receive ()))
+    #def LogData (self):
+    #    self.textBrowser.append (str (self.uart.Receive ()))
 
     def CurrentIndexChanged (self, vIndex):
         self.commandLineEdit.setText (self.commandComboBox.currentText ())
 
-    def ConvertCommandToDirection (self, vCommand: str):
-        if vCommand == "Move forward":
-            self.settings.direction = self.settings.EMoveDirection.Forward
-        elif vCommand == "Move backward":
-            self.settings.direction = self.settings.EMoveDirection.Backward
-        elif vCommand == "Turn left":
-            self.settings.direction = self.settings.EMoveDirection.Left
-        elif vCommand == "Turn right":
-            self.settings.direction = self.settings.EMoveDirection.Right
-
     def SendButtonClicked (self, vChecked):
         data = self.commandLineEdit.text ()
-        self.ConvertCommandToDirection (data)
+        self.commandConverter.Convert (data)
 
         json = self.bleParserAndSerializer.serialize ()
-        print ("Send {0}".format (json))
-
-        if self.interface == False:
-            self.uart.Send (json)
-        else:
-            self.bleComm.Send (json)
+        LOGI ("Send {0}".format (json))
+        self.panel.Send         (json)
 
     def ConnectButtonClicked (self, vChecked):
         if (self.connectButton.text () == "Connect"):
@@ -80,9 +68,10 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
         else:
             self.panel.Disconnect ()
             self.connectButton.setText ("Connect")
+            LOGW                       ("Disconnected")
 
     def ClearButtonClicked (self, vChecked):
-        self.logOutputTextBrowser.clear ()
+        self.textBrowser.clear ()
 
     def OpenUartInterface (self, vChecked):
         self.uartPanel.show ()

@@ -1,38 +1,44 @@
 import logging
-from   enum import Enum
+from   enum        import IntEnum
+#from   TextBrowser import TextBrowser
 
-class ELogLevel (Enum):
-    Debug    = logging.DEBUG
-    Info     = logging.INFO
-    Warning  = logging.WARNING
-    Error    = logging.ERROR
-    Critical = logging.CRITICAL
+class ELogLevel (IntEnum):
+    Debug    = 0
+    Info     = 1
+    Warning  = 2
+    Error    = 3
+    Critical = 4
 
-def LOGD (vMsg: str): logger.log (ELogLevel.Debug   , vMsg)
-def LOGI (vMsg: str): logger.log (ELogLevel.Info    , vMsg)
-def LOGW (vMsg: str): logger.log (ELogLevel.Warning , vMsg)
-def LOGE (vMsg: str): logger.log (ELogLevel.Error   , vMsg)
-def LOGC (vMsg: str): logger.log (ELogLevel.Critical, vMsg)
+def LOGD (vMsg: str): Logger ().Log (ELogLevel.Debug   , vMsg)
+def LOGI (vMsg: str): Logger ().Log (ELogLevel.Info    , vMsg)
+def LOGW (vMsg: str): Logger ().Log (ELogLevel.Warning , vMsg)
+def LOGE (vMsg: str): Logger ().Log (ELogLevel.Error   , vMsg)
+def LOGC (vMsg: str): Logger ().Log (ELogLevel.Critical, vMsg)
 
 class Logger:
-    def __init__(self):
-        logging.root.setLevel (logging.NOTSET)
-        
-    def log (self, vLogLevel: ELogLevel, vMsg: str):
+    _instance = None
+
+    def __new__(self):
+        if self._instance is None:
+            self._instance = super (Logger, self).__new__(self)
+        return self._instance
+
+    def SetLogger (self, vTextBrowser):
+        self.textBrowser = vTextBrowser
+    
+    def Log (self, vLogLevel: ELogLevel, vMsg: str):
         msg = "Module: " + __name__ + ". "
         msg =  msg + vMsg
         
         if vLogLevel == ELogLevel.Debug:
-            logging.debug (vMsg)
+            self.textBrowser.setTextColor ("black")
         elif vLogLevel == ELogLevel.Info:
-            logging.info (vMsg)
+            self.textBrowser.setTextColor ("blue")
         elif vLogLevel == ELogLevel.Warning:
-            logging.warning (msg)
+            self.textBrowser.setTextColor ("gray")
         elif vLogLevel == ELogLevel.Error:
-            logging.error (vMsg)
+            self.textBrowser.setTextColor ("red")
         elif vLogLevel == ELogLevel.Critical:
-            logging.critical (vMsg)
-        else:
-            print (f"Unknown log level. {vMsg}")
+            self.textBrowser.setTextColor ("purple")
 
-logger = Logger ()
+        self.textBrowser.append (vMsg)

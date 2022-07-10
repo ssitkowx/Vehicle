@@ -2,13 +2,11 @@ from PySide6.QtCore    import Qt
 from PySide6.QtWidgets import QTextBrowser, QScrollBar
 
 class TextBrowser:
-    def __init__(self):
-        self.logOutputTextBrowser = QTextBrowser       (self)
-        self.logOutputTextBrowser.setVerticalScrollBar (QScrollBar())
-        self.logOutputTextBrowser.setStyleSheet        ("background-color:#33ccff")
+    def __init__ (self):
+        self.textBrowser = QTextBrowser       ()
+        self.textBrowser.setStyleSheet        ("background-color:white")
+        self.textBrowser.setVerticalScrollBar (QScrollBar())
 
-    def ToogleName(self, v_state):
-        if(Qt.Checked == v_state):
-            self.checkBox.setText("Uart")
-        else:
-            self.checkBox.setText("Bluetooth")
+    def ToogleName (self, v_state):
+        if (Qt.Checked == v_state): self.checkBox.setText ("Uart")
+        else:                       self.checkBox.setText ("Bluetooth")
