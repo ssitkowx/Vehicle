@@ -1,5 +1,5 @@
 from Uart                            import Uart
-from Logger                          import *
+from LoggerHw                          import *
 from MenuBar                         import MenuBar
 from Buttons                         import Buttons
 from Layouts                         import Layouts
@@ -15,7 +15,7 @@ from PySide6.QtWidgets               import QMainWindow
 from BleParserAndSerializer          import BleParserAndSerializer
 from Logic.Gui.Panels.Ble.BlePanel   import BlePanel
 from Logic.Gui.Panels.Uart.UartPanel import UartPanel
-
+from Logger import *
 class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit, TextBrowser, Layouts):
     def __init__ (self, vSettings: Settings):
         QMainWindow.__init__ (self)
@@ -27,7 +27,7 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
         TextBrowser.__init__ (self)
         Layouts    .__init__ (self)
         
-        Logger                                               ().SetLogger (self.textBrowser)
+        Logger                                               (LoggerHw).SetLogging (Logger, self.textBrowser)
         self.uart                   = Uart                   ()
         self.bleComm                = BleComm                ()
         self.blePanel               = BlePanel               (self.bleComm, vSettings)
