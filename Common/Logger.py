@@ -1,30 +1,27 @@
-from enum import IntEnum
-from LoggerHw import LoggerHw
-class ELogLevel (IntEnum):
-    Debug    = 0
-    Info     = 1
-    Warning  = 2
-    Error    = 3
-    Critical = 4
+from abc import ABC, abstractmethod
 
-def LOGD (vMsg: str): Logger (LoggerHw).Log (Logger, ELogLevel.Debug   , vMsg)
-def LOGI (vMsg: str): Logger (LoggerHw).Log (Logger, ELogLevel.Info    , vMsg)
-def LOGW (vMsg: str): Logger (LoggerHw).Log (Logger, ELogLevel.Warning , vMsg)
-def LOGE (vMsg: str): Logger (LoggerHw).Log (Logger, ELogLevel.Error   , vMsg)
-def LOGC (vMsg: str): Logger (LoggerHw).Log (Logger, ELogLevel.Critical, vMsg)
+def LOGD (vMsg: str): Logger.getInst ().log ("Debug"   , vMsg)
+def LOGI (vMsg: str): Logger.getInst ().log ("Info"    , vMsg)
+def LOGW (vMsg: str): Logger.getInst ().log ("Warning" , vMsg)
+def LOGE (vMsg: str): Logger.getInst ().log ("Error"   , vMsg)
+def LOGC (vMsg: str): Logger.getInst ().log ("Critical", vMsg)
 
-class Logger:
-    _instance = None
+class Logger (ABC):
+    _inst = None
 
-    def __new__ (self, vSubClass):
-        if self._instance is None:
-            self._instance = self
-            self.subClass  = vSubClass
-        return self._instance
+    def __init__ ():
+        print ("Init was called unfortunatelly")
 
-    def SetLogging (self, vTextBrowser) -> None:
-        self.subClass.SetLogging (self, vTextBrowser)
-    
-    def Log (self, vLogLevel: ELogLevel, vMsg: str) -> str:
-        msg = "Module: " + __name__ + ". "    #Add Module to logger
-        self.subClass.Log (self, vLogLevel, msg + vMsg)
+    @classmethod
+    def setInst (cls, vInst):
+        cls._inst = vInst
+
+    @classmethod
+    def getInst (cls):
+        if cls._inst == None:
+            cls._inst = cls.__new__ (cls)
+        return cls._inst
+
+    @abstractmethod
+    def log (self, vLogLevel: str, vMsg: str):
+        return "{0}: Module: {1}: {2}. ".format (vLogLevel, __name__, vMsg)

@@ -6,5 +6,5 @@ class Button:
         dimensions      = QSize         (200, 50)
         self.saveButton = QPushButton   ("Save")
         self.saveButton.setFixedSize    (dimensions.width(), dimensions.height())
-        self.saveButton.clicked.connect (self.SaveClicked)
+        self.saveButton.clicked.connect (self.saveClicked)
         self.saveButton.setStyleSheet   ('background-color:blue')

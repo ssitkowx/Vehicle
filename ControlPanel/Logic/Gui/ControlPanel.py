@@ -1,5 +1,4 @@
 from Uart                            import Uart
-from LoggerHw                          import *
 from MenuBar                         import MenuBar
 from Buttons                         import Buttons
 from Layouts                         import Layouts
@@ -8,6 +7,7 @@ from Settings                        import Settings
 from LineEdit                        import LineEdit
 from ComboBox                        import ComboBox
 from CheckBox                        import CheckBox
+from LoggerHw                        import *
 from TextBrowser                     import TextBrowser
 from PySide6.QtCore                  import QSize
 from CommandConverter                import CommandConverter
@@ -15,7 +15,9 @@ from PySide6.QtWidgets               import QMainWindow
 from BleParserAndSerializer          import BleParserAndSerializer
 from Logic.Gui.Panels.Ble.BlePanel   import BlePanel
 from Logic.Gui.Panels.Uart.UartPanel import UartPanel
-from Logger import *
+
+from PySide6.QtWidgets import QPushButton
+
 class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit, TextBrowser, Layouts):
     def __init__ (self, vSettings: Settings):
         QMainWindow.__init__ (self)
@@ -27,7 +29,9 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
         TextBrowser.__init__ (self)
         Layouts    .__init__ (self)
         
-        Logger                                               (LoggerHw).SetLogging (Logger, self.textBrowser)
+        loggerHw = LoggerHw (self.textBrowser)
+        Logger.setInst (loggerHw)
+
         self.uart                   = Uart                   ()
         self.bleComm                = BleComm                ()
         self.blePanel               = BlePanel               (self.bleComm, vSettings)
@@ -45,13 +49,13 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
         self.setMaximumSize   (QSize(800, 800))
         self.setCentralWidget (self.widgetLayout)
 
-    #def LogData (self):
+    #def logData (self):
     #    self.textBrowser.append (str (self.uart.Receive ()))
 
-    def CurrentIndexChanged (self, vIndex):
+    def currentIndexChanged (self, vIndex):
         self.commandLineEdit.setText (self.commandComboBox.currentText ())
 
-    def SendButtonClicked (self, vChecked):
+    def sendButtonClicked (self, vChecked):
         data = self.commandLineEdit.text ()
         self.commandConverter.Convert (data)
 
@@ -59,7 +63,7 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
         LOGI ("Send {0}".format (json))
         self.panel.Send         (json)
 
-    def ConnectButtonClicked (self, vChecked):
+    def connectButtonClicked (self, vChecked):
         if (self.connectButton.text () == "Connect"):
             if self.panel.Connect () == False: return
             self.connectButton.setText ("Disconnect")
@@ -68,16 +72,16 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
             self.connectButton.setText ("Connect")
             LOGW                       ("Disconnected")
 
-    def ClearButtonClicked (self, vChecked):
+    def clearButtonClicked (self, vChecked):
         self.textBrowser.clear ()
 
-    def OpenUartInterface (self, vChecked):
+    def openUartInterface (self, vChecked):
         self.uartPanel.show ()
 
-    def OpenBluetoothInterface (self, vChecked):
+    def openBluetoothInterface (self, vChecked):
         self.blePanel.show ()
 
-    def ChooseInterface (self, vState):
+    def chooseInterface (self, vState):
         if vState == 0:
             self.panel = self.uartPanel
             self.interfaceCheckBox.setText ("To uart")

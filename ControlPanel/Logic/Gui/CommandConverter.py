@@ -4,7 +4,7 @@ class CommandConverter:
     def __init__ (self, vSettings: Settings):
         self.settings = vSettings
     
-    def Convert (self, vCommand: str):
+    def convert (self, vCommand: str):
         if vCommand == "Move forward":
             self.settings.direction = self.settings.EMoveDirection.Forward
         elif vCommand == "Move backward":

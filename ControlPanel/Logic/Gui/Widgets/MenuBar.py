@@ -5,11 +5,11 @@ class MenuBar:
     def __init__(self):
         uartAction = QAction         ("Uart", self)
         uartAction.setStatusTip      ("Configure Uart")
-        uartAction.triggered.connect (self.OpenUartInterface)
+        uartAction.triggered.connect (self.openUartInterface)
         
         bluetoothAction = QAction         ("Bluetooth", self)
         bluetoothAction.setStatusTip      ("Configure bluetooth")
-        bluetoothAction.triggered.connect (self.OpenBluetoothInterface)
+        bluetoothAction.triggered.connect (self.openBluetoothInterface)
         
         menuBar    = QMenuBar        ()
         menuConfig = menuBar.addMenu ("Configuration")

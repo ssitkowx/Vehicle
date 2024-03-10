@@ -1,3 +1,4 @@
+import Paths
 import unittest
 from   MotorFixture               import MotorFixture
 from   ParserAndSerializerFixture import ParserAndSerializerFixture
@@ -13,5 +14,6 @@ def testSuit ():
     return testSuit
 
 if __name__ == "__main__":
+    Logger.setInst (LoggerHw)
     runner = unittest.TextTestRunner()
     runner.run (testSuit())

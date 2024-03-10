@@ -7,6 +7,6 @@ class TextBrowser:
         self.textBrowser.setStyleSheet        ("background-color:white")
         self.textBrowser.setVerticalScrollBar (QScrollBar())
 
-    def ToogleName (self, v_state):
+    def toogleName (self, v_state):
         if (Qt.Checked == v_state): self.checkBox.setText ("Uart")
         else:                       self.checkBox.setText ("Bluetooth")

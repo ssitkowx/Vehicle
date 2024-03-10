@@ -29,14 +29,14 @@ class UartPanel (QWidget, Button, Layouts, LineEdit, ComboBoxes, Labels):
 
     def __fillCommandComboBoxPorts (self):
         self.portComboBox.clear ()
-        for port in self.uart.GetPortNames ():
+        for port in self.uart.getPortNames ():
             self.portComboBox.addItem (port)
 
-    def Send (self, vJson):
-        self.uart.Send (vJson)
+    def send (self, vJson):
+        self.uart.send (vJson)
 
-    def Connect (self) -> bool:
-        self.PortEnable               ()
+    def connect (self) -> bool:
+        self.portEnable               ()
         self.__fillCommandComboBoxPorts ()
         
         speed       = self.speedComboBox      .currentText ()
@@ -46,16 +46,16 @@ class UartPanel (QWidget, Button, Layouts, LineEdit, ComboBoxes, Labels):
         parityBits  = self.parityBitsComboBox .currentText ()
         flowControl = self.flowControlComboBox.currentText ()
         
-        self.uart.Update (self.port, speed, dataBits, stopBits, parityBits, flowControl)
+        self.uart.update (self.port, speed, dataBits, stopBits, parityBits, flowControl)
         return self.uart.Open (self.port)
 
-    def Disconnect (self):
+    def disconnect (self):
         self.uart.Close ()
 
-    def SaveClicked (self, vChecked):
+    def saveClicked (self, vChecked):
         self.__fillCommandComboBoxPorts ()
-        self.PortEnable               ()
+        self.portEnable               ()
         self.close                    ()
 
-    def PortEnable (self):
+    def portEnable (self):
         os.system ('echo ' + self.passwordLineEdit.text () + ' | sudo -S chmod 777 /dev/' + self.portComboBox.currentText ())

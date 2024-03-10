@@ -3,7 +3,7 @@ from   Ble    import Ble
 from   Logger import *
 
 class BleComm (Ble):
-    def Open (self, vUuid: str, vAddress: str) -> bool:
+    def open (self, vUuid: str, vAddress: str) -> bool:
         serviceMatches = bluetooth.find_service (uuid = vUuid, address = vAddress)
         if len (serviceMatches) == 0:
             LOGE ("Couldn't find the BleServer service.")
@@ -21,8 +21,8 @@ class BleComm (Ble):
         self.sock.connect                     ((host, port))
         return True
 
-    def Send (self, vData):
+    def send (self, vData):
         self.sock.send (vData)
 
-    def Close (self):
+    def close (self):
         self.sock.close ()

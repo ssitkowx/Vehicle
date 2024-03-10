@@ -28,16 +28,16 @@ class BlePanel (QWidget, Button, Labels, ComboBox, Layouts):
         self.setFixedSize   (dimensions.width (), dimensions.height ())
         self.__fillCommandComboBoxPorts ()
 
-    def Send (self, vJson):
+    def send (self, vJson):
         self.bleComm.Send (vJson)
 
-    def Connect (self) -> bool:
+    def connect (self) -> bool:
         uuid    = self.uuidComboBox   .currentText ()
         address = self.addressComboBox.currentText ()
-        self.FillCommandComboBoxPorts ()
+        self.__fillCommandComboBoxPorts ()
         return self.bleComm.Open      (uuid, address)
 
-    def Disconnect (self):
+    def disconnect (self):
         self.bleComm.Close ()
 
     def __fillCommandComboBoxPorts (self):
@@ -46,6 +46,6 @@ class BlePanel (QWidget, Button, Labels, ComboBox, Layouts):
         self.uuidComboBox   .addItems (self.settings.UUID)
         self.addressComboBox.addItems (self.settings.ADDRESS)
 
-    def SaveClicked (self, vChecked):
+    def saveClicked (self, vChecked):
         self.__fillCommandComboBoxPorts ()
         self.close                    ()

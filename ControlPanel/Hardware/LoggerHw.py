@@ -1,19 +1,20 @@
 from Logger import *
 
 class LoggerHw (Logger):
-    def SetLogging (self, vTextBrowser) -> None:
+    def __init__ (self, vTextBrowser):
         self.textBrowser = vTextBrowser
     
-    def Log (self, vLogLevel: ELogLevel, vMsg: str) -> None:
-        if vLogLevel == ELogLevel.Debug:
+    def log (self, vLogLevel: str, vMsg: str):
+        if vLogLevel == "Debug":
             self.textBrowser.setTextColor ("black")
-        elif vLogLevel == ELogLevel.Info:
+        elif vLogLevel == "Info":
             self.textBrowser.setTextColor ("blue")
-        elif vLogLevel == ELogLevel.Warning:
+        elif vLogLevel == "Warning":
             self.textBrowser.setTextColor ("gray")
-        elif vLogLevel == ELogLevel.Error:
+        elif vLogLevel == "Error":
             self.textBrowser.setTextColor ("red")
-        elif vLogLevel == ELogLevel.Critical:
+        elif vLogLevel == "Critical":
             self.textBrowser.setTextColor ("purple")
-
-        self.textBrowser.append (vMsg)
+        
+        msg = super ().log (vLogLevel, vMsg)
+        self.textBrowser.append (msg)
