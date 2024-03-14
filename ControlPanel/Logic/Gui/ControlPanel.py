@@ -65,10 +65,10 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
 
     def connectButtonClicked (self, vChecked):
         if (self.connectButton.text () == "Connect"):
-            if self.panel.Connect () == False: return
+            if self.panel.connect () == False: return
             self.connectButton.setText ("Disconnect")
         else:
-            self.panel.Disconnect ()
+            self.panel.disconnect ()
             self.connectButton.setText ("Connect")
             LOGW                       ("Disconnected")
 

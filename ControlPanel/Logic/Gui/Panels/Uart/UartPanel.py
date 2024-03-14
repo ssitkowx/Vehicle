@@ -47,10 +47,10 @@ class UartPanel (QWidget, Button, Layouts, LineEdit, ComboBoxes, Labels):
         flowControl = self.flowControlComboBox.currentText ()
         
         self.uart.update (self.port, speed, dataBits, stopBits, parityBits, flowControl)
-        return self.uart.Open (self.port)
+        return self.uart.open (self.port)
 
     def disconnect (self):
-        self.uart.Close ()
+        self.uart.close ()
 
     def saveClicked (self, vChecked):
         self.__fillCommandComboBoxPorts ()

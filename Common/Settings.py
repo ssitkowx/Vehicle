@@ -33,7 +33,7 @@ class Settings:
         TO_SPEED_COEFF = 100
     
 
-    ADDRESS   = ["98:84:E3:E0:A6:92"]
+    ADDRESS   = ["84:1B:77:98:56:56"]
     UUID      = ["94f39d29-7d6d-437d-973b-fba39e49d4ee"]
     
     duty      = 0

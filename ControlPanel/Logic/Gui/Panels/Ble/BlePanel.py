@@ -35,10 +35,10 @@ class BlePanel (QWidget, Button, Labels, ComboBox, Layouts):
         uuid    = self.uuidComboBox   .currentText ()
         address = self.addressComboBox.currentText ()
         self.__fillCommandComboBoxPorts ()
-        return self.bleComm.Open      (uuid, address)
+        return self.bleComm.open      (uuid, address)
 
     def disconnect (self):
-        self.bleComm.Close ()
+        self.bleComm.close ()
 
     def __fillCommandComboBoxPorts (self):
         self.uuidComboBox   .clear    ()
@@ -48,4 +48,4 @@ class BlePanel (QWidget, Button, Labels, ComboBox, Layouts):
 
     def saveClicked (self, vChecked):
         self.__fillCommandComboBoxPorts ()
-        self.close                    ()
+        self.close ()

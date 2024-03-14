@@ -2,15 +2,15 @@ from Logger               import *
 from PySide6.QtSerialPort import QSerialPort, QSerialPortInfo
 
 class Uart:
-    def Update (self, vPort, vSpeed, vDataBits, vStopBits, vPairtyBits, vFlowControl):
+    def update (self, vPort, vSpeed, vDataBits, vStopBits, vPairtyBits, vFlowControl):
         self.serialPort = QSerialPort    ()
-        self.serialPort.readyRead.connect(self.Receive)
+        self.serialPort.readyRead.connect(self.receive)
         self.serialPort.setPortName      (vPort)
         self.serialPort.setBaudRate      (int(vSpeed))
-        self.serialPort.setDataBits      (self.GetDataBits   (vDataBits))
-        self.serialPort.setStopBits      (self.GetStopBits   (vStopBits))
-        self.serialPort.setParity        (self.GetParityBits (vPairtyBits))
-        self.serialPort.setFlowControl   (self.GetFlowControl(vFlowControl))
+        self.serialPort.setDataBits      (self.getDataBits   (vDataBits))
+        self.serialPort.setStopBits      (self.getStopBits   (vStopBits))
+        self.serialPort.setParity        (self.getParityBits (vPairtyBits))
+        self.serialPort.setFlowControl   (self.getFlowControl(vFlowControl))
 
     def send (self, vData):
         dataLen = len (vData)
