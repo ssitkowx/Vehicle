@@ -1,7 +1,7 @@
 import os
-import Logger
 import bluetooth
 from   Ble      import Ble
+from   Logger   import *
 from   Settings import Settings
 
 class BleComm (Ble):
@@ -26,4 +26,5 @@ class BleComm (Ble):
         LOGI (f"Waiting for connection on RFCOMM channel. Port: {port}")
         
         self.clientSock, clientInfo = self.sock.accept ()
+        
         LOGI (f"Accepted connection from. Client info: {clientInfo}")

@@ -2,8 +2,8 @@ import time
 import Paths
 from   App                    import App
 from   Rtos                   import Rtos
-from   Logger                 import *
 from   BleComm                import BleComm
+from   LoggerHw               import *
 from   Settings               import Settings
 from   Accelerometer          import Accelerometer
 from   BleParserAndSerializer import BleParserAndSerializer
@@ -15,6 +15,9 @@ class Process:
     bleParserAndSerializer = BleParserAndSerializer (settings)
     
     def __init__ (self):
+        loggerHw = LoggerHw ()
+        Logger.setInst (loggerHw)
+        
         self.bleComm            = BleComm                (self.settings)
         self.accelerometer      = Accelerometer          (self.settings)
         self.bleServerThread    = self.rtos.createThread (self.bleServerProcess)
