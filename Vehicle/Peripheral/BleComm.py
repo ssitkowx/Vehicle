@@ -23,7 +23,7 @@ class BleComm (Ble):
                                      profiles        = [bluetooth.SERIAL_PORT_PROFILE],
                                      # protocols=[bluetooth.OBEX_UUID]
                                     )
-        
+
         LOGI (self.module, f"Waiting for connection on RFCOMM channel. Port: {port}")
         
         self.clientSock, clientInfo = self.sock.accept ()
