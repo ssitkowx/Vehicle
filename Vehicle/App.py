@@ -1,8 +1,9 @@
 import time
-import rcpy 
+import rcpy
+from   rcpy.motor import motor1, motor2
+
 from   Logger     import *
 from   Settings   import Settings
-from   rcpy.motor import motor1, motor2
 
 class App: 
     turnLeft  = False
@@ -63,19 +64,20 @@ class App:
             self.settings.duty = Settings.Duty.RANGE ["Bottom"]
     
     def process (self):
-        if self.settings.direction == Settings.EMoveDirection.Forward:
-            self.settings.duty += Settings.Duty.STEP
-        elif self.settings.direction == Settings.EMoveDirection.Backward:
-            self.settings.duty -= Settings.Duty.STEP
-        elif self.settings.direction == Settings.EMoveDirection.Left:
-            self.turnLeft = True
-        elif self.settings.direction == Settings.EMoveDirection.Right:
-            self.turnRight = True
-        else:
-            self.settings.duty     = 0
-            self.settings.freeSpin = True
-        
-        self.update ()
+        while rcpy.get_state() != rcpy.EXITING:
+            if rcpy.get_state() == rcpy.RUNNING:
+                if self.settings.direction == Settings.EMoveDirection.Forward:
+                    self.settings.duty += Settings.Duty.STEP
+                elif self.settings.direction == Settings.EMoveDirection.Backward:
+                    self.settings.duty -= Settings.Duty.STEP
+                elif self.settings.direction == Settings.EMoveDirection.Left:
+                    self.turnLeft = True
+                elif self.settings.direction == Settings.EMoveDirection.Right:
+                    self.turnRight = True
+                else:
+                    self.settings.duty     = 0
+                    self.settings.freeSpin = True
+                self.update ()
 
     @staticmethod
     def isMsgDoubled (vMsg: str):

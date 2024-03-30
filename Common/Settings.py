@@ -14,10 +14,10 @@ class Settings:
         One = 1
         Two = 2
 
-    class ImuAngles:
-        X = 0
-        Y = 0
-        Z = 0
+    #class ImuAngles:
+    #    X = 0
+    #    Y = 0
+    #    Z = 0
 
     class Duty:
         RANGE = { "Top"    : 10,

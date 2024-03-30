@@ -1,10 +1,15 @@
 from abc import ABC, abstractmethod
 
 class Imu:
-    @abstractmethod
-    def process ():
+    RAD_TO_DEG = (180 / 3.14)
+    
+    def __init__ (self):
         pass
     
     @abstractmethod
-    def getAngles ():
+    def process (self):
+        pass
+    
+    @abstractmethod
+    def getAngles (self):
         pass

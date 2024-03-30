@@ -40,7 +40,8 @@ class Process:
         return True
     
     def bleServerProcess (self):
-        LOGI (self.module, "ble server process")
+        LOGI (self.module, "bleServerProcess")
+        
         while self.isBleProcessRunning ():
             try:
                 msg = self.bleComm.clientSock.recv (1024)
@@ -55,7 +56,8 @@ class Process:
                 break
 
     def appProcess (self):
-        LOGI (self.module, "app process")
+        LOGI (self.module, "appProcess")
+        
         while self.app.isExiting () == False:
             try:
                 if self.app.isRunning () == True:
@@ -71,11 +73,12 @@ class Process:
                 break
     
     def imuProcess (self):
-        LOGI (self.module, "imu process")
+        LOGI (self.module, "imuProcess")
+        
         while self.imu.isExiting () == False:
             try:
                 self.imu.process ()
-                time.sleep (3)
+                time.sleep (5)
             except OSError:
                 LOGE (self.module, "imuProcess disconnected")
                 break
