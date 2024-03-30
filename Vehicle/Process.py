@@ -51,8 +51,8 @@ class Process:
                 self.rtos.sendMsg (msg)
             except OSError:
                 LOGE (self.module, "bleServerProcess disconnected")
-                self.bleComm.clientSock.close ()
-                self.bleComm.sock      .close ()
+                #self.bleComm.clientSock.close ()
+                #self.bleComm.sock      .close ()
                 break
 
     def appProcess (self):
