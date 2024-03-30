@@ -9,6 +9,7 @@ from   Accelerometer          import Accelerometer
 from   BleParserAndSerializer import BleParserAndSerializer
 
 class Process:
+    module                 = __name__
     rtos                   = Rtos                   ()
     settings               = Settings               ()
     app                    = App                    (settings)
@@ -45,7 +46,7 @@ class Process:
 
                 self.rtos.sendMsg (msg)
             except OSError:
-                LOGE ("appProcess disconnected")
+                LOGE (self.module, "appProcess disconnected")
                 self.bleComm.clientSock.close ()
                 self.bleComm.sock      .close ()
                 break
@@ -55,14 +56,14 @@ class Process:
             try:
                 if self.app.isRunning () == True:
                     msg = self.rtos.getMsg            ()
-                    LOGI                              (f"Received: {msg}")
+                    LOGI                              (self.module, f"Received: {msg}")
                     self.bleParserAndSerializer.parse (msg)
                     self.app.process                  ()
                 elif self.app.isPaused () == True:
                     self.settings.freeSpin = True
 
             except OSError:
-                LOGE ("appProcess disconnected")
+                LOGE (self.module, "appProcess disconnected")
                 break
     
     def accelerometerProcess (self):
@@ -71,5 +72,5 @@ class Process:
                 self.accelerometer.process ()
                 time.sleep (3)
             except OSError:
-                LOGE ("accelerometerProcess disconnected")
+                LOGE (self.module, "accelerometerProcess disconnected")
                 break

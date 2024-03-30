@@ -14,6 +14,8 @@ from Settings      import Settings
 from Accelerometer import Accelerometer
 
 class MotorFixture (unittest.TestCase):
+    module = __name__
+    
     @classmethod
     @mock.patch ('App.time.sleep')
     @mock.patch ('App.App.isPaused'                      , return_value=False)
@@ -24,7 +26,7 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('BleComm.BleComm.clientSock')
     @mock.patch ('Accelerometer.Accelerometer.isExiting' , return_value=True)
     def setUpClass (self, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMockSleep):
-        LOGI ("MotorFixture")
+        LOGI (self.module, "MotorFixture")
         self.process = Process ()
 
     @mock.patch ('App.time.sleep')
@@ -39,7 +41,7 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
     @mock.patch ('Accelerometer.mpu9250'   )
     def moveLeftUntilMaxSpeedLimit (self, vMpu9250Mock, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
-        LOGI ("moveLeftUntilMaxSpeedLimit")
+        LOGI (self.module, "moveLeftUntilMaxSpeedLimit")
         vMpu9250Mock.read.return_value    = {'accel': [10, -10, 5], 'gyro': [10, -10, 5]}
         vClientSockMock.recv.return_value = b'{"MoveDirection": 2}'
         self.process.settings.duty        = 10
@@ -81,7 +83,7 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
     @mock.patch ('Accelerometer.mpu9250'   )
     def moveForwardUntilMaxSpeedLimit (self, vMpu9250Mock, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
-        LOGI ("moveForwardUntilMaxSpeedLimit")
+        LOGI (self.module, "moveForwardUntilMaxSpeedLimit")
         vMpu9250Mock.read.return_value    = {'accel': [10, -10, 5], 'gyro': [10, -10, 5]}
         vClientSockMock.recv.return_value = b'{"MoveDirection": 3}'
         vClientSockMock.recv.return_value = b'{"MoveDirection": 0}'
@@ -103,7 +105,7 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
     @mock.patch ('Accelerometer.mpu9250'   )
     def moveBackwardUntilMaxSpeedLimit (self, vMpu9250Mock, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
-        LOGI ("moveBackwardUntilMaxSpeedLimit")
+        LOGI (self.module, "moveBackwardUntilMaxSpeedLimit")
         vMpu9250Mock.read.return_value    = {'accel': [10, -10, 5], 'gyro': [10, -10, 5]}
         vClientSockMock.recv.return_value = b'{"MoveDirection": 3}'
         vClientSockMock.recv.return_value = b'{"MoveDirection": 1}'

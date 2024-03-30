@@ -7,6 +7,7 @@ from   rcpy.motor import motor1, motor2
 class App: 
     turnLeft  = False
     turnRight = False
+    module    = __name__
     
     def __init__ (self, vSettings: Settings):
         self.settings = vSettings
@@ -28,7 +29,7 @@ class App:
         self.validate ()
         
         duty = self.settings.duty
-        LOGI (f'Duty {duty / Settings.Duty.FACTOR}')
+        LOGI (self.module, f'Duty {duty / Settings.Duty.FACTOR}')
 
         if self.turnLeft == True:
             self.turnLeft = False

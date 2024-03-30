@@ -41,10 +41,10 @@ class BlePanel (QWidget, Button, Labels, ComboBox, Layouts):
         self.bleComm.close ()
 
     def __fillCommandComboBoxPorts (self):
-        self.uuidComboBox   .clear    ()
-        self.addressComboBox.clear    ()
-        self.uuidComboBox   .addItems (self.settings.UUID)
-        self.addressComboBox.addItems (self.settings.ADDRESS)
+        self.uuidComboBox   .clear   ()
+        self.addressComboBox.clear   ()
+        self.uuidComboBox   .addItem (self.settings.UUID)
+        self.addressComboBox.addItem (self.settings.ADDRESS)
 
     def saveClicked (self, vChecked):
         self.__fillCommandComboBoxPorts ()

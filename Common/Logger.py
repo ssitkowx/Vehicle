@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 
-def LOGD (vMsg: str): Logger.getInst ().log ("Debug"   , vMsg)
-def LOGI (vMsg: str): Logger.getInst ().log ("Info"    , vMsg)
-def LOGW (vMsg: str): Logger.getInst ().log ("Warning" , vMsg)
-def LOGE (vMsg: str): Logger.getInst ().log ("Error"   , vMsg)
-def LOGC (vMsg: str): Logger.getInst ().log ("Critical", vMsg)
+def LOGD (vModule: str, vMsg: str): Logger.getInst ().log ("Debug"   , vModule, vMsg)
+def LOGI (vModule: str, vMsg: str): Logger.getInst ().log ("Info"    , vModule, vMsg)
+def LOGW (vModule: str, vMsg: str): Logger.getInst ().log ("Warning" , vModule, vMsg)
+def LOGE (vModule: str, vMsg: str): Logger.getInst ().log ("Error"   , vModule, vMsg)
+def LOGC (vModule: str, vMsg: str): Logger.getInst ().log ("Critical", vModule, vMsg)
 
 class Logger (ABC):
     _inst = None
@@ -23,5 +23,5 @@ class Logger (ABC):
         return cls._inst
 
     @abstractmethod
-    def log (self, vLogLevel: str, vMsg: str):
-        return "{0}: Module: {1}: {2}. ".format (vLogLevel, __name__, vMsg)
+    def log (self, vLogLevel: str, vModule: str, vMsg: str):
+        return "{0}: Module: {1}: {2}. ".format (vLogLevel, vModule, vMsg)

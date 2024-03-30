@@ -6,6 +6,7 @@ from   Settings import Settings
 
 class BleComm (Ble):
     sock       = 0
+    module     = __name__
     clientSock = 0
     
     def __init__ (self, vSettings: Settings):
@@ -23,8 +24,8 @@ class BleComm (Ble):
                                      # protocols=[bluetooth.OBEX_UUID]
                                     )
         
-        LOGI (f"Waiting for connection on RFCOMM channel. Port: {port}")
+        LOGI (self.module, f"Waiting for connection on RFCOMM channel. Port: {port}")
         
         self.clientSock, clientInfo = self.sock.accept ()
         
-        LOGI (f"Accepted connection from. Client info: {clientInfo}")
+        LOGI (self.module, f"Accepted connection from. Client info: {clientInfo}")

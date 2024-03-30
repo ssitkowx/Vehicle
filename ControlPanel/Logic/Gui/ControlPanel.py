@@ -19,6 +19,8 @@ from Logic.Gui.Panels.Uart.UartPanel import UartPanel
 from PySide6.QtWidgets import QPushButton
 
 class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit, TextBrowser, Layouts):
+    module = __name__
+    
     def __init__ (self, vSettings: Settings):
         QMainWindow.__init__ (self)
         Buttons    .__init__ (self)
@@ -60,7 +62,7 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
         self.commandConverter.Convert (data)
 
         json = self.bleParserAndSerializer.serialize ()
-        LOGI ("Send {0}".format (json))
+        LOGI (self.module, "Send {0}".format (json))
         self.panel.Send         (json)
 
     def connectButtonClicked (self, vChecked):
@@ -70,7 +72,7 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
         else:
             self.panel.disconnect ()
             self.connectButton.setText ("Connect")
-            LOGW                       ("Disconnected")
+            LOGW                       (self.module, "Disconnected")
 
     def clearButtonClicked (self, vChecked):
         self.textBrowser.clear ()

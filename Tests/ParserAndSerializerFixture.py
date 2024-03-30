@@ -4,20 +4,22 @@ from   Settings               import Settings
 from   BleParserAndSerializer import BleParserAndSerializer
 
 class ParserAndSerializerFixture (unittest.TestCase):
+    module = __name__
+    
     def setUp (self) -> None:
-        LOGI ("ParserAndSerializerFixture")
+        LOGI (self.module, "ParserAndSerializerFixture")
         self.settings               = Settings ()
         self.bleParserAndSerializer = BleParserAndSerializer (self.settings)
         return super ().setUp ()
 
     def parse (self):
-        LOGI ('parse')
+        LOGI (self.module, 'parse')
         jsonMsg = '{"MoveDirection": 1}'
         self.bleParserAndSerializer.parse (jsonMsg)
         self.assertEqual                  (self.settings.direction, Settings.EMoveDirection.Backward)
     
     def serialize (self):
-        LOGI ('serialize')
+        LOGI (self.module, 'serialize')
         self.settings.direction = Settings.EMoveDirection.Forward
         jsonMsg                 = self.bleParserAndSerializer.serialize ()
         self.assertEqual (jsonMsg, '{"MoveDirection": 0}')
