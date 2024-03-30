@@ -29,13 +29,13 @@ class BlePanel (QWidget, Button, Labels, ComboBox, Layouts):
         self.__fillCommandComboBoxPorts ()
 
     def send (self, vJson):
-        self.bleComm.Send (vJson)
+        self.bleComm.send (vJson)
 
     def connect (self) -> bool:
         uuid    = self.uuidComboBox   .currentText ()
         address = self.addressComboBox.currentText ()
         self.__fillCommandComboBoxPorts ()
-        return self.bleComm.open      (uuid, address)
+        return self.bleComm.open (uuid, address)
 
     def disconnect (self):
         self.bleComm.close ()

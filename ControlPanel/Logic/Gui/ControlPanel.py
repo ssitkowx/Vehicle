@@ -59,11 +59,11 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, CheckBox, ComboBox, LineEdit,
 
     def sendButtonClicked (self, vChecked):
         data = self.commandLineEdit.text ()
-        self.commandConverter.Convert (data)
+        self.commandConverter.convert (data)
 
         json = self.bleParserAndSerializer.serialize ()
         LOGI (self.module, "Send {0}".format (json))
-        self.panel.Send         (json)
+        self.panel.send         (json)
 
     def connectButtonClicked (self, vChecked):
         if (self.connectButton.text () == "Connect"):
