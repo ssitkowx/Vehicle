@@ -14,12 +14,7 @@ class Settings:
         One = 1
         Two = 2
 
-    class Gyroscop:
-        X = 0
-        Y = 0
-        Z = 0
-
-    class Accelerometer:
+    class ImuAngles:
         X = 0
         Y = 0
         Z = 0

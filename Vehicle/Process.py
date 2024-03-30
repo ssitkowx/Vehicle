@@ -1,11 +1,12 @@
 import time
 import Paths
+
 from   App                    import App
 from   Rtos                   import Rtos
+from   Mpu9250                import Mpu9250
 from   BleComm                import BleComm
 from   LoggerHw               import *
 from   Settings               import Settings
-from   Accelerometer          import Accelerometer
 from   BleParserAndSerializer import BleParserAndSerializer
 
 class Process:
@@ -19,25 +20,27 @@ class Process:
         loggerHw = LoggerHw ()
         Logger.setInst (loggerHw)
         
-        self.bleComm            = BleComm                (self.settings)
-        self.accelerometer      = Accelerometer          (self.settings)
-        self.bleServerThread    = self.rtos.createThread (self.bleServerProcess)
-        self.bleServerThread    .start ()
+        self.bleComm = BleComm (self.settings)
+        self.imu     = Mpu9250 (self.settings)
 
-        self.appThread           = self.rtos.createThread (self.appProcess)
-        self.appThread          .start ()
+        self.appThread = self.rtos.createThread (self.appProcess)
+        self.appThread.start ()
 
-        self.accelerometerThread = self.rtos.createThread (self.accelerometerProcess)
-        self.accelerometerThread.start ()
+        self.imuThread = self.rtos.createThread (self.imuProcess)
+        self.imuThread.start ()
+        
+        self.bleServerThread = self.rtos.createThread (self.bleServerProcess)
+        self.bleServerThread.start ()
     
-        self.bleServerThread    .join  ()
-        self.appThread          .join  ()
-        self.accelerometerThread.join  ()
+        self.appThread      .join  ()
+        self.imuThread      .join  ()
+        self.bleServerThread.join  ()
 
     def isBleProcessRunning (self):
         return True
     
     def bleServerProcess (self):
+        LOGI (self.module, "ble server process")
         while self.isBleProcessRunning ():
             try:
                 msg = self.bleComm.clientSock.recv (1024)
@@ -46,12 +49,13 @@ class Process:
 
                 self.rtos.sendMsg (msg)
             except OSError:
-                LOGE (self.module, "appProcess disconnected")
-                self.bleComm.clientSock.close ()
-                self.bleComm.sock      .close ()
+                LOGE (self.module, "bleServerProcess disconnected")
+                #self.bleComm.clientSock.close ()
+                #self.bleComm.sock      .close ()
                 break
 
-    def appProcess (self): 
+    def appProcess (self):
+        LOGI (self.module, "app process")
         while self.app.isExiting () == False:
             try:
                 if self.app.isRunning () == True:
@@ -66,11 +70,12 @@ class Process:
                 LOGE (self.module, "appProcess disconnected")
                 break
     
-    def accelerometerProcess (self):
-        while self.accelerometer.isExiting () == False:
+    def imuProcess (self):
+        LOGI (self.module, "imu process")
+        while self.imu.isExiting () == False:
             try:
-                self.accelerometer.process ()
+                self.imu.process ()
                 time.sleep (3)
             except OSError:
-                LOGE (self.module, "accelerometerProcess disconnected")
+                LOGE (self.module, "imuProcess disconnected")
                 break
