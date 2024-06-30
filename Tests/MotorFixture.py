@@ -11,7 +11,6 @@ from App           import App
 from Logger        import *
 from Process       import Process
 from Settings      import Settings
-from Accelerometer import Accelerometer
 
 class MotorFixture (unittest.TestCase):
     module = __name__
@@ -24,8 +23,10 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Process.Process.isBleProcessRunning'   , return_value=False)
     @mock.patch ('BleComm.BleComm.__init__'              , return_value=None)
     @mock.patch ('BleComm.BleComm.clientSock')
-    @mock.patch ('Accelerometer.Accelerometer.isExiting' , return_value=True)
-    def setUpClass (self, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMockSleep):
+    @mock.patch ('Mpu9250.Mpu9250.isExiting'             , side_effect=[True, False])
+    @mock.patch ('Mpu9250.Mpu9250.getAngles'             , return_value=[90, -90, 90])
+    def setUpClass (self, vMockGetAngles, vMockIsExisting, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock,
+                          vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMockSleep):
         LOGI (self.module, "MotorFixture")
         self.process = Process ()
 
@@ -38,17 +39,16 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Process.Process.isBleProcessRunning'   , side_effect =[True, False])
     @mock.patch ('BleComm.BleComm.__init__'              , return_value=None)
     @mock.patch ('BleComm.BleComm.clientSock')
-    @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
-    @mock.patch ('Accelerometer.mpu9250'   )
-    def moveLeftUntilMaxSpeedLimit (self, vMpu9250Mock, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
-        LOGI (self.module, "moveLeftUntilMaxSpeedLimit")
-        vMpu9250Mock.read.return_value    = {'accel': [10, -10, 5], 'gyro': [10, -10, 5]}
-        vClientSockMock.recv.return_value = b'{"MoveDirection": 2}'
-        self.process.settings.duty        = 10
+    @mock.patch ('Mpu9250.Mpu9250.isExiting'             , side_effect=[False, True])
+    @mock.patch ('Mpu9250.Mpu9250.getAngles'             , return_value=[90, -90, 90])
+    def moveForwardWithDuty (self, vMockGetAngles, vMockIsExisting, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock,
+                                   vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
+        LOGI (self.module, "moveForwardWithDuty")
+        vClientSockMock.recv.return_value = b'{"Duty": 0.8, "MoveDirection": 0}'
         self.process.__init__              ()
         vClientSockMock.recv.assert_called ()
-        vMotor1.set.assert_called_with     (0.9)
-        vMotor2.set.assert_called_with     (1)
+        vMotor1.set.assert_called_with     (0.8)
+        vMotor2.set.assert_called_with     (0.8)
 
     @mock.patch ('App.time.sleep')
     @mock.patch ('App.motor1'                            , create=True)
@@ -59,61 +59,57 @@ class MotorFixture (unittest.TestCase):
     @mock.patch ('Process.Process.isBleProcessRunning'   , side_effect =[True, False])
     @mock.patch ('BleComm.BleComm.__init__'              , return_value=None)
     @mock.patch ('BleComm.BleComm.clientSock')
-    @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
-    @mock.patch ('Accelerometer.mpu9250'   )
-    def moveRightUntilMaxSpeedLimit (self, vMpu9250Mock, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
-        LOGI ("moveRightUntilMaxSpeedLimit")
-        vMpu9250Mock.read.return_value    = {'accel': [10, -10, 5], 'gyro': [10, -10, 5]}
-        vClientSockMock.recv.return_value = b'{"MoveDirection": 3}'
-        self.process.settings.duty        = 10
+    @mock.patch ('Mpu9250.Mpu9250.isExiting'             , side_effect=[False, True])
+    @mock.patch ('Mpu9250.Mpu9250.getAngles'             , return_value=[80, -70, 60])
+    def moveBackwardWithDuty (self, vMockGetAngles, vMockIsExisting, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock,
+                                    vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
+        LOGI (self.module, "moveBackwardWithDuty")
+        vClientSockMock.recv.return_value = b'{"Duty": 0.2, "MoveDirection": 1}'
         self.process.__init__              ()
         vClientSockMock.recv.assert_called ()
-        vMotor1.set.assert_called_with     (1)
-        vMotor2.set.assert_called_with     (0.9)
+        vMotor1.set.assert_called_with     (0.2)
+        vMotor2.set.assert_called_with     (0.2)
 
     @mock.patch ('App.time.sleep')
     @mock.patch ('App.motor1'                            , create=True)
     @mock.patch ('App.motor2'                            , create=True)
     @mock.patch ('App.App.isPaused'                      , return_value=False)
-    @mock.patch ('App.App.isRunning'                     , side_effect=([True  for i in range (10)] + [False]))
-    @mock.patch ('App.App.isExiting'                     , side_effect=([False for i in range (10)] + [True]))
-    @mock.patch ('Process.Process.isBleProcessRunning'   , side_effect=([True  for i in range (10)] + [False]))
+    @mock.patch ('App.App.isRunning'                     , side_effect =[True, False])
+    @mock.patch ('App.App.isExiting'                     , side_effect =[False, True])
+    @mock.patch ('Process.Process.isBleProcessRunning'   , side_effect =[True, False])
     @mock.patch ('BleComm.BleComm.__init__'              , return_value=None)
     @mock.patch ('BleComm.BleComm.clientSock')
-    @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
-    @mock.patch ('Accelerometer.mpu9250'   )
-    def moveForwardUntilMaxSpeedLimit (self, vMpu9250Mock, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
-        LOGI (self.module, "moveForwardUntilMaxSpeedLimit")
-        vMpu9250Mock.read.return_value    = {'accel': [10, -10, 5], 'gyro': [10, -10, 5]}
-        vClientSockMock.recv.return_value = b'{"MoveDirection": 3}'
-        vClientSockMock.recv.return_value = b'{"MoveDirection": 0}'
-        self.process.settings.duty        = 0
+    @mock.patch ('Mpu9250.Mpu9250.isExiting'             , side_effect=[False, True])
+    @mock.patch ('Mpu9250.Mpu9250.getAngles'             , return_value=[90, -90, 90])
+    def turnLeft (self, vMockGetAngles, vMockIsExisting, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock,
+                        vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
+        LOGI (self.module, "turnLeft")
+        vClientSockMock.recv.return_value = b'{"Duty": 0.1, "MoveDirection": 2}'
         self.process.__init__              ()
         vClientSockMock.recv.assert_called ()
-        vMotor1.set.assert_called_with     (1)
-        vMotor2.set.assert_called_with     (1)
+        vMotor1.set.assert_called_with     (0.1)
+        vMotor2.assert_not_called          ()
 
     @mock.patch ('App.time.sleep')
     @mock.patch ('App.motor1'                            , create=True)
     @mock.patch ('App.motor2'                            , create=True)
     @mock.patch ('App.App.isPaused'                      , return_value=False)
-    @mock.patch ('App.App.isRunning'                     , side_effect=([True  for i in range (10)] + [False]))
-    @mock.patch ('App.App.isExiting'                     , side_effect=([False for i in range (10)] + [True]))
-    @mock.patch ('Process.Process.isBleProcessRunning'   , side_effect=([True  for i in range (10)] + [False]))
+    @mock.patch ('App.App.isRunning'                     , side_effect =[True, False])
+    @mock.patch ('App.App.isExiting'                     , side_effect =[False, True])
+    @mock.patch ('Process.Process.isBleProcessRunning'   , side_effect =[True, False])
     @mock.patch ('BleComm.BleComm.__init__'              , return_value=None)
     @mock.patch ('BleComm.BleComm.clientSock')
-    @mock.patch ('Accelerometer.Accelerometer.isExiting' , side_effect =[False, True])
-    @mock.patch ('Accelerometer.mpu9250'   )
-    def moveBackwardUntilMaxSpeedLimit (self, vMpu9250Mock, vIsAccelerometerExitingMock, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock, vIsExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
-        LOGI (self.module, "moveBackwardUntilMaxSpeedLimit")
-        vMpu9250Mock.read.return_value    = {'accel': [10, -10, 5], 'gyro': [10, -10, 5]}
-        vClientSockMock.recv.return_value = b'{"MoveDirection": 3}'
-        vClientSockMock.recv.return_value = b'{"MoveDirection": 1}'
-        self.process.settings.duty        = 0
+    @mock.patch ('Mpu9250.Mpu9250.isExiting'             , side_effect=[False, True])
+    @mock.patch ('Mpu9250.Mpu9250.getAngles'             , return_value=[90, -90, 90])
+    def turnRight (self, vMockGetAngles, vMockIsExisting, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock,
+                        vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
+        LOGI (self.module, "turnRight")
+        vClientSockMock.recv.return_value = b'{"Duty": 0.2, "MoveDirection": 3}'
+        self.process.settings.duty = 0.4
         self.process.__init__              ()
         vClientSockMock.recv.assert_called ()
-        vMotor1.set.assert_called_with     (-1)
-        vMotor2.set.assert_called_with     (-1)
+        vMotor1.assert_not_called          ()
+        vMotor2.set.assert_called_with     (0.2)
 
     def tearDown (self) -> None:
         return super().tearDown ()

@@ -19,19 +19,18 @@ class Settings:
     #    Y = 0
     #    Z = 0
 
-    class Duty:
-        RANGE = { "Top"    : 10,
-                  "Bottom" : -10
+    class DutyParams:
+        RANGE = { "Top"    : 1.0,
+                  "Bottom" : -1.0
                 }
-        STEP           = 1
-        FACTOR         = 10
+        STEP           = 0.1
+        FACTOR         = 1.0
         TO_SPEED_COEFF = 100
     
-
     ADDRESS   = "98:84:E3:E0:A6:92"
     UUID      = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
     
-    duty      = 0
+    duty      = 0.0
     brake     = False
     freeSpin  = False
     direction = EMoveDirection.Stop

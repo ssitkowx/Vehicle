@@ -14,15 +14,20 @@ class ParserAndSerializerFixture (unittest.TestCase):
 
     def parse (self):
         LOGI (self.module, 'parse')
-        jsonMsg = '{"MoveDirection": 1}'
+        jsonMsg = '{"Duty": 0.1, \
+                    "MoveDirection": 1 \
+                   }'
         self.bleParserAndSerializer.parse (jsonMsg)
+        self.assertEqual                  (self.settings.duty, 0.1)
         self.assertEqual                  (self.settings.direction, Settings.EMoveDirection.Backward)
     
     def serialize (self):
         LOGI (self.module, 'serialize')
+        expectedJsonMsg = '{"Duty": 0.1, "MoveDirection": 0}'
+        self.settings.duty = Settings.Duty = 0.1
         self.settings.direction = Settings.EMoveDirection.Forward
         jsonMsg                 = self.bleParserAndSerializer.serialize ()
-        self.assertEqual (jsonMsg, '{"MoveDirection": 0}')
+        self.assertEqual (jsonMsg, expectedJsonMsg)
 
     def tearDown (self) -> None:
         return super().tearDown ()
