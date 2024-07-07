@@ -1,4 +1,5 @@
 from Uart                            import Uart
+from Timer                           import Timer
 from Labels                          import Labels
 from MenuBar                         import MenuBar
 from Buttons                         import Buttons
@@ -14,7 +15,7 @@ from PySide6.QtWidgets               import QMainWindow, QWidget
 from BleParserAndSerializer          import BleParserAndSerializer
 from Logic.Gui.Panels.Ble.BlePanel   import BlePanel
 from Logic.Gui.Panels.Uart.UartPanel import UartPanel
-
+from PySide6.QtCore import QTimer
 class ControlPanel (QMainWindow):
     module = __name__
     
@@ -25,11 +26,15 @@ class ControlPanel (QMainWindow):
         self.menuBar     = MenuBar     ()
         self.textBrowser = TextBrowser ()
         self.groupBoxes  = GroupBoxes  (self.labels, self.buttons, self.textBrowser.obj)
+        self.timer       = Timer       ()
+
+        self.counter = 0
 
         self.buttons.clearLogs      .clicked  .connect (self.clearButtonClicked)
         self.menuBar.uartAction     .triggered.connect (self.openUartInterface)
         self.menuBar.bluetoothAction.triggered.connect (self.openBluetoothInterface)
         self.setMenuBar                                (self.menuBar.obj)
+        self.timer.obj              .timeout.connect   (self.timerIsr)
         
         loggerHw = LoggerHw (self.textBrowser.obj)
         Logger.setInst (loggerHw)
@@ -52,6 +57,10 @@ class ControlPanel (QMainWindow):
         self.widget = QWidget (self)
         self.widget.setLayout (self.groupBoxes.obj)
         self.setCentralWidget (self.widget)
+
+    def timerIsr (self):
+        self.counter += 1
+        self.labels.roll.setText (f"Roll: {self.counter}")
 
     #def logData (self):
     #    self.textBrowser.append (str (self.uart.Receive ()))
@@ -89,9 +98,6 @@ class ControlPanel (QMainWindow):
         else:
             self.panel = self.blePanel
             self.interfaceCheckBox.setText ("Car")
-
-    def keyPressEvent(self, event):
-        self.labels.roll.setText ("Roll: press")
 
     def keyPressEvent(self, event):
         if isinstance(event, QKeyEvent):
