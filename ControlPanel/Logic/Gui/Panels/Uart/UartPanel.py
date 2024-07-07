@@ -52,10 +52,11 @@ class UartPanel (QWidget, Button, Layouts, LineEdit, ComboBoxes, Labels):
     def disconnect (self):
         self.uart.close ()
 
-    def saveClicked (self, vChecked):
+    def connectClicked (self, vChecked):
         self.__fillCommandComboBoxPorts ()
-        self.portEnable               ()
-        self.close                    ()
+        self.portEnable ()
+        self.close ()
+        self.connect ()
 
     def portEnable (self):
         os.system ('echo ' + self.passwordLineEdit.text () + ' | sudo -S chmod 777 /dev/' + self.portComboBox.currentText ())

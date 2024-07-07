@@ -46,6 +46,7 @@ class BlePanel (QWidget, Button, Labels, ComboBox, Layouts):
         self.uuidComboBox   .addItem (self.settings.UUID)
         self.addressComboBox.addItem (self.settings.ADDRESS)
 
-    def saveClicked (self, vChecked):
+    def connectClicked (self, vChecked):
         self.__fillCommandComboBoxPorts ()
         self.close ()
+        self.connect ()
