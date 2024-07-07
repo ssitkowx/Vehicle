@@ -7,14 +7,13 @@ from Settings                        import Settings
 from GroupBoxes                      import GroupBoxes
 from LoggerHw                        import *
 from TextBrowser                     import TextBrowser
-from PySide6.QtCore                  import QSize, Qt
+from PySide6.QtGui                   import QKeyEvent
+from PySide6.QtCore                  import QSize
 from CommandConverter                import CommandConverter
-from PySide6.QtWidgets               import QMainWindow, QWidget, QLabel
+from PySide6.QtWidgets               import QMainWindow, QWidget
 from BleParserAndSerializer          import BleParserAndSerializer
 from Logic.Gui.Panels.Ble.BlePanel   import BlePanel
 from Logic.Gui.Panels.Uart.UartPanel import UartPanel
-
-from PySide6.QtGui import QKeyEvent
 
 class ControlPanel (QMainWindow):
     module = __name__
@@ -31,9 +30,6 @@ class ControlPanel (QMainWindow):
         self.menuBar.uartAction     .triggered.connect (self.openUartInterface)
         self.menuBar.bluetoothAction.triggered.connect (self.openBluetoothInterface)
         self.setMenuBar                                (self.menuBar.obj)
-
-        self.widget = QWidget (self)
-        self.widget.setLayout (self.groupBoxes.obj)
         
         loggerHw = LoggerHw (self.textBrowser.obj)
         Logger.setInst (loggerHw)
@@ -53,13 +49,9 @@ class ControlPanel (QMainWindow):
                                'selection-background-color: gray;')
         self.setMinimumSize   (QSize(500, 500))
         self.setMaximumSize   (QSize(800, 800))
+        self.widget = QWidget (self)
+        self.widget.setLayout (self.groupBoxes.obj)
         self.setCentralWidget (self.widget)
-
-        #self.central_widget = QWidget(self)
-        #self.setCentralWidget(self.central_widget)
-
-        #self.key_label = QLabel("Last Key Pressed: None", self.central_widget)
-        #self.key_label.setGeometry(10, 10, 200, 30)
 
     #def logData (self):
     #    self.textBrowser.append (str (self.uart.Receive ()))
@@ -100,46 +92,21 @@ class ControlPanel (QMainWindow):
 
     def keyPressEvent(self, event):
         self.labels.roll.setText ("Roll: press")
-        '''
-        if event.key () == Qt.Key_Up:
-            self.buttons.changeColor (self.forward, True)
-            self.buttons.labels.roll.setText ("Roll: press")
-        elif event.key () == Qt.Key_Down:
-            self.buttons.changeColor (self.backward, True)
-        elif event.key () == Qt.Key_Left:
-            self.buttons.changeColor (self.left, True)
-        elif event.key () == Qt.Key_Right:
-            self.buttons.changeColor (self.right, True)
-        else:
-            super().keyPressEvent(event)
-            '''
 
-    def keyReleaseEvent(self, event):
-        self.labels.roll.setText ("Roll: release")
-        '''
-        if event.key () == Qt.Key_Up:
-            self.buttons.changeColor (self.buttons.forward, False)
-            self.labels.roll.setText ("Roll: release")
-        elif event.key () == Qt.Key_Down:
-            self.buttons.changeColor (self.buttons.backward, False)
-        elif event.key () == Qt.Key_Left:
-            self.buttons.changeColor(self.buttons.left, False)
-        elif event.key () == Qt.Key_Right:
-            self.buttons.changeColor(self.buttons.right, False)
-        else:
-            super().keyPressEvent(event)
-            '''
-
-'''
     def keyPressEvent(self, event):
         if isinstance(event, QKeyEvent):
-            key_text = event.text()
-            key_num = event.key ()
-            self.labels.roll.setText(f"Last Key Pressed: {key_num}")
+            char = event.text ()
+            if   char == Buttons.left    : self.buttons.changeColor (self.buttons.left    , True)
+            elif char == Buttons.right   : self.buttons.changeColor (self.buttons.right   , True)
+            elif char == Buttons.forward : self.buttons.changeColor (self.buttons.forward , True)
+            elif char == Buttons.backward: self.buttons.changeColor (self.buttons.backward, True)
+            else: super().keyPressEvent(event)
 
     def keyReleaseEvent(self, event):
         if isinstance(event, QKeyEvent):
-            key_text = event.text()
-            key_num = event.key ()
-            self.labels.roll.setText(f"Key Released: {key_num}")
-'''
+            char = event.text ()
+            if   char == Buttons.left    : self.buttons.changeColor (self.buttons.left    , False)
+            elif char == Buttons.right   : self.buttons.changeColor (self.buttons.right   , False)
+            elif char == Buttons.forward : self.buttons.changeColor (self.buttons.forward , False)
+            elif char == Buttons.backward: self.buttons.changeColor (self.buttons.backward, False)
+            else: super().keyPressEvent(event)

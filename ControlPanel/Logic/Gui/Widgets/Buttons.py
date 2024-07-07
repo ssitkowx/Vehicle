@@ -2,6 +2,11 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QPushButton, QSizePolicy
 
 class Buttons:
+    left     = 's'
+    right    = 'f'
+    forward  = 'e'
+    backward = 'd'
+
     def __init__(self):
         size = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         width  = 200
