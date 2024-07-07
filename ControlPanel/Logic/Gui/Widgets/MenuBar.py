@@ -3,18 +3,15 @@ from PySide6.QtWidgets import QMenuBar
 
 class MenuBar:
     def __init__(self):
-        uartAction = QAction         ("Uart", self)
-        uartAction.setStatusTip      ("Configure Uart")
-        uartAction.triggered.connect (self.openUartInterface)
+        self.uartAction = QAction    ("Uart")
+        self.uartAction.setStatusTip ("Configure Uart")
         
-        bluetoothAction = QAction         ("Bluetooth", self)
-        bluetoothAction.setStatusTip      ("Configure bluetooth")
-        bluetoothAction.triggered.connect (self.openBluetoothInterface)
+        self.bluetoothAction = QAction    ("Bluetooth")
+        self.bluetoothAction.setStatusTip ("Configure bluetooth")
         
-        menuBar    = QMenuBar        ()
-        menuConfig = menuBar.addMenu ("Configuration")
+        self.obj        = QMenuBar         ()
+        self.menuConfig = self.obj.addMenu ("Configuration")
         
-        menuInterface = menuConfig.addMenu ("Interface")
-        menuInterface.addAction (uartAction)
-        menuInterface.addAction (bluetoothAction)
-        self.setMenuBar         (menuBar)
+        self.menuInterface = self.menuConfig.addMenu ("Interface")
+        self.menuInterface.addAction (self.uartAction)
+        self.menuInterface.addAction (self.bluetoothAction)

@@ -1,39 +1,37 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGroupBox, QGridLayout
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QGridLayout
 
 class GroupBoxes:
-    def __init__ (self):
-        self.widgetLayout = QWidget ()
-        layout = QVBoxLayout ()
-
-        imuGroupBox = QGroupBox ("Imu")
-        imuGroupBox.setStyleSheet("QGroupBox { background-color: gray; }")
+    def __init__ (self, vLabels, vButtons, vTextBrowser):
+        imu = QGroupBox ("Imu")
+        imu.setStyleSheet("QGroupBox { background-color: gray; }")
 
         imuLayout = QHBoxLayout ()
-        imuLayout.addWidget (self.rollLabel)
-        imuLayout.addWidget (self.pitchLabel)
-        imuLayout.addWidget (self.yawLabel)
-        imuGroupBox.setLayout (imuLayout)
+        imuLayout.addWidget     (vLabels.roll)
+        imuLayout.addWidget     (vLabels.pitch)
+        imuLayout.addWidget     (vLabels.yaw)
+        imu      .setLayout     (imuLayout)
         
-        controlPanelGroupBox = QGroupBox ("Control panel")
-        controlPanelGroupBox.setStyleSheet("QGroupBox { background-color: lightgray; }")
+        controlPanel = QGroupBox   ("Control panel")
+        controlPanel.setStyleSheet ("QGroupBox { background-color: lightgray; }")
         
         controlPanelGridLayout = QGridLayout ()
-        controlPanelGridLayout.addWidget (self.forwardButton , 0, 1)
-        controlPanelGridLayout.addWidget (self.leftButton    , 1, 0)
-        controlPanelGridLayout.addWidget (self.rightButton   , 1, 2)
-        controlPanelGridLayout.addWidget (self.backwardButton, 2, 1)
-        controlPanelGroupBox  .setLayout (controlPanelGridLayout)
+        controlPanelGridLayout.addWidget     (vButtons.forward , 0, 1)
+        controlPanelGridLayout.addWidget     (vButtons.left    , 1, 0)
+        controlPanelGridLayout.addWidget     (vButtons.right   , 1, 2)
+        controlPanelGridLayout.addWidget     (vButtons.backward, 2, 1)
+        controlPanel          .setLayout     (controlPanelGridLayout)
 
-        terminalGroupBox = QGroupBox ("Terminal")
-        terminalGroupBox.setStyleSheet("QGroupBox { background-color: gray; }")
+        terminalGroupBox = QGroupBox   ("Terminal")
+        terminalGroupBox.setStyleSheet ("QGroupBox { background-color: gray; }")
         
         terminalLayout = QHBoxLayout ()
-        terminalLayout  .addWidget (self.clearLogsButton)
-        terminalLayout  .addWidget (self.textBrowser)
-        terminalGroupBox.setLayout (terminalLayout)
+        terminalLayout  .addWidget   (vButtons.clearLogs)
+        terminalLayout  .addWidget   (vTextBrowser)
+        terminalGroupBox.setLayout   (terminalLayout)
 
-        layout.addWidget  (imuGroupBox)
-        layout.addWidget  (controlPanelGroupBox)
-        layout.setSpacing (10)
-        layout.addWidget  (terminalGroupBox)
-        self.widgetLayout.setLayout (layout)
+        self.obj = QVBoxLayout ()
+        self.obj.addWidget     (imu)
+        self.obj.setSpacing    (10)
+        self.obj.addWidget     (controlPanel)
+        self.obj.setSpacing    (10)
+        self.obj.addWidget     (terminalGroupBox)

@@ -2,10 +2,10 @@ from PySide6.QtWidgets import QLabel
 
 class Labels:
     def __init__ (self):
-        self.portLabel        = QLabel ("Port")
-        self.speedLabel       = QLabel ("Speed(baud)")
-        self.passwordLabel    = QLabel ("Password")
-        self.dataBitsLabel    = QLabel ("Data bits")
-        self.stopBitsLabel    = QLabel ("Stop bits")
-        self.parityBitsLabel  = QLabel ("Parity bits")
-        self.flowControlLabel = QLabel ("Flow control")
+        self.port        = QLabel ("Port")
+        self.speed       = QLabel ("Speed(baud)")
+        self.password    = QLabel ("Password")
+        self.dataBits    = QLabel ("Data bits")
+        self.stopBits    = QLabel ("Stop bits")
+        self.parityBits  = QLabel ("Parity bits")
+        self.flowControl = QLabel ("Flow control")

@@ -9,24 +9,24 @@ class ComboBoxes:
     flowControl = ('No', 'RTS/CTS', 'XON/XOFF')
     
     def __init__ (self):
-        self.portComboBox = QComboBox()
+        self.port = QComboBox()
         
-        self.speedComboBox = QComboBox     ()
-        self.speedComboBox.addItems        (self.speeds)
-        self.speedComboBox.setCurrentIndex (7)
+        self.speed = QComboBox     ()
+        self.speed.addItems        (ComboBoxes.speeds)
+        self.speed.setCurrentIndex (7)
         
-        self.dataBitsComboBox = QComboBox     ()
-        self.dataBitsComboBox.addItems        (self.dataBits)
-        self.dataBitsComboBox.setCurrentIndex (3)
+        self.dataBits = QComboBox     ()
+        self.dataBits.addItems        (ComboBoxes.dataBits)
+        self.dataBits.setCurrentIndex (3)
         
-        self.stopBitsComboBox = QComboBox     ()
-        self.stopBitsComboBox.addItems        (self.stopBits)
-        self.stopBitsComboBox.setCurrentIndex (0)
+        self.stopBits = QComboBox     ()
+        self.stopBits.addItems        (ComboBoxes.stopBits)
+        self.stopBits.setCurrentIndex (0)
         
-        self.parityBitsComboBox = QComboBox     ()
-        self.parityBitsComboBox.addItems        (self.parityBits)
-        self.parityBitsComboBox.setCurrentIndex (0)
+        self.parityBits = QComboBox     ()
+        self.parityBits.addItems        (ComboBoxes.parityBits)
+        self.parityBits.setCurrentIndex (0)
         
-        self.flowControlComboBox = QComboBox     ()
-        self.flowControlComboBox.addItems        (self.flowControl)
-        self.flowControlComboBox.setCurrentIndex (0)
+        self.flowControl = QComboBox     ()
+        self.flowControl.addItems        (ComboBoxes.flowControl)
+        self.flowControl.setCurrentIndex (0)

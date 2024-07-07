@@ -16,18 +16,26 @@ from Logic.Gui.Panels.Uart.UartPanel import UartPanel
 
 from PySide6.QtGui import QKeyEvent
 
-class ControlPanel (QMainWindow, Buttons, MenuBar, TextBrowser, GroupBoxes):
+class ControlPanel (QMainWindow):
     module = __name__
     
     def __init__ (self, vSettings: Settings):
         QMainWindow.__init__ (self)
-        Labels     .__init__ (self)
-        Buttons    .__init__ (self)
-        MenuBar    .__init__ (self)
-        TextBrowser.__init__ (self)
-        GroupBoxes    .__init__ (self)
+        self.labels      = Labels      ()
+        self.buttons     = Buttons     ()
+        self.menuBar     = MenuBar     ()
+        self.textBrowser = TextBrowser ()
+        self.groupBoxes  = GroupBoxes  (self.labels, self.buttons, self.textBrowser.obj)
+
+        self.buttons.clearLogs      .clicked  .connect (self.clearButtonClicked)
+        self.menuBar.uartAction     .triggered.connect (self.openUartInterface)
+        self.menuBar.bluetoothAction.triggered.connect (self.openBluetoothInterface)
+        self.setMenuBar                                (self.menuBar.obj)
+
+        self.widget = QWidget (self)
+        self.widget.setLayout (self.groupBoxes.obj)
         
-        loggerHw = LoggerHw (self.textBrowser)
+        loggerHw = LoggerHw (self.textBrowser.obj)
         Logger.setInst (loggerHw)
 
         self.uart                   = Uart                   ()
@@ -45,7 +53,7 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, TextBrowser, GroupBoxes):
                                'selection-background-color: gray;')
         self.setMinimumSize   (QSize(500, 500))
         self.setMaximumSize   (QSize(800, 800))
-        self.setCentralWidget (self.widgetLayout)
+        self.setCentralWidget (self.widget)
 
         #self.central_widget = QWidget(self)
         #self.setCentralWidget(self.central_widget)
@@ -74,7 +82,7 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, TextBrowser, GroupBoxes):
             LOGW                       (self.module, "Disconnected")
 
     def clearButtonClicked (self, vChecked):
-        self.textBrowser.clear ()
+        self.textBrowser.textBrowser.clear ()
 
     def openUartInterface (self, vChecked):
         self.uartPanel.show ()
@@ -91,40 +99,47 @@ class ControlPanel (QMainWindow, Buttons, MenuBar, TextBrowser, GroupBoxes):
             self.interfaceCheckBox.setText ("Car")
 
     def keyPressEvent(self, event):
-        if isinstance(event, QKeyEvent):
-            key_text = event.text()
-            key_num = event.key ()
-            self.key_label.setText(f"Last Key Pressed: {key_num}")
+        self.labels.roll.setText ("Roll: press")
+        '''
+        if event.key () == Qt.Key_Up:
+            self.buttons.changeColor (self.forward, True)
+            self.buttons.labels.roll.setText ("Roll: press")
+        elif event.key () == Qt.Key_Down:
+            self.buttons.changeColor (self.backward, True)
+        elif event.key () == Qt.Key_Left:
+            self.buttons.changeColor (self.left, True)
+        elif event.key () == Qt.Key_Right:
+            self.buttons.changeColor (self.right, True)
+        else:
+            super().keyPressEvent(event)
+            '''
 
     def keyReleaseEvent(self, event):
-        if isinstance(event, QKeyEvent):
-            key_text = event.text()
-            key_num = event.key ()
-            self.key_label.setText(f"Key Released: {key_num}")
+        self.labels.roll.setText ("Roll: release")
+        '''
+        if event.key () == Qt.Key_Up:
+            self.buttons.changeColor (self.buttons.forward, False)
+            self.labels.roll.setText ("Roll: release")
+        elif event.key () == Qt.Key_Down:
+            self.buttons.changeColor (self.buttons.backward, False)
+        elif event.key () == Qt.Key_Left:
+            self.buttons.changeColor(self.buttons.left, False)
+        elif event.key () == Qt.Key_Right:
+            self.buttons.changeColor(self.buttons.right, False)
+        else:
+            super().keyPressEvent(event)
+            '''
+
 '''
     def keyPressEvent(self, event):
-        self.rollLabel.setText("Pressed")
-        if event.key () == Qt.Key_Up:
-            self.changeColor (self.forwardButton, True)
-        elif event.key () == Qt.Key_Down:
-            self.changeColor (self.backwardButton, True)
-        elif event.key () == Qt.Key_Left:
-            self.changeColor (self.leftButton, True)
-        elif event.key () == Qt.Key_Right:
-            self.changeColor (self.rightButton, True)
-        else:
-            super().keyPressEvent(event)
+        if isinstance(event, QKeyEvent):
+            key_text = event.text()
+            key_num = event.key ()
+            self.labels.roll.setText(f"Last Key Pressed: {key_num}")
 
     def keyReleaseEvent(self, event):
-        self.rollLabel.setText("Released")
-        if event.key () == Qt.Key_Up:
-            self.changeColor (self.forwardButton, False)
-        elif event.key () == Qt.Key_Down:
-            self.changeColor (self.backwardButton, False)
-        elif event.key () == Qt.Key_Left:
-            self.changeColor(self.leftButton, False)
-        elif event.key () == Qt.Key_Right:
-            self.changeColor(self.rightButton, False)
-        else:
-            super().keyPressEvent(event)
+        if isinstance(event, QKeyEvent):
+            key_text = event.text()
+            key_num = event.key ()
+            self.labels.roll.setText(f"Key Released: {key_num}")
 '''
