@@ -1,3 +1,4 @@
+from enum                            import IntEnum, unique
 from Uart                            import Uart
 from Timer                           import Timer
 from Labels                          import Labels
@@ -15,20 +16,20 @@ from PySide6.QtWidgets               import QMainWindow, QWidget
 from BleParserAndSerializer          import BleParserAndSerializer
 from Logic.Gui.Panels.Ble.BlePanel   import BlePanel
 from Logic.Gui.Panels.Uart.UartPanel import UartPanel
-from PySide6.QtCore import QTimer
+
 class ControlPanel (QMainWindow):
     module = __name__
     
     def __init__ (self, vSettings: Settings):
         QMainWindow.__init__ (self)
-        self.labels      = Labels      ()
-        self.buttons     = Buttons     ()
-        self.menuBar     = MenuBar     ()
-        self.textBrowser = TextBrowser ()
-        self.groupBoxes  = GroupBoxes  (self.labels, self.buttons, self.textBrowser.obj)
-        self.timer       = Timer       ()
-
-        self.counter = 0
+        self.direction    = Settings.EMoveDirection.Idle
+        self.settings     = vSettings
+        self.labels       = Labels      ()
+        self.buttons      = Buttons     ()
+        self.menuBar      = MenuBar     ()
+        self.textBrowser  = TextBrowser ()
+        self.groupBoxes   = GroupBoxes  (self.labels, self.buttons, self.textBrowser.obj)
+        self.timer        = Timer       ()
 
         self.buttons.left           .pressed  .connect (self.leftButtonPressed)
         self.buttons.left           .released .connect (self.leftButtonReleased)
@@ -50,10 +51,10 @@ class ControlPanel (QMainWindow):
 
         self.uart                   = Uart                   ()
         self.bleComm                = BleComm                ()
-        self.blePanel               = BlePanel               (self.bleComm, vSettings)
+        self.blePanel               = BlePanel               (self.bleComm, self.settings)
         self.uartPanel              = UartPanel              (self.uart)
-        self.commandConverter       = CommandConverter       (vSettings)
-        self.bleParserAndSerializer = BleParserAndSerializer (vSettings)
+        self.commandConverter       = CommandConverter       (self.settings)
+        self.bleParserAndSerializer = BleParserAndSerializer (self.settings)
         self.panel                  = self.uartPanel
 
         self.setGeometry      (500, 200, 500, 500)
@@ -68,8 +69,22 @@ class ControlPanel (QMainWindow):
         self.setCentralWidget (self.widget)
 
     def timerIsr (self):
-        self.counter += 1
-        self.labels.roll.setText (f"Roll: {self.counter}")
+        if self.direction == Settings.EMoveDirection.Forward:
+            self.settings.duty += 0.05
+            self.direction = Settings.EMoveDirection.Idle
+
+        if self.direction == Settings.EMoveDirection.Backward:
+            self.settings.duty -= 0.05
+            self.direction = Settings.EMoveDirection.Idle
+        
+        self.validateDuty ()
+        self.labels.roll.setText (f"Roll: {self.settings.duty}")    # todo sylsit display duty
+
+    def validateDuty (self):
+        if self.settings.duty > Settings.DutyParams.DUTY_MAX:
+            self.settings.duty = Settings.DutyParams.DUTY_MAX
+        elif self.settings.duty < Settings.DutyParams.DUTY_MIN:
+            self.settings.duty = Settings.DutyParams.DUTY_MIN
 
     #def logData (self):
     #    self.textBrowser.append (str (self.uart.Receive ()))
@@ -105,17 +120,35 @@ class ControlPanel (QMainWindow):
             self.panel = self.blePanel
             self.interfaceCheckBox.setText ("Car")
 
-    def leftButtonPressed      (self): self.buttons.changeColor (self.buttons.left    , True)
-    def leftButtonReleased     (self): self.buttons.changeColor (self.buttons.left    , False)
-    def rightButtonPressed     (self): self.buttons.changeColor (self.buttons.right   , True)
-    def rightButtonReleased    (self): self.buttons.changeColor (self.buttons.right   , False)
-    def forwardButtonPressed   (self): self.buttons.changeColor (self.buttons.forward , True)
-    def forwardButtonReleased  (self): self.buttons.changeColor (self.buttons.forward , False)
-    def backwardButtonPressed  (self): self.buttons.changeColor (self.buttons.backward, True)
-    def backwardButtonReleased (self): self.buttons.changeColor (self.buttons.backward, False)
+    def leftButtonPressed (self):
+        self.buttons.changeColor (self.buttons.left, True)
+
+    def leftButtonReleased (self):
+        self.buttons.changeColor (self.buttons.left, False)
+    
+    def rightButtonPressed (self):
+        self.buttons.changeColor (self.buttons.right, True)
+    
+    def rightButtonReleased (self):
+        self.buttons.changeColor (self.buttons.right, False)
+    
+    def forwardButtonPressed (self):
+        self.direction = Settings.EMoveDirection.Forward
+        self.buttons.changeColor (self.buttons.forward, True)
+    
+    def forwardButtonReleased (self):
+        self.buttons.changeColor (self.buttons.forward, False)
+    
+    def backwardButtonPressed (self):
+        self.direction = Settings.EMoveDirection.Backward
+        self.buttons.changeColor (self.buttons.backward, True)
+    
+    def backwardButtonReleased (self):
+        self.buttons.changeColor (self.buttons.backward, False)
+    
     def clearButtonPressed (self):
         self.textBrowser.obj.clear ()
-        self.buttons.changeColor   (self.buttons.clearLogs, True)
+        self.buttons.changeColor (self.buttons.clearLogs, True)
 
     def clearButtonReleased (self): self.buttons.changeColor (self.buttons.clearLogs, False)
 

@@ -7,7 +7,8 @@ class Settings:
         Backward = 1,
         Left     = 2,
         Right    = 3,
-        Stop     = 4
+        Stop     = 4,
+        Idle     = 5
     
     @unique
     class EChannel (IntEnum):
@@ -25,6 +26,8 @@ class Settings:
                 }
         STEP           = 0.1
         FACTOR         = 1.0
+        DUTY_MIN       = -1.0
+        DUTY_MAX       = 1.0
         TO_SPEED_COEFF = 100
     
     ADDRESS   = "98:84:E3:E0:A6:92"
