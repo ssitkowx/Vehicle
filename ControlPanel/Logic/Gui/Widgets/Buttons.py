@@ -13,29 +13,29 @@ class Buttons:
         height = 60
         self.left = QPushButton    ("Left")
         self.left.setMinimumHeight (height)
-        self.left.setStyleSheet    ('color: black; background-color:brown')
+        self.left.setStyleSheet    ('font-weight: bold; color: black; background-color:blue')
         self.left.setSizePolicy    (size)
 
         self.right = QPushButton    ("Right")
         self.right.setMinimumHeight (height)
-        self.right.setStyleSheet    ('color: black; background-color:brown')
+        self.right.setStyleSheet    ('font-weight: bold; color: black; background-color:blue')
         self.right.setSizePolicy    (size)
 
         self.forward = QPushButton  ("Forward")
         self.forward.setMinimumSize (QSize(width, height))
-        self.forward.setStyleSheet  ('color: black; background-color:brown')
+        self.forward.setStyleSheet  ('font-weight: bold; color: black; background-color:blue')
         self.forward.setSizePolicy  (size)
 
         self.backward = QPushButton  ("Backward")
         self.backward.setMinimumSize (QSize(width, height))
-        self.backward.setStyleSheet  ('color: black; background-color:brown')
+        self.backward.setStyleSheet  ('font-weight: bold; color: black; background-color:blue')
         self.backward.setSizePolicy  (size)
         
         self.clearLogs = QPushButton   ("Clear logs")
-        self.clearLogs.setStyleSheet   ('background-color:blue')
+        self.clearLogs.setStyleSheet   ('font-weight: bold; background-color:blue')
         self.clearLogs.setMaximumWidth (75)
         self.clearLogs.setSizePolicy   (size)
 
     def changeColor(self, vButton, vIsPressed):
-        if vIsPressed: vButton.setStyleSheet('color: white; background-color:black')
-        else:          vButton.setStyleSheet('color: black; background-color:brown')
+        if vIsPressed: vButton.setStyleSheet('font-weight: bold; color: white; background-color:darkgreen')
+        else:          vButton.setStyleSheet('font-weight: bold; color: black; background-color:blue')

@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox, QGridLayout
 class GroupBoxes:
     def __init__ (self, vLabels, vButtons, vTextBrowser):
         imu = QGroupBox ("Imu")
-        imu.setStyleSheet("QGroupBox { background-color: gray; }")
+        imu.setStyleSheet("QGroupBox { font-weight: bold; background-color: gray; }")
 
         imuLayout = QHBoxLayout ()
         imuLayout.addWidget     (vLabels.roll)
@@ -12,7 +12,7 @@ class GroupBoxes:
         imu      .setLayout     (imuLayout)
         
         controlPanel = QGroupBox   ("Control panel")
-        controlPanel.setStyleSheet ("QGroupBox { background-color: lightgray; }")
+        controlPanel.setStyleSheet ("QGroupBox { font-weight: bold; background-color: gray; }")
         
         controlPanelGridLayout = QGridLayout ()
         controlPanelGridLayout.addWidget     (vButtons.forward , 0, 1)
@@ -22,7 +22,7 @@ class GroupBoxes:
         controlPanel          .setLayout     (controlPanelGridLayout)
 
         terminalGroupBox = QGroupBox   ("Terminal")
-        terminalGroupBox.setStyleSheet ("QGroupBox { background-color: gray; }")
+        terminalGroupBox.setStyleSheet ("QGroupBox { font-weight: bold; background-color: gray; }")
         
         terminalLayout = QHBoxLayout ()
         terminalLayout  .addWidget   (vButtons.clearLogs)

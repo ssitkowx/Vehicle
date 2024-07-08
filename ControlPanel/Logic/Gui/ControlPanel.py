@@ -30,7 +30,16 @@ class ControlPanel (QMainWindow):
 
         self.counter = 0
 
-        self.buttons.clearLogs      .clicked  .connect (self.clearButtonClicked)
+        self.buttons.left           .pressed  .connect (self.leftButtonPressed)
+        self.buttons.left           .released .connect (self.leftButtonReleased)
+        self.buttons.right          .pressed  .connect (self.rightButtonPressed)
+        self.buttons.right          .released .connect (self.rightButtonReleased)
+        self.buttons.forward        .pressed  .connect (self.forwardButtonPressed)
+        self.buttons.forward        .released .connect (self.forwardButtonReleased)
+        self.buttons.backward       .pressed  .connect (self.backwardButtonPressed)
+        self.buttons.backward       .released .connect (self.backwardButtonReleased)
+        self.buttons.clearLogs      .pressed  .connect (self.clearButtonPressed)
+        self.buttons.clearLogs      .released .connect (self.clearButtonReleased)
         self.menuBar.uartAction     .triggered.connect (self.openUartInterface)
         self.menuBar.bluetoothAction.triggered.connect (self.openBluetoothInterface)
         self.setMenuBar                                (self.menuBar.obj)
@@ -82,9 +91,6 @@ class ControlPanel (QMainWindow):
             self.connectButton.setText ("Connect")
             LOGW                       (self.module, "Disconnected")
 
-    def clearButtonClicked (self, vChecked):
-        self.textBrowser.textBrowser.clear ()
-
     def openUartInterface (self, vChecked):
         self.uartPanel.show ()
 
@@ -99,20 +105,34 @@ class ControlPanel (QMainWindow):
             self.panel = self.blePanel
             self.interfaceCheckBox.setText ("Car")
 
-    def keyPressEvent(self, event):
-        if isinstance(event, QKeyEvent):
-            char = event.text ()
-            if   char == Buttons.left    : self.buttons.changeColor (self.buttons.left    , True)
-            elif char == Buttons.right   : self.buttons.changeColor (self.buttons.right   , True)
-            elif char == Buttons.forward : self.buttons.changeColor (self.buttons.forward , True)
-            elif char == Buttons.backward: self.buttons.changeColor (self.buttons.backward, True)
-            else: super().keyPressEvent(event)
+    def leftButtonPressed      (self): self.buttons.changeColor (self.buttons.left    , True)
+    def leftButtonReleased     (self): self.buttons.changeColor (self.buttons.left    , False)
+    def rightButtonPressed     (self): self.buttons.changeColor (self.buttons.right   , True)
+    def rightButtonReleased    (self): self.buttons.changeColor (self.buttons.right   , False)
+    def forwardButtonPressed   (self): self.buttons.changeColor (self.buttons.forward , True)
+    def forwardButtonReleased  (self): self.buttons.changeColor (self.buttons.forward , False)
+    def backwardButtonPressed  (self): self.buttons.changeColor (self.buttons.backward, True)
+    def backwardButtonReleased (self): self.buttons.changeColor (self.buttons.backward, False)
+    def clearButtonPressed (self):
+        self.textBrowser.obj.clear ()
+        self.buttons.changeColor   (self.buttons.clearLogs, True)
 
-    def keyReleaseEvent(self, event):
-        if isinstance(event, QKeyEvent):
+    def clearButtonReleased (self): self.buttons.changeColor (self.buttons.clearLogs, False)
+
+    def keyPressEvent (self, event):
+        if isinstance (event, QKeyEvent):
             char = event.text ()
-            if   char == Buttons.left    : self.buttons.changeColor (self.buttons.left    , False)
-            elif char == Buttons.right   : self.buttons.changeColor (self.buttons.right   , False)
-            elif char == Buttons.forward : self.buttons.changeColor (self.buttons.forward , False)
-            elif char == Buttons.backward: self.buttons.changeColor (self.buttons.backward, False)
-            else: super().keyPressEvent(event)
+            if   char == Buttons.left    : self.leftButtonPressed     ()
+            elif char == Buttons.right   : self.rightButtonPressed    ()
+            elif char == Buttons.forward : self.forwardButtonPressed  ()
+            elif char == Buttons.backward: self.backwardButtonPressed ()
+            else: super ().keyPressEvent (event)
+
+    def keyReleaseEvent (self, event):
+        if isinstance (event, QKeyEvent):
+            char = event.text ()
+            if   char == Buttons.left    : self.leftButtonReleased     ()
+            elif char == Buttons.right   : self.rightButtonReleased    ()
+            elif char == Buttons.forward : self.forwardButtonReleased  ()
+            elif char == Buttons.backward: self.backwardButtonReleased ()
+            else: super ().keyPressEvent (event)
