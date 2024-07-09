@@ -6,9 +6,9 @@ from   Logger     import *
 from   Settings   import Settings
 
 class App: 
+    module    = __name__
     turnLeft  = False
     turnRight = False
-    module    = __name__
     
     def __init__ (self, vSettings: Settings):
         self.settings = vSettings
@@ -29,23 +29,25 @@ class App:
     def update (self):
         self.validate ()
         
-        duty = self.settings.duty
+        duty = self.settings.Duty.data
         LOGI (self.module, f'Duty {duty}')
 
         if self.turnLeft == True:
             self.turnLeft = False
-            motor1.set (duty)
+            motor1.set (0)
+            time.sleep (Settings.Duty.TIMEOUT)
         else:
             motor1.set (duty)
         time.sleep (0.1)
         
         if self.turnRight == True:
             self.turnRight = False
-            motor2.set (duty)
+            motor2.set (0)
+            time.sleep (Settings.Duty.TIMEOUT)
         else:
             motor2.set (duty)
         time.sleep (0.1)
-        
+
         if self.settings.brake == True:
             self.settings.brake = False
             motor1.brake ()
@@ -57,13 +59,13 @@ class App:
             motor2.free_spin ()
         
     def validate (self):
-        topMax    = self.settings.DutyParams.RANGE ["Top"]
-        bottomMax = self.settings.DutyParams.RANGE ["Bottom"]
-        if self.settings.duty >= topMax:
-            self.settings.duty = topMax
+        topMax    = self.settings.Duty.RANGE ["Top"]
+        bottomMax = self.settings.Duty.RANGE ["Bottom"]
+        if self.settings.Duty.data >= topMax:
+            self.settings.Duty.data = topMax
         
-        if self.settings.duty <= bottomMax:
-            self.settings.duty = bottomMax
+        if self.settings.Duty.data <= bottomMax:
+            self.settings.Duty.data = bottomMax
     
     def process (self):
         if self.settings.direction == Settings.EMoveDirection.Forward:

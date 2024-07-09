@@ -8,11 +8,11 @@ class BleParserAndSerializer:
     
     def parse (self, vMsg):
         jsonMsg                 = json.loads (vMsg)
-        self.settings.duty      = jsonMsg ["Duty"]
+        self.settings.Duty.data = jsonMsg ["Duty"]
         self.settings.direction = jsonMsg ["MoveDirection"]
     
     def serialize (self):
-        msg = { "Duty"          : self.settings.duty,
+        msg = { "Duty"          : self.settings.Duty.data,
                 "MoveDirection" : self.settings.direction
               }
         return json.dumps (msg)

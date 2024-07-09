@@ -28,8 +28,8 @@ class Settings:
                   "Bottom" : -1.0
                 }
         TIMEOUT = 100
+        data = 0.0
 
     brake     = False
     freeSpin  = False
-    duty      = 0
     direction = EMoveDirection.Stop

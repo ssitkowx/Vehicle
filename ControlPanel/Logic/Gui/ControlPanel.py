@@ -70,19 +70,19 @@ class ControlPanel (QMainWindow):
 
     def timerIsr (self):
         if self.direction == Settings.EMoveDirection.Forward:
-            self.settings.duty += 0.05
+            self.settings.Duty.data += 0.05
 
         if self.direction == Settings.EMoveDirection.Backward:
-            self.settings.duty -= 0.05
+            self.settings.Duty.data -= 0.05
         
         self.validateDuty ()
-        self.labels.duty.setText (f"Duty: {self.settings.duty}")
+        self.labels.duty.setText (f"Duty: {self.settings.Duty.data}")
 
     def validateDuty (self):
-        if self.settings.duty > Settings.Duty.RANGE ["Top"]:
-            self.settings.duty = Settings.Duty.RANGE ["Top"]
-        elif self.settings.duty < Settings.Duty.RANGE ["Bottom"]:
-            self.settings.duty = Settings.Duty.RANGE ["Bottom"]
+        if self.settings.Duty.data > Settings.Duty.RANGE ["Top"]:
+            self.settings.Duty.data = Settings.Duty.RANGE ["Top"]
+        elif self.settings.Duty.data < Settings.Duty.RANGE ["Bottom"]:
+            self.settings.Duty.data = Settings.Duty.RANGE ["Bottom"]
 
     def logData (self):
         self.textBrowser.append (str (self.uart.Receive ()))

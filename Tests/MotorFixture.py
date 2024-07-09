@@ -87,7 +87,7 @@ class MotorFixture (unittest.TestCase):
         vClientSockMock.recv.return_value = b'{"Duty": 0.1, "MoveDirection": 2}'
         self.process.__init__              ()
         vClientSockMock.recv.assert_called ()
-        vMotor1.set.assert_called_with     (0.1)
+        vMotor1.set.assert_called_with     (0)
         vMotor2.assert_not_called          ()
 
     @mock.patch ('App.time.sleep')
@@ -109,7 +109,7 @@ class MotorFixture (unittest.TestCase):
         self.process.__init__              ()
         vClientSockMock.recv.assert_called ()
         vMotor1.assert_not_called          ()
-        vMotor2.set.assert_called_with     (0.2)
+        vMotor2.set.assert_called_with     (0)
 
     def tearDown (self) -> None:
         return super().tearDown ()
