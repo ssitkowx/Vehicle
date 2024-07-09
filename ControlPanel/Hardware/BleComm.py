@@ -4,6 +4,7 @@ from   Logger import *
 
 class BleComm (Ble):
     module = __name__
+    isConnected = False
 
     def open (self, vUuid: str, vAddress: str) -> bool:
         serviceMatches = bluetooth.find_service (uuid = vUuid, address = vAddress)
@@ -21,10 +22,16 @@ class BleComm (Ble):
         # Create the client socket
         self.sock = bluetooth.BluetoothSocket (bluetooth.RFCOMM)
         self.sock.connect                     ((host, port))
+        self.isConnected = True
         return True
 
     def send (self, vData):
+        if self.isConnected == False:
+            LOGE (self.module, "Bluetooth unconnected")
+            return
+        
         self.sock.send (vData)
 
     def close (self):
+        self.isConnected = False
         self.sock.close ()

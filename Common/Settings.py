@@ -1,6 +1,9 @@
 from enum import IntEnum, unique
 
 class Settings:
+    ADDRESS = "98:84:E3:E0:A6:92"
+    UUID    = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
+
     @unique
     class EMoveDirection (IntEnum):
         Forward  = 0,
@@ -15,25 +18,18 @@ class Settings:
         One = 1
         Two = 2
 
-    #class ImuAngles:
-    #    X = 0
-    #    Y = 0
-    #    Z = 0
-
-    class DutyParams:
+    class ImuAngles:
+        X = 0.0
+        Y = 0.0
+        Z = 0.0
+    
+    class Duty:
         RANGE = { "Top"    : 1.0,
                   "Bottom" : -1.0
                 }
-        STEP           = 0.1
-        FACTOR         = 1.0
-        DUTY_MIN       = -1.0
-        DUTY_MAX       = 1.0
-        TO_SPEED_COEFF = 100
-    
-    ADDRESS   = "98:84:E3:E0:A6:92"
-    UUID      = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
-    
-    duty      = 0.0
+        TIMEOUT = 100
+
     brake     = False
     freeSpin  = False
+    duty      = 0
     direction = EMoveDirection.Stop

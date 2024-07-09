@@ -71,23 +71,21 @@ class ControlPanel (QMainWindow):
     def timerIsr (self):
         if self.direction == Settings.EMoveDirection.Forward:
             self.settings.duty += 0.05
-            self.direction = Settings.EMoveDirection.Idle
 
         if self.direction == Settings.EMoveDirection.Backward:
             self.settings.duty -= 0.05
-            self.direction = Settings.EMoveDirection.Idle
         
         self.validateDuty ()
         self.labels.roll.setText (f"Roll: {self.settings.duty}")    # todo sylsit display duty
 
     def validateDuty (self):
-        if self.settings.duty > Settings.DutyParams.DUTY_MAX:
-            self.settings.duty = Settings.DutyParams.DUTY_MAX
-        elif self.settings.duty < Settings.DutyParams.DUTY_MIN:
-            self.settings.duty = Settings.DutyParams.DUTY_MIN
+        if self.settings.duty > Settings.Duty.RANGE ["Top"]:
+            self.settings.duty = Settings.Duty.RANGE ["Top"]
+        elif self.settings.duty < Settings.Duty.RANGE ["Bottom"]:
+            self.settings.duty = Settings.Duty.RANGE ["Bottom"]
 
-    #def logData (self):
-    #    self.textBrowser.append (str (self.uart.Receive ()))
+    def logData (self):
+        self.textBrowser.append (str (self.uart.Receive ()))
 
     def sendButtonClicked (self, vChecked):
         data = self.commandLineEdit.text ()
@@ -95,7 +93,7 @@ class ControlPanel (QMainWindow):
 
         json = self.bleParserAndSerializer.serialize ()
         LOGI (self.module, "Send {0}".format (json))
-        self.panel.send         (json)
+        self.panel.send (json)
 
     def connectButtonClicked (self, vChecked):
         if (self.connectButton.text () == "Connect"):
@@ -122,28 +120,40 @@ class ControlPanel (QMainWindow):
 
     def leftButtonPressed (self):
         self.buttons.changeColor (self.buttons.left, True)
+        json = self.bleParserAndSerializer.serialize ()
+        self.bleComm.send (json)
 
     def leftButtonReleased (self):
+        self.direction = Settings.EMoveDirection.Idle
         self.buttons.changeColor (self.buttons.left, False)
     
     def rightButtonPressed (self):
         self.buttons.changeColor (self.buttons.right, True)
+        json = self.bleParserAndSerializer.serialize ()
+        self.bleComm.send (json)
     
     def rightButtonReleased (self):
+        self.direction = Settings.EMoveDirection.Idle
         self.buttons.changeColor (self.buttons.right, False)
     
     def forwardButtonPressed (self):
         self.direction = Settings.EMoveDirection.Forward
         self.buttons.changeColor (self.buttons.forward, True)
+        json = self.bleParserAndSerializer.serialize ()
+        self.bleComm.send (json)
     
     def forwardButtonReleased (self):
+        self.direction = Settings.EMoveDirection.Idle
         self.buttons.changeColor (self.buttons.forward, False)
     
     def backwardButtonPressed (self):
         self.direction = Settings.EMoveDirection.Backward
         self.buttons.changeColor (self.buttons.backward, True)
+        json = self.bleParserAndSerializer.serialize ()
+        self.bleComm.send (json)
     
     def backwardButtonReleased (self):
+        self.direction = Settings.EMoveDirection.Idle
         self.buttons.changeColor (self.buttons.backward, False)
     
     def clearButtonPressed (self):
