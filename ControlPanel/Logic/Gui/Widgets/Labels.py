@@ -5,3 +5,4 @@ class Labels:
         self.roll  = QLabel ("Roll: ")
         self.pitch = QLabel ("Pitch: ")
         self.yaw   = QLabel ("Yaw: ")
+        self.duty  = QLabel ("Duty: ")

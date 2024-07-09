@@ -76,7 +76,7 @@ class ControlPanel (QMainWindow):
             self.settings.duty -= 0.05
         
         self.validateDuty ()
-        self.labels.roll.setText (f"Roll: {self.settings.duty}")    # todo sylsit display duty
+        self.labels.duty.setText (f"Duty: {self.settings.duty}")
 
     def validateDuty (self):
         if self.settings.duty > Settings.Duty.RANGE ["Top"]:

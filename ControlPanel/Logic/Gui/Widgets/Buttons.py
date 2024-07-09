@@ -33,7 +33,7 @@ class Buttons:
         
         self.clearLogs = QPushButton   ("Clear logs")
         self.clearLogs.setStyleSheet   ('font-weight: bold; background-color:blue')
-        self.clearLogs.setMaximumWidth (75)
+        self.clearLogs.setMaximumWidth (80)
         self.clearLogs.setSizePolicy   (size)
 
     def changeColor(self, vButton, vIsPressed):
