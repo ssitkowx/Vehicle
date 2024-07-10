@@ -1,20 +1,22 @@
 import time
 import Paths
 
-from   App                    import App
-from   Rtos                   import Rtos
-from   Mpu9250                import Mpu9250
-from   BleComm                import BleComm
-from   LoggerHw               import *
-from   Settings               import Settings
-from   BleParserAndSerializer import BleParserAndSerializer
+from   App           import App
+from   Rtos          import Rtos
+from   Mpu9250       import Mpu9250
+from   BleComm       import BleComm
+from   LoggerHw      import *
+from   Settings      import Settings
+from   CmdParser     import CmdParser
+from   CmdSerializer import CmdSerializer
 
 class Process:
-    module                 = __name__
-    rtos                   = Rtos                   ()
-    settings               = Settings               ()
-    app                    = App                    (settings)
-    bleParserAndSerializer = BleParserAndSerializer (settings)
+    module        = __name__
+    rtos          = Rtos          ()
+    settings      = Settings      ()
+    app           = App           (settings)
+    cmdParser     = CmdParser     (settings)
+    cmdSerializer = CmdSerializer (settings)
     
     def __init__ (self):
         loggerHw = LoggerHw ()
@@ -63,7 +65,7 @@ class Process:
                 if self.app.isRunning () == True:
                     msg = self.rtos.getMsg            ()
                     LOGI                              (self.module, f"Received: {msg}")
-                    self.bleParserAndSerializer.parse (msg)
+                    self.cmdParser.parse (msg)
                     self.app.process                  ()
                 elif self.app.isPaused () == True:
                     self.settings.freeSpin = True

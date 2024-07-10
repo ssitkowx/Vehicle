@@ -6,14 +6,14 @@ from MenuBar                         import MenuBar
 from Buttons                         import Buttons
 from BleComm                         import BleComm
 from Settings                        import Settings
-from GroupBoxes                      import GroupBoxes
 from LoggerHw                        import *
+from GroupBoxes                      import GroupBoxes
 from TextBrowser                     import TextBrowser
+from CmdSerializer                   import CmdSerializer
 from PySide6.QtGui                   import QKeyEvent
 from PySide6.QtCore                  import QSize
 from CommandConverter                import CommandConverter
 from PySide6.QtWidgets               import QMainWindow, QWidget
-from BleParserAndSerializer          import BleParserAndSerializer
 from Logic.Gui.Panels.Ble.BlePanel   import BlePanel
 from Logic.Gui.Panels.Uart.UartPanel import UartPanel
 
@@ -49,13 +49,13 @@ class ControlPanel (QMainWindow):
         loggerHw = LoggerHw (self.textBrowser.obj)
         Logger.setInst (loggerHw)
 
-        self.uart                   = Uart                   ()
-        self.bleComm                = BleComm                ()
-        self.blePanel               = BlePanel               (self.bleComm, self.settings)
-        self.uartPanel              = UartPanel              (self.uart)
-        self.commandConverter       = CommandConverter       (self.settings)
-        self.bleParserAndSerializer = BleParserAndSerializer (self.settings)
-        self.panel                  = self.uartPanel
+        self.uart             = Uart             ()
+        self.bleComm          = BleComm          ()
+        self.blePanel         = BlePanel         (self.bleComm, self.settings)
+        self.uartPanel        = UartPanel        (self.uart)
+        self.commandConverter = CommandConverter (self.settings)
+        self.cmdSerializer    = CmdSerializer    (self.settings)
+        self.panel            = self.uartPanel
 
         self.setGeometry      (500, 200, 500, 500)
         self.setWindowTitle   ('Control Panel')
@@ -91,7 +91,7 @@ class ControlPanel (QMainWindow):
         data = self.commandLineEdit.text ()
         self.commandConverter.convert (data)
 
-        json = self.bleParserAndSerializer.serialize ()
+        json = self.cmdSerializer.serialize ()
         LOGI (self.module, "Send {0}".format (json))
         self.panel.send (json)
 
@@ -120,7 +120,7 @@ class ControlPanel (QMainWindow):
 
     def leftButtonPressed (self):
         self.buttons.changeColor (self.buttons.left, True)
-        json = self.bleParserAndSerializer.serialize ()
+        json = self.cmdSerializer.serialize ()
         self.bleComm.send (json)
 
     def leftButtonReleased (self):
@@ -129,7 +129,7 @@ class ControlPanel (QMainWindow):
     
     def rightButtonPressed (self):
         self.buttons.changeColor (self.buttons.right, True)
-        json = self.bleParserAndSerializer.serialize ()
+        json = self.cmdSerializer.serialize ()
         self.bleComm.send (json)
     
     def rightButtonReleased (self):
@@ -139,7 +139,7 @@ class ControlPanel (QMainWindow):
     def forwardButtonPressed (self):
         self.direction = Settings.EMoveDirection.Forward
         self.buttons.changeColor (self.buttons.forward, True)
-        json = self.bleParserAndSerializer.serialize ()
+        json = self.cmdSerializer.serialize ()
         self.bleComm.send (json)
     
     def forwardButtonReleased (self):
@@ -149,7 +149,7 @@ class ControlPanel (QMainWindow):
     def backwardButtonPressed (self):
         self.direction = Settings.EMoveDirection.Backward
         self.buttons.changeColor (self.buttons.backward, True)
-        json = self.bleParserAndSerializer.serialize ()
+        json = self.cmdSerializer.serialize ()
         self.bleComm.send (json)
     
     def backwardButtonReleased (self):

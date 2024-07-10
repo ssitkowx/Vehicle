@@ -2,6 +2,7 @@ import os
 import sys
 
 sys.path.append ('Common')
+sys.path.append ('Common/ParserAndSerializer')
 sys.path.append ('ControlPanel')
 sys.path.append ('ControlPanel/Hardware')
 sys.path.append ('ControlPanel/Hardware/Peripheral')
