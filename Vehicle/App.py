@@ -1,5 +1,6 @@
 import time
 import rcpy
+import Cmd_pb2 as CmdProto
 from   rcpy.motor import motor1, motor2
 
 from   Logger     import *
@@ -29,7 +30,7 @@ class App:
     def update (self):
         self.validate ()
         
-        duty = self.settings.Duty.data
+        duty = self.settings.vehicleMsg.Duty
         LOGI (self.module, f'Duty {duty}')
 
         if self.turnLeft == True:
@@ -61,28 +62,20 @@ class App:
     def validate (self):
         topMax    = self.settings.Duty.RANGE ["Top"]
         bottomMax = self.settings.Duty.RANGE ["Bottom"]
-        if self.settings.Duty.data >= topMax:
-            self.settings.Duty.data = topMax
+        if self.settings.vehicleMsg.Duty >= topMax:
+            self.settings.vehicleMsg.Duty = topMax
         
-        if self.settings.Duty.data <= bottomMax:
-            self.settings.Duty.data = bottomMax
+        if self.settings.vehicleMsg.Duty <= bottomMax:
+            self.settings.vehicleMsg.Duty = bottomMax
     
     def process (self):
-        if self.settings.direction == Settings.EMoveDirection.Forward:
+        if self.settings.vehicleMsg.Direction == CmdProto.EDirection.Move:
             pass
-        elif self.settings.direction == Settings.EMoveDirection.Backward:
-            pass
-        elif self.settings.direction == Settings.EMoveDirection.Left:
+        elif self.settings.vehicleMsg.Direction == CmdProto.EDirection.Left:
             self.turnLeft = True
-        elif self.settings.direction == Settings.EMoveDirection.Right:
+        elif self.settings.vehicleMsg.Direction == CmdProto.EDirection.Right:
             self.turnRight = True
         else:
-            self.settings.duty     = 0
-            self.settings.freeSpin = True
+            self.settings.freeSpin        = True
+            self.settings.vehicleMsg.Duty = 0
         self.update ()
-
-    @staticmethod
-    def isMsgDoubled (vMsg: str):    # todo sylsit I don't remember use of this function
-        if vMsg.find ("MoveDirection", 20, 40) == -1:
-            return False
-        return True

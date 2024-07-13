@@ -1,5 +1,5 @@
-import json
-from   Settings import Settings
+import Cmd_pb2 as CmdProto
+from Settings import Settings
 
 class CmdSerializer:
     def __init__ (self, vSettings: Settings):
@@ -7,7 +7,8 @@ class CmdSerializer:
         self.settings = vSettings
     
     def serialize (self):
-        msg = { "Duty"          : self.settings.Duty.data,
-                "MoveDirection" : self.settings.direction
-              }
-        return json.dumps (msg)
+        msg = CmdProto.Vehicle ()
+        if self.settings.vehicleMsg.Duty is not None:
+            msg.Duty = self.settings.vehicleMsg.Duty
+        msg.Direction = self.settings.vehicleMsg.Direction
+        return msg.SerializeToString ()

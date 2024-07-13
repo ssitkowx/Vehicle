@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+enum EDirection {
+    Idle  = 0;
+    Stop  = 1;
+    Move  = 2;
+    Left  = 3;
+    Right = 4;
+}
+
+message Vehicle {
+    double     Duty      = 1;
+    EDirection Direction = 2;
+}
+

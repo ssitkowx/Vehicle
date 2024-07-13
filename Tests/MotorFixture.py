@@ -44,7 +44,7 @@ class MotorFixture (unittest.TestCase):
     def moveForwardWithDuty (self, vMockGetAngles, vMockIsExisting, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock,
                                    vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
         LOGI (self.module, "moveForwardWithDuty")
-        vClientSockMock.recv.return_value = b'{"Duty": 0.8, "MoveDirection": 0}'
+        vClientSockMock.recv.return_value = b'\t\x9a\x99\x99\x99\x99\x99\xe9?\x10\x02'
         self.process.__init__              ()
         vClientSockMock.recv.assert_called ()
         vMotor1.set.assert_called_with     (0.8)
@@ -64,11 +64,11 @@ class MotorFixture (unittest.TestCase):
     def moveBackwardWithDuty (self, vMockGetAngles, vMockIsExisting, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock,
                                     vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
         LOGI (self.module, "moveBackwardWithDuty")
-        vClientSockMock.recv.return_value = b'{"Duty": 0.2, "MoveDirection": 1}'
+        vClientSockMock.recv.return_value = b'\t\x9a\x99\x99\x99\x99\x99\xc9\xbf\x10\x02'
         self.process.__init__              ()
         vClientSockMock.recv.assert_called ()
-        vMotor1.set.assert_called_with     (0.2)
-        vMotor2.set.assert_called_with     (0.2)
+        vMotor1.set.assert_called_with     (-0.2)
+        vMotor2.set.assert_called_with     (-0.2)
 
     @mock.patch ('App.time.sleep')
     @mock.patch ('App.motor1'                            , create=True)
@@ -84,7 +84,7 @@ class MotorFixture (unittest.TestCase):
     def turnLeft (self, vMockGetAngles, vMockIsExisting, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock,
                         vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
         LOGI (self.module, "turnLeft")
-        vClientSockMock.recv.return_value = b'{"Duty": 0.1, "MoveDirection": 2}'
+        vClientSockMock.recv.return_value = b'\x10\x03'
         self.process.__init__              ()
         vClientSockMock.recv.assert_called ()
         vMotor1.set.assert_called_with     (0)
@@ -104,8 +104,8 @@ class MotorFixture (unittest.TestCase):
     def turnRight (self, vMockGetAngles, vMockIsExisting, vClientSockMock, vBleInitMock, vIsBleProcessRunningMock,
                         vIsAppExitingMock, vIsRunningMock, vIsPausedMock, vMotor2, vMotor1, vMockSleep):
         LOGI (self.module, "turnRight")
-        vClientSockMock.recv.return_value = b'{"Duty": 0.2, "MoveDirection": 3}'
-        self.process.settings.duty = 0.4
+        vClientSockMock.recv.return_value = b'\x10\x04'
+        self.process.settings.duty = 0
         self.process.__init__              ()
         vClientSockMock.recv.assert_called ()
         vMotor1.assert_not_called          ()
@@ -113,4 +113,3 @@ class MotorFixture (unittest.TestCase):
 
     def tearDown (self) -> None:
         return super().tearDown ()
-    

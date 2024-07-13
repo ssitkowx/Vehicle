@@ -1,4 +1,5 @@
-from enum                            import IntEnum, unique
+import Cmd_pb2 as CmdProto
+
 from Uart                            import Uart
 from Timer                           import Timer
 from Labels                          import Labels
@@ -19,17 +20,17 @@ from Logic.Gui.Panels.Uart.UartPanel import UartPanel
 
 class ControlPanel (QMainWindow):
     module = __name__
-    
+
     def __init__ (self, vSettings: Settings):
         QMainWindow.__init__ (self)
-        self.direction    = Settings.EMoveDirection.Idle
-        self.settings     = vSettings
-        self.labels       = Labels      ()
-        self.buttons      = Buttons     ()
-        self.menuBar      = MenuBar     ()
-        self.textBrowser  = TextBrowser ()
-        self.groupBoxes   = GroupBoxes  (self.labels, self.buttons, self.textBrowser.obj)
-        self.timer        = Timer       ()
+        self.moveDirection = False
+        self.settings      = vSettings
+        self.labels        = Labels      ()
+        self.buttons       = Buttons     ()
+        self.menuBar       = MenuBar     ()
+        self.textBrowser   = TextBrowser ()
+        self.groupBoxes    = GroupBoxes  (self.labels, self.buttons, self.textBrowser.obj)
+        self.timer         = Timer       ()
 
         self.buttons.left           .pressed  .connect (self.leftButtonPressed)
         self.buttons.left           .released .connect (self.leftButtonReleased)
@@ -69,20 +70,20 @@ class ControlPanel (QMainWindow):
         self.setCentralWidget (self.widget)
 
     def timerIsr (self):
-        if self.direction == Settings.EMoveDirection.Forward:
-            self.settings.Duty.data += 0.05
+        if self.settings.vehicleMsg.Direction == CmdProto.EDirection.Move:
+            if self.moveDirection == True:
+                self.settings.vehicleMsg.Duty += 0.05
+            else:
+                self.settings.vehicleMsg.Duty -= 0.05
 
-        if self.direction == Settings.EMoveDirection.Backward:
-            self.settings.Duty.data -= 0.05
-        
         self.validateDuty ()
-        self.labels.duty.setText (f"Duty: {self.settings.Duty.data}")
+        self.labels.duty.setText (f"Duty: {self.settings.vehicleMsg.Duty}")
 
     def validateDuty (self):
-        if self.settings.Duty.data > Settings.Duty.RANGE ["Top"]:
-            self.settings.Duty.data = Settings.Duty.RANGE ["Top"]
-        elif self.settings.Duty.data < Settings.Duty.RANGE ["Bottom"]:
-            self.settings.Duty.data = Settings.Duty.RANGE ["Bottom"]
+        if self.settings.vehicleMsg.Duty > Settings.Duty.RANGE ["Top"]:
+            self.settings.vehicleMsg.Duty = Settings.Duty.RANGE ["Top"]
+        elif self.settings.vehicleMsg.Duty < Settings.Duty.RANGE ["Bottom"]:
+            self.settings.vehicleMsg.Duty = Settings.Duty.RANGE ["Bottom"]
 
     def logData (self):
         self.textBrowser.append (str (self.uart.Receive ()))
@@ -120,40 +121,42 @@ class ControlPanel (QMainWindow):
 
     def leftButtonPressed (self):
         self.buttons.changeColor (self.buttons.left, True)
-        json = self.cmdSerializer.serialize ()
-        self.bleComm.send (json)
+        msg = self.cmdSerializer.serialize ()
+        self.bleComm.send (msg)
 
     def leftButtonReleased (self):
-        self.direction = Settings.EMoveDirection.Idle
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Idle
         self.buttons.changeColor (self.buttons.left, False)
     
     def rightButtonPressed (self):
         self.buttons.changeColor (self.buttons.right, True)
-        json = self.cmdSerializer.serialize ()
-        self.bleComm.send (json)
+        msg = self.cmdSerializer.serialize ()
+        self.bleComm.send (msg)
     
     def rightButtonReleased (self):
-        self.direction = Settings.EMoveDirection.Idle
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Idle
         self.buttons.changeColor (self.buttons.right, False)
     
     def forwardButtonPressed (self):
-        self.direction = Settings.EMoveDirection.Forward
+        self.moveDirection                 = True
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Move
         self.buttons.changeColor (self.buttons.forward, True)
-        json = self.cmdSerializer.serialize ()
-        self.bleComm.send (json)
+        msg = self.cmdSerializer.serialize ()
+        self.bleComm.send (msg)
     
     def forwardButtonReleased (self):
-        self.direction = Settings.EMoveDirection.Idle
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Idle
         self.buttons.changeColor (self.buttons.forward, False)
     
     def backwardButtonPressed (self):
-        self.direction = Settings.EMoveDirection.Backward
+        self.moveDirection                 = False
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Move
         self.buttons.changeColor (self.buttons.backward, True)
-        json = self.cmdSerializer.serialize ()
-        self.bleComm.send (json)
+        msg = self.cmdSerializer.serialize ()
+        self.bleComm.send (msg)
     
     def backwardButtonReleased (self):
-        self.direction = Settings.EMoveDirection.Idle
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Idle
         self.buttons.changeColor (self.buttons.backward, False)
     
     def clearButtonPressed (self):

@@ -47,9 +47,6 @@ class Process:
         while self.isBleProcessRunning ():
             try:
                 msg = self.bleComm.clientSock.recv (1024)
-                if self.app.isMsgDoubled (msg.decode ('UTF-8')) == True:
-                    continue
-
                 self.rtos.sendMsg (msg)
             except OSError:
                 LOGE (self.module, "bleServerProcess disconnected")

@@ -5,11 +5,9 @@ class CommandConverter:
         self.settings = vSettings
     
     def convert (self, vCommand: str):
-        if vCommand == "Move forward":
-            self.settings.direction = self.settings.EMoveDirection.Forward
-        elif vCommand == "Move backward":
-            self.settings.direction = self.settings.EMoveDirection.Backward
+        if vCommand == "Move":
+            self.settings.vehicleMsg.Direction = CmdProto.EDirection.Move
         elif vCommand == "Turn left":
-            self.settings.direction = self.settings.EMoveDirection.Left
+            self.settings.vehicleMsg.Direction = CmdProto.EDirection.Left
         elif vCommand == "Turn right":
-            self.settings.direction = self.settings.EMoveDirection.Right
+            self.settings.vehicleMsg.Direction = CmdProto.EDirection.Right

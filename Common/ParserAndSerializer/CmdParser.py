@@ -1,5 +1,5 @@
-import json
-from   Settings import Settings
+import Cmd_pb2 as CmdProto
+from Settings import Settings
 
 class CmdParser:
     def __init__ (self, vSettings: Settings):
@@ -7,6 +7,7 @@ class CmdParser:
         self.settings = vSettings
     
     def parse (self, vMsg):
-        jsonMsg                 = json.loads (vMsg)
-        self.settings.Duty.data = jsonMsg ["Duty"]
-        self.settings.direction = jsonMsg ["MoveDirection"]
+        msg = CmdProto.Vehicle ()
+        msg.ParseFromString (vMsg)
+        self.settings.vehicleMsg.Duty      = msg.Duty
+        self.settings.vehicleMsg.Direction = msg.Direction
