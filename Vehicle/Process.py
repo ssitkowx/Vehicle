@@ -22,7 +22,7 @@ class Process:
         loggerHw = LoggerHw ()
         Logger.setInst (loggerHw)
         
-        self.bleComm = BleComm (self.settings)
+        self.bleComm = BleComm (self.rtos, self.settings)
         self.imu     = Mpu9250 (self.settings)
 
         self.appThread = self.rtos.createThread (self.appProcess)
@@ -47,7 +47,7 @@ class Process:
         while self.isBleProcessRunning ():
             try:
                 msg = self.bleComm.clientSock.recv (1024)
-                self.rtos.sendMsg (msg)
+                self.rtos.addQueueMsg (msg)
             except OSError:
                 LOGE (self.module, "bleServerProcess disconnected")
                 #self.bleComm.clientSock.close ()
@@ -60,10 +60,11 @@ class Process:
         while self.app.isExiting () == False:
             try:
                 if self.app.isRunning () == True:
-                    msg = self.rtos.getMsg            ()
-                    LOGI                              (self.module, f"Received: {msg}")
+                    msg = self.rtos.getQueueMsg ()
+                    
+                    LOGI (self.module, f"Received: {msg}")
                     self.cmdParser.parse (msg)
-                    self.app.process                  ()
+                    self.app.process ()
                 elif self.app.isPaused () == True:
                     self.settings.freeSpin = True
 

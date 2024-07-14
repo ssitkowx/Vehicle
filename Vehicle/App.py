@@ -1,10 +1,10 @@
 import time
 import rcpy
 import Cmd_pb2 as CmdProto
-from   rcpy.motor import motor1, motor2
 
 from   Logger     import *
 from   Settings   import Settings
+from   rcpy.motor import motor1, motor2
 
 class App: 
     module    = __name__

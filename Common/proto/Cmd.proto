@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-enum EDirection {
+enum EDirection
+{
     Idle  = 0;
     Stop  = 1;
     Move  = 2;
@@ -8,7 +9,15 @@ enum EDirection {
     Right = 4;
 }
 
-message Vehicle {
+message Imu
+{
+    uint32 Roll  = 1;
+    uint32 Pitch = 2;
+    uint32 Yaw   = 3;
+}
+
+message Vehicle
+{
     double     Duty      = 1;
     EDirection Direction = 2;
 }
