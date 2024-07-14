@@ -7,8 +7,8 @@ from   Logger   import *
 from   Settings import Settings
 
 class Mpu9250 (Imu):
-    data   = 0
     module = __name__
+    data   = 0
 
     def __init__ (self, vSettings: Settings):
         self.data = mpu9250.initialize (accel_fsr       = True,
@@ -16,8 +16,6 @@ class Mpu9250 (Imu):
                                         accel_dlpf      = True,
                                         enable_dmp      = True,
                                         dmp_sample_rate = 10)
-
-        
         self.settings = vSettings
         
     def getAngles (self):
@@ -36,3 +34,4 @@ class Mpu9250 (Imu):
         LOGI (self.module, 'Imu: x:{0:1}, y:{1:1}, z:{2:1} [deg]'.format (round (angles [0], 1),
                                                                           round (angles [1], 1),
                                                                           round (angles [2], 1)))
+        return angles

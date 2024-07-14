@@ -37,8 +37,8 @@ class UartPanel (QWidget):
         for port in self.uart.getPortNames ():
             self.comboBoxes.port.addItem (port)
 
-    def send (self, vJson):
-        self.uart.send (vJson)
+    def send (self, vMsg):
+        self.uart.send (vMsg)
 
     def connect (self) -> bool:
         self.portEnable               ()

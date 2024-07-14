@@ -9,16 +9,24 @@ enum EDirection
     Right = 4;
 }
 
-message Imu
-{
-    uint32 Roll  = 1;
-    uint32 Pitch = 2;
-    uint32 Yaw   = 3;
-}
-
 message Vehicle
 {
     double     Duty      = 1;
     EDirection Direction = 2;
 }
 
+message ImuAngles
+{
+    int32 Roll  = 1;
+    int32 Pitch = 2;
+    int32 Yaw   = 3;
+}
+
+message Msg
+{
+    oneof Types
+    {
+        Vehicle   Vehicle   = 1;
+        ImuAngles ImuAngles = 2;
+    }
+}

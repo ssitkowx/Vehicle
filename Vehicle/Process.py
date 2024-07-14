@@ -12,18 +12,18 @@ from   CmdSerializer import CmdSerializer
 
 class Process:
     module        = __name__
-    rtos          = Rtos          ()
-    settings      = Settings      ()
-    app           = App           (settings)
-    cmdParser     = CmdParser     (settings)
-    cmdSerializer = CmdSerializer (settings)
     
     def __init__ (self):
         loggerHw = LoggerHw ()
         Logger.setInst (loggerHw)
-        
-        self.bleComm = BleComm (self.rtos, self.settings)
-        self.imu     = Mpu9250 (self.settings)
+
+        self.rtos          = Rtos          ()
+        self.settings      = Settings      ()
+        self.app           = App           (self.settings)
+        self.cmdParser     = CmdParser     (self.settings)
+        self.cmdSerializer = CmdSerializer (self.settings)
+        self.bleComm       = BleComm (self.rtos, self.settings)
+        self.imu           = Mpu9250 (self.settings)
 
         self.appThread = self.rtos.createThread (self.appProcess)
         self.appThread.start ()
@@ -78,6 +78,8 @@ class Process:
         while self.imu.isExiting () == False:
             try:
                 self.imu.process ()
+                msg = self.cmdSerializer.imu ()
+                self.bleComm.send (msg)
                 time.sleep (5)
             except OSError:
                 LOGE (self.module, "imuProcess disconnected")

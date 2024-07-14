@@ -6,9 +6,21 @@ class CmdSerializer:
         super ().__init__ ()
         self.settings = vSettings
     
-    def serialize (self):
-        msg = CmdProto.Vehicle ()
+    def cmd (self):
+        msg = CmdProto.Msg ()
         if self.settings.vehicleMsg.Duty is not None:
-            msg.Duty = self.settings.vehicleMsg.Duty
-        msg.Direction = self.settings.vehicleMsg.Direction
+            msg.Vehicle.Duty = self.settings.vehicleMsg.Duty
+        msg.Vehicle.Direction = self.settings.vehicleMsg.Direction
+        return msg.SerializeToString ()
+    
+    def imu (self):
+        msg = CmdProto.Msg ()
+        if self.settings.imuAnglesMsg.Roll is not None:
+            msg.ImuAngles.Roll = self.settings.imuAnglesMsg.Roll
+
+        if self.settings.imuAnglesMsg.Pitch is not None:
+            msg.ImuAngles.Pitch = self.settings.imuAnglesMsg.Pitch
+
+        if self.settings.imuAnglesMsg.Yaw is not None:
+            msg.ImuAngles.Yaw = self.settings.imuAnglesMsg.Yaw
         return msg.SerializeToString ()

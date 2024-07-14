@@ -92,7 +92,7 @@ class ControlPanel (QMainWindow):
         data = self.commandLineEdit.text ()
         self.commandConverter.convert (data)
 
-        json = self.cmdSerializer.serialize ()
+        json = self.cmdSerializer.cmd ()
         LOGI (self.module, "Send {0}".format (json))
         self.panel.send (json)
 
@@ -121,7 +121,7 @@ class ControlPanel (QMainWindow):
 
     def leftButtonPressed (self):
         self.buttons.changeColor (self.buttons.left, True)
-        msg = self.cmdSerializer.serialize ()
+        msg = self.cmdSerializer.cmd ()
         self.bleComm.send (msg)
 
     def leftButtonReleased (self):
@@ -130,7 +130,7 @@ class ControlPanel (QMainWindow):
     
     def rightButtonPressed (self):
         self.buttons.changeColor (self.buttons.right, True)
-        msg = self.cmdSerializer.serialize ()
+        msg = self.cmdSerializer.cmd ()
         self.bleComm.send (msg)
     
     def rightButtonReleased (self):
@@ -141,7 +141,7 @@ class ControlPanel (QMainWindow):
         self.moveDirection                 = True
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.Move
         self.buttons.changeColor (self.buttons.forward, True)
-        msg = self.cmdSerializer.serialize ()
+        msg = self.cmdSerializer.cmd ()
         self.bleComm.send (msg)
     
     def forwardButtonReleased (self):
@@ -152,7 +152,7 @@ class ControlPanel (QMainWindow):
         self.moveDirection                 = False
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.Move
         self.buttons.changeColor (self.buttons.backward, True)
-        msg = self.cmdSerializer.serialize ()
+        msg = self.cmdSerializer.cmd ()
         self.bleComm.send (msg)
     
     def backwardButtonReleased (self):

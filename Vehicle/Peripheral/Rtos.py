@@ -4,7 +4,8 @@ class Rtos:
     def __init__ (self):
         self.bleMsgQueue = queue.Queue (maxsize=10)
         self.bleMsgQueue.join          ()
-    
+        self.mutex = threading.Lock    ()
+
     def createThread (self, vHandler):
         return threading.Thread (target = vHandler, daemon = True)
     
