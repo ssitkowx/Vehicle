@@ -38,8 +38,8 @@ class CmdSerializerFixture (unittest.TestCase):
     def serializeLeft (self):
         LOGI (self.module, 'Serialize left')
 
-        expectedSerialized                 = b'\n\x02\x10\x03'
-        self.settings.vehicleMsg.Duty      = 0
+        expectedSerialized                 = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xe0?\x10\x03'
+        self.settings.vehicleMsg.Duty      = 0.5
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.Left
         serialized                         = self.cmdSerializer.cmd ()
         print ("Serialized data: ", serialized)
@@ -48,8 +48,8 @@ class CmdSerializerFixture (unittest.TestCase):
     def serializeRight (self):
         LOGI (self.module, 'Serialize right')
 
-        expectedSerialized                 = b'\n\x02\x10\x04'
-        self.settings.vehicleMsg.Duty      = 0
+        expectedSerialized                 = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xe0?\x10\x04'
+        self.settings.vehicleMsg.Duty      = 0.5
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.Right
         serialized                         = self.cmdSerializer.cmd ()
         print ("Serialized data: ", serialized)

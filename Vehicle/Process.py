@@ -37,14 +37,11 @@ class Process:
         self.appThread      .join  ()
         self.imuThread      .join  ()
         self.bleServerThread.join  ()
-
-    def isBleProcessRunning (self):
-        return True
     
     def bleServerProcess (self):
         LOGI (self.module, "bleServerProcess")
         
-        while self.isBleProcessRunning ():
+        while self.bleComm.isRunning ():
             try:
                 msg = self.bleComm.clientSock.recv (1024)
                 self.rtos.addQueueMsg (msg)
@@ -61,9 +58,9 @@ class Process:
             try:
                 if self.app.isRunning () == True:
                     msg = self.rtos.getQueueMsg ()
-                    
                     LOGI (self.module, f"Received: {msg}")
                     self.cmdParser.parse (msg)
+                    self.bleComm.send (msg)
                     self.app.process ()
                 elif self.app.isPaused () == True:
                     self.settings.freeSpin = True
@@ -79,7 +76,7 @@ class Process:
             try:
                 self.imu.process ()
                 msg = self.cmdSerializer.imu ()
-                self.bleComm.send (msg)
+                self.rtos.addQueueMsg (msg)
                 time.sleep (5)
             except OSError:
                 LOGE (self.module, "imuProcess disconnected")

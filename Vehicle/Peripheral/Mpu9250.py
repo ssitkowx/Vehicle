@@ -29,9 +29,10 @@ class Mpu9250 (Imu):
         return rcpy.get_state () == rcpy.EXITING
 
     def process (self):
-        angles = self.getAngles ()
+        [self.settings.imuAnglesMsg.Roll,
+         self.settings.imuAnglesMsg.Pitch,
+         self.settings.imuAnglesMsg.Yaw] = self.getAngles ()
         
-        LOGI (self.module, 'Imu: x:{0:1}, y:{1:1}, z:{2:1} [deg]'.format (round (angles [0], 1),
-                                                                          round (angles [1], 1),
-                                                                          round (angles [2], 1)))
-        return angles
+        LOGI (self.module, 'Imu: x:{0:1}, y:{1:1}, z:{2:1} [deg]'.format (round (self.settings.imuAnglesMsg.Roll , 1),
+                                                                          round (self.settings.imuAnglesMsg.Pitch, 1),
+                                                                          round (self.settings.imuAnglesMsg.Yaw  , 1)))

@@ -40,3 +40,6 @@ class BleComm (Ble):
                 return
         
             self.sock.send (vData)
+
+    def isRunning (self):
+        return True
