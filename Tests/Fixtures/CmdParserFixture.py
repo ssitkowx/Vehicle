@@ -20,7 +20,7 @@ class CmdParserFixture (unittest.TestCase):
         serialized = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xf0?\x10\x02'
         self.cmdParser.parse (serialized)
         self.assertEqual (self.settings.vehicleMsg.Duty, 1)
-        self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.Move)
+        self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index)
 
     def parseBackward (self):
         LOGI (self.module, 'Parse backward')
@@ -28,7 +28,7 @@ class CmdParserFixture (unittest.TestCase):
         serialized = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xf0\xbf\x10\x02'
         self.cmdParser.parse (serialized)
         self.assertEqual (self.settings.vehicleMsg.Duty, -1)
-        self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.Move)
+        self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index)
 
     def parseLeft(self):
         LOGI (self.module, 'Parse left')
@@ -36,7 +36,7 @@ class CmdParserFixture (unittest.TestCase):
         serialized = b'\n\x02\x10\x03'
         self.cmdParser.parse (serialized)
         self.assertEqual (self.settings.vehicleMsg.Duty, 0)
-        self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.Left)
+        self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.DESCRIPTOR.values_by_name['Left'].index)
 
     def parseRight (self):
         LOGI (self.module, 'Parse right')
@@ -44,7 +44,7 @@ class CmdParserFixture (unittest.TestCase):
         serialized = b'\n\x02\x10\x04'
         self.cmdParser.parse (serialized)
         self.assertEqual (self.settings.vehicleMsg.Duty, 0)
-        self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.Right)
+        self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.DESCRIPTOR.values_by_name['Right'].index)
 
     def parseImu (self):
         LOGI (self.module, 'Parse imu')

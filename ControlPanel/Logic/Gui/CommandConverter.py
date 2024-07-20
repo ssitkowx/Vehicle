@@ -6,8 +6,8 @@ class CommandConverter:
     
     def convert (self, vCommand: str):
         if vCommand == "Move":
-            self.settings.vehicleMsg.Direction = CmdProto.EDirection.Move
+            self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
         elif vCommand == "Turn left":
-            self.settings.vehicleMsg.Direction = CmdProto.EDirection.Left
+            self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Left'].index
         elif vCommand == "Turn right":
-            self.settings.vehicleMsg.Direction = CmdProto.EDirection.Right
+            self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Right'].index

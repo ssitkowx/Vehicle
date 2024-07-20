@@ -13,7 +13,7 @@ class Settings:
         
         self.vehicleMsg           = CmdProto.Vehicle ()
         self.vehicleMsg.Duty      = 0
-        self.vehicleMsg.Direction = CmdProto.EDirection.Stop
+        self.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Stop'].index
     
     @unique
     class EChannel (IntEnum):

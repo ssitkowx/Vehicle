@@ -70,7 +70,7 @@ class ControlPanel (QMainWindow):
         self.setCentralWidget (self.widget)
 
     def timerIsr (self):
-        if self.settings.vehicleMsg.Direction == CmdProto.EDirection.Move:
+        if self.settings.vehicleMsg.Direction == CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index:
             if self.moveDirection == True:
                 self.settings.vehicleMsg.Duty += 0.05
             else:
@@ -125,7 +125,7 @@ class ControlPanel (QMainWindow):
         self.bleComm.send (msg)
 
     def leftButtonReleased (self):
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Idle
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
         self.buttons.changeColor (self.buttons.left, False)
     
     def rightButtonPressed (self):
@@ -134,29 +134,29 @@ class ControlPanel (QMainWindow):
         self.bleComm.send (msg)
     
     def rightButtonReleased (self):
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Idle
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
         self.buttons.changeColor (self.buttons.right, False)
     
     def forwardButtonPressed (self):
         self.moveDirection                 = True
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Move
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
         self.buttons.changeColor (self.buttons.forward, True)
         msg = self.cmdSerializer.cmd ()
         self.bleComm.send (msg)
     
     def forwardButtonReleased (self):
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Idle
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
         self.buttons.changeColor (self.buttons.forward, False)
     
     def backwardButtonPressed (self):
         self.moveDirection                 = False
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Move
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
         self.buttons.changeColor (self.buttons.backward, True)
         msg = self.cmdSerializer.cmd ()
         self.bleComm.send (msg)
     
     def backwardButtonReleased (self):
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Idle
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
         self.buttons.changeColor (self.buttons.backward, False)
     
     def clearButtonPressed (self):

@@ -20,7 +20,7 @@ class CmdSerializerFixture (unittest.TestCase):
 
         expectedSerialized                 = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xf0?\x10\x02'
         self.settings.vehicleMsg.Duty      = 1
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Move
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
         serialized                         = self.cmdSerializer.cmd ()
         print ("Serialized data: ", serialized)
         self.assertEqual (expectedSerialized, serialized)
@@ -30,7 +30,7 @@ class CmdSerializerFixture (unittest.TestCase):
 
         expectedSerialized                 = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xf0\xbf\x10\x02'
         self.settings.vehicleMsg.Duty      = -1
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Move
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
         serialized                         = self.cmdSerializer.cmd ()
         print ("Serialized data: ", serialized)
         self.assertEqual (expectedSerialized, serialized)
@@ -40,7 +40,7 @@ class CmdSerializerFixture (unittest.TestCase):
 
         expectedSerialized                 = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xe0?\x10\x03'
         self.settings.vehicleMsg.Duty      = 0.5
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Left
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Left'].index
         serialized                         = self.cmdSerializer.cmd ()
         print ("Serialized data: ", serialized)
         self.assertEqual (expectedSerialized, serialized)
@@ -50,7 +50,7 @@ class CmdSerializerFixture (unittest.TestCase):
 
         expectedSerialized                 = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xe0?\x10\x04'
         self.settings.vehicleMsg.Duty      = 0.5
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.Right
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Right'].index
         serialized                         = self.cmdSerializer.cmd ()
         print ("Serialized data: ", serialized)
         self.assertEqual (expectedSerialized, serialized)

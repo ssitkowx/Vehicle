@@ -69,11 +69,11 @@ class App:
             self.settings.vehicleMsg.Duty = bottomMax
     
     def process (self):
-        if self.settings.vehicleMsg.Direction == CmdProto.EDirection.Move:
+        if self.settings.vehicleMsg.Direction == CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index:
             pass
-        elif self.settings.vehicleMsg.Direction == CmdProto.EDirection.Left:
+        elif self.settings.vehicleMsg.Direction == CmdProto.EDirection.DESCRIPTOR.values_by_name['Left'].index:
             self.turnLeft = True
-        elif self.settings.vehicleMsg.Direction == CmdProto.EDirection.Right:
+        elif self.settings.vehicleMsg.Direction == CmdProto.EDirection.DESCRIPTOR.values_by_name['Right'].index:
             self.turnRight = True
         else:
             self.settings.freeSpin        = True
