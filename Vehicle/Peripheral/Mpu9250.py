@@ -22,7 +22,7 @@ class Mpu9250 (Imu):
         imuX, imuY, imuZ = 0, 0, 0
         
         (imuX, imuY, imuZ) = mpu9250.read () ['tb']
-        return (imuX * self.RAD_TO_DEG, imuY * self.RAD_TO_DEG, imuZ * self.RAD_TO_DEG)
+        return ((int)(imuX * self.RAD_TO_DEG), (int)(imuY * self.RAD_TO_DEG), (int)(imuZ * self.RAD_TO_DEG))
 
     @staticmethod
     def isExiting ():

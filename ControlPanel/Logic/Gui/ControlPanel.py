@@ -121,43 +121,43 @@ class ControlPanel (QMainWindow):
 
     def leftButtonPressed (self):
         self.buttons.changeColor (self.buttons.left, True)
-        msg = self.cmdSerializer.cmd ()
-        self.bleComm.send (msg)
 
     def leftButtonReleased (self):
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
         self.buttons.changeColor (self.buttons.left, False)
+        msg = self.cmdSerializer.cmd ()
+        self.bleComm.send (msg)
     
     def rightButtonPressed (self):
         self.buttons.changeColor (self.buttons.right, True)
-        msg = self.cmdSerializer.cmd ()
-        self.bleComm.send (msg)
     
     def rightButtonReleased (self):
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
         self.buttons.changeColor (self.buttons.right, False)
+        msg = self.cmdSerializer.cmd ()
+        self.bleComm.send (msg)
     
     def forwardButtonPressed (self):
         self.moveDirection                 = True
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
         self.buttons.changeColor (self.buttons.forward, True)
-        msg = self.cmdSerializer.cmd ()
-        self.bleComm.send (msg)
     
     def forwardButtonReleased (self):
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
         self.buttons.changeColor (self.buttons.forward, False)
+        msg = self.cmdSerializer.cmd ()
+        self.bleComm.send (msg)
     
     def backwardButtonPressed (self):
         self.moveDirection                 = False
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
         self.buttons.changeColor (self.buttons.backward, True)
-        msg = self.cmdSerializer.cmd ()
-        self.bleComm.send (msg)
     
     def backwardButtonReleased (self):
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
         self.buttons.changeColor (self.buttons.backward, False)
+        msg = self.cmdSerializer.cmd ()
+        self.bleComm.send (msg)
     
     def clearButtonPressed (self):
         self.textBrowser.obj.clear ()

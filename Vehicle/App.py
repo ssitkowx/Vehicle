@@ -37,6 +37,7 @@ class App:
             self.turnLeft = False
             motor1.set (0)
             time.sleep (Settings.Duty.TIMEOUT)
+            motor1.set (duty)
         else:
             motor1.set (duty)
         time.sleep (0.1)
@@ -45,6 +46,7 @@ class App:
             self.turnRight = False
             motor2.set (0)
             time.sleep (Settings.Duty.TIMEOUT)
+            motor2.set (duty)
         else:
             motor2.set (duty)
         time.sleep (0.1)
