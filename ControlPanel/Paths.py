@@ -2,7 +2,7 @@ import os
 import sys
 
 sys.path.append ('Common')
-sys.path.append ('Common/proto/generated')
+sys.path.append ('Common/Proto/Generated')
 sys.path.append ('Common/ParserAndSerializer')
 sys.path.append ('ControlPanel')
 sys.path.append ('ControlPanel/Hardware')

@@ -17,17 +17,17 @@ class CmdParserFixture (unittest.TestCase):
     def parseForward (self):
         LOGI (self.module, 'Parse forward')
         
-        serialized = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xf0?\x10\x02'
+        serialized = b'\n\x04\x08d\x10\x02'
         self.cmdParser.parse (serialized)
-        self.assertEqual (self.settings.vehicleMsg.Duty, 1)
+        self.assertEqual (self.settings.vehicleMsg.Duty, 100)
         self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index)
 
     def parseBackward (self):
         LOGI (self.module, 'Parse backward')
         
-        serialized = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xf0\xbf\x10\x02'
+        serialized = b'\n\r\x08\x9c\xff\xff\xff\xff\xff\xff\xff\xff\x01\x10\x02'
         self.cmdParser.parse (serialized)
-        self.assertEqual (self.settings.vehicleMsg.Duty, -1)
+        self.assertEqual (self.settings.vehicleMsg.Duty, -100)
         self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index)
 
     def parseLeft(self):

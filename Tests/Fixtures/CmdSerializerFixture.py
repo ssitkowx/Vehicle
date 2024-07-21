@@ -18,8 +18,8 @@ class CmdSerializerFixture (unittest.TestCase):
     def serializeForward (self):
         LOGI (self.module, 'Serialize forward')
 
-        expectedSerialized                 = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xf0?\x10\x02'
-        self.settings.vehicleMsg.Duty      = 1
+        expectedSerialized                 = b'\n\x04\x08d\x10\x02'
+        self.settings.vehicleMsg.Duty      = 100
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
         serialized                         = self.cmdSerializer.cmd ()
         print ("Serialized data: ", serialized)
@@ -28,8 +28,8 @@ class CmdSerializerFixture (unittest.TestCase):
     def serializeBackward (self):
         LOGI (self.module, 'Serialize backward')
 
-        expectedSerialized                 = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xf0\xbf\x10\x02'
-        self.settings.vehicleMsg.Duty      = -1
+        expectedSerialized                 = b'\n\r\x08\x9c\xff\xff\xff\xff\xff\xff\xff\xff\x01\x10\x02'
+        self.settings.vehicleMsg.Duty      = -100
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
         serialized                         = self.cmdSerializer.cmd ()
         print ("Serialized data: ", serialized)
@@ -38,8 +38,8 @@ class CmdSerializerFixture (unittest.TestCase):
     def serializeLeft (self):
         LOGI (self.module, 'Serialize left')
 
-        expectedSerialized                 = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xe0?\x10\x03'
-        self.settings.vehicleMsg.Duty      = 0.5
+        expectedSerialized                 = b'\n\x04\x082\x10\x03'
+        self.settings.vehicleMsg.Duty      = 50
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Left'].index
         serialized                         = self.cmdSerializer.cmd ()
         print ("Serialized data: ", serialized)
@@ -48,8 +48,8 @@ class CmdSerializerFixture (unittest.TestCase):
     def serializeRight (self):
         LOGI (self.module, 'Serialize right')
 
-        expectedSerialized                 = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xe0?\x10\x04'
-        self.settings.vehicleMsg.Duty      = 0.5
+        expectedSerialized                 = b'\n\r\x08\xce\xff\xff\xff\xff\xff\xff\xff\xff\x01\x10\x04'
+        self.settings.vehicleMsg.Duty      = -50
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Right'].index
         serialized                         = self.cmdSerializer.cmd ()
         print ("Serialized data: ", serialized)

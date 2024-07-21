@@ -40,3 +40,6 @@ class BleComm (Ble):
     def close (self):
         self.isConnected = False
         self.sock.close ()
+    
+    def isRunning (self):
+        return True

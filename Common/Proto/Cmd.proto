@@ -11,7 +11,7 @@ enum EDirection
 
 message Vehicle
 {
-    double     Duty      = 1;
+    int32      Duty      = 1;
     EDirection Direction = 2;
 }
 

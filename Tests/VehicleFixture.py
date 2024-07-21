@@ -51,7 +51,7 @@ class VehicleFixture (unittest.TestCase):
                                    vMotor2, vMotor1, vSleepInApp):
         LOGI (self.module, "moveForwardWithDuty")
         serializedImu        = b'\x12\x0f\x08\n\x10\xba\xff\xff\xff\xff\xff\xff\xff\xff\x01\x18<'
-        serializedForwardMsg = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xf0?\x10\x02'
+        serializedForwardMsg = b'\n\x04\x08d\x10\x02'
         vClientSockInBleComm.recv.return_value = serializedForwardMsg
 
         self.process.__init__ ()
@@ -81,7 +81,7 @@ class VehicleFixture (unittest.TestCase):
                                     vMotor2, vMotor1, vSleepInApp):
         LOGI (self.module, "moveBackwardWithDuty")
         serializedImu         = b'\x12\x0f\x08\n\x10\xba\xff\xff\xff\xff\xff\xff\xff\xff\x01\x18<'
-        serializedBackwardMsg = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xf0\xbf\x10\x02'
+        serializedBackwardMsg = b'\n\r\x08\x9c\xff\xff\xff\xff\xff\xff\xff\xff\x01\x10\x02'
         vClientSockInBleComm.recv.return_value = serializedBackwardMsg
 
         self.process.__init__ ()
@@ -111,12 +111,13 @@ class VehicleFixture (unittest.TestCase):
                         vMotor2, vMotor1, vSleepInApp):
         LOGI (self.module, "turnLeft")
         serializedImu         = b'\x12\x0f\x08\n\x10\xba\xff\xff\xff\xff\xff\xff\xff\xff\x01\x18<'
-        serializedTurnLeftMsg = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xe0?\x10\x03'
+        serializedTurnLeftMsg = b'\n\x04\x082\x10\x03'
         vClientSockInBleComm.recv.return_value = serializedTurnLeftMsg
 
         self.process.__init__ ()
         vClientSockInBleComm.recv.assert_called   ()
         vMotor1             .set.assert_any_call  (0)
+        vMotor1             .set.assert_any_call  (0.5)
         vMotor2             .set.assert_any_call  (0.5)
         vSockInBleComm      .send.assert_any_call (serializedTurnLeftMsg)
         vSockInBleComm      .send.assert_any_call (serializedImu)
@@ -139,15 +140,16 @@ class VehicleFixture (unittest.TestCase):
                          vIsRunningInBleComm, vRtosInBleComm, vSockInBleComm, vClientSockInBleComm,
                          vInitInBleComm, vIsAppExitingInApp, vIsRunningInApp, vIsPausedInApp,
                          vMotor2, vMotor1, vSleepInApp):
-        LOGI (self.module, "turnLeft")
+        LOGI (self.module, "turnRight")
         serializedImu          = b'\x12\x0f\x08\n\x10\xba\xff\xff\xff\xff\xff\xff\xff\xff\x01\x18<'
-        serializedTurnRightMsg = b'\n\x0b\t\x00\x00\x00\x00\x00\x00\xe0?\x10\x04'
+        serializedTurnRightMsg = b'\n\r\x08\xce\xff\xff\xff\xff\xff\xff\xff\xff\x01\x10\x04'
         vClientSockInBleComm.recv.return_value = serializedTurnRightMsg
 
         self.process.__init__ ()
         vClientSockInBleComm.recv.assert_called   ()
-        vMotor1             .set.assert_any_call  (0.5)
+        vMotor1             .set.assert_any_call  (-0.5)
         vMotor2             .set.assert_any_call  (0)
+        vMotor2             .set.assert_any_call  (-0.5)
         vSockInBleComm      .send.assert_any_call (serializedTurnRightMsg)
         vSockInBleComm      .send.assert_any_call (serializedImu)
 

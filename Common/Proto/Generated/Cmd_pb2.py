@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\tCmd.proto\"7\n\x07Vehicle\x12\x0c\n\x04\x44uty\x18\x01 \x01(\x01\x12\x1e\n\tDirection\x18\x02 \x01(\x0e\x32\x0b.EDirection\"5\n\tImuAngles\x12\x0c\n\x04Roll\x18\x01 \x01(\x05\x12\r\n\x05Pitch\x18\x02 \x01(\x05\x12\x0b\n\x03Yaw\x18\x03 \x01(\x05\"L\n\x03Msg\x12\x1b\n\x07Vehicle\x18\x01 \x01(\x0b\x32\x08.VehicleH\x00\x12\x1f\n\tImuAngles\x18\x02 \x01(\x0b\x32\n.ImuAnglesH\x00\x42\x07\n\x05Types*?\n\nEDirection\x12\x08\n\x04Idle\x10\x00\x12\x08\n\x04Stop\x10\x01\x12\x08\n\x04Move\x10\x02\x12\x08\n\x04Left\x10\x03\x12\t\n\x05Right\x10\x04\x62\x06proto3')
+  serialized_pb=_b('\n\tCmd.proto\"7\n\x07Vehicle\x12\x0c\n\x04\x44uty\x18\x01 \x01(\x05\x12\x1e\n\tDirection\x18\x02 \x01(\x0e\x32\x0b.EDirection\"5\n\tImuAngles\x12\x0c\n\x04Roll\x18\x01 \x01(\x05\x12\r\n\x05Pitch\x18\x02 \x01(\x05\x12\x0b\n\x03Yaw\x18\x03 \x01(\x05\"L\n\x03Msg\x12\x1b\n\x07Vehicle\x18\x01 \x01(\x0b\x32\x08.VehicleH\x00\x12\x1f\n\tImuAngles\x18\x02 \x01(\x0b\x32\n.ImuAnglesH\x00\x42\x07\n\x05Types*?\n\nEDirection\x12\x08\n\x04Idle\x10\x00\x12\x08\n\x04Stop\x10\x01\x12\x08\n\x04Move\x10\x02\x12\x08\n\x04Left\x10\x03\x12\t\n\x05Right\x10\x04\x62\x06proto3')
 )
 
 _EDIRECTION = _descriptor.EnumDescriptor(
@@ -75,8 +75,8 @@ _VEHICLE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='Duty', full_name='Vehicle.Duty', index=0,
-      number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),

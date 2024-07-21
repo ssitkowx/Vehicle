@@ -13,5 +13,5 @@ ControlPanel/Logic/Gui/Panels/Ble/Widgets/__pycache__/
 ControlPanel/Logic/Gui/Panels/Uart/__pycache__/
 ControlPanel/Logic/Gui/Panels/uart/Widgets/__pycache__/
 Tests/__pycache__/
-
+Commmon/Proto/Generated/*
 
