@@ -32,7 +32,7 @@ class App:
         
         duty = self.settings.vehicleMsg.Duty
         LOGI (self.module, f'Duty {duty}[%]')
-        duty /= self.settings.Duty.DEV_COEF
+        duty = (float)(duty / self.settings.Duty.DEV_COEF)
 
         if self.turnLeft == True:
             self.turnLeft = False
