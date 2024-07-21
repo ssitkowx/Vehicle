@@ -11,7 +11,7 @@ from   CmdParser     import CmdParser
 from   CmdSerializer import CmdSerializer
 
 class Process:
-    module        = __name__
+    module = __name__
     
     def __init__ (self):
         loggerHw = LoggerHw ()
@@ -60,7 +60,7 @@ class Process:
                     msg = self.rtos.getQueueMsg ()
                     LOGI (self.module, f"Received: {msg}")
                     self.cmdParser.parse (msg)
-                    #self.bleComm.send (msg)
+                    self.bleComm.send (msg)
                     self.app.process ()
                 elif self.app.isPaused () == True:
                     self.settings.freeSpin = True

@@ -1,6 +1,7 @@
 import Cmd_pb2 as CmdProto
 
 from Uart                            import Uart
+from Rtos                            import Rtos
 from Timer                           import Timer
 from Labels                          import Labels
 from MenuBar                         import MenuBar
@@ -21,7 +22,7 @@ from Logic.Gui.Panels.Uart.UartPanel import UartPanel
 class ControlPanel (QMainWindow):
     module = __name__
 
-    def __init__ (self, vSettings: Settings):
+    def __init__ (self, vSettings: Settings, vBleComm: BleComm):
         QMainWindow.__init__ (self)
         self.moveDirection = False
         self.settings      = vSettings
@@ -31,6 +32,7 @@ class ControlPanel (QMainWindow):
         self.textBrowser   = TextBrowser ()
         self.groupBoxes    = GroupBoxes  (self.labels, self.buttons, self.textBrowser.obj)
         self.timer         = Timer       ()
+        self.rtos          = Rtos        ()
 
         self.buttons.left           .pressed  .connect (self.leftButtonPressed)
         self.buttons.left           .released .connect (self.leftButtonReleased)
@@ -51,7 +53,7 @@ class ControlPanel (QMainWindow):
         Logger.setInst (loggerHw)
 
         self.uart             = Uart             ()
-        self.bleComm          = BleComm          ()
+        self.bleComm          = vBleComm
         self.blePanel         = BlePanel         (self.bleComm, self.settings)
         self.uartPanel        = UartPanel        (self.uart)
         self.commandConverter = CommandConverter (self.settings)
@@ -70,14 +72,24 @@ class ControlPanel (QMainWindow):
         self.setCentralWidget (self.widget)
 
     def timerIsr (self):
+        send = False
         if self.settings.vehicleMsg.Direction == CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index:
-            if self.moveDirection == True:
-                self.settings.vehicleMsg.Duty += Settings.Duty.STEP
-            else:
-                self.settings.vehicleMsg.Duty -= Settings.Duty.STEP
+            send = True
+            if self.moveDirection == True: self.settings.vehicleMsg.Duty += Settings.Duty.STEP
+            else:                          self.settings.vehicleMsg.Duty -= Settings.Duty.STEP
+        elif self.settings.vehicleMsg.Direction == CmdProto.EDirection.DESCRIPTOR.values_by_name['Left'] .index: send = True
+        elif self.settings.vehicleMsg.Direction == CmdProto.EDirection.DESCRIPTOR.values_by_name['Right'].index: send = True
+        else: send = False
+
+        if send == True:
+            msg = self.cmdSerializer.cmd ()
+            self.rtos.addQueueMsg (msg)
 
         self.validateDuty ()
-        self.labels.duty.setText (f"Duty: {self.settings.vehicleMsg.Duty}[%]")
+        self.labels.duty .setText (f"Duty: {self.settings.vehicleMsg.Duty}[%]")
+        self.labels.roll .setText (f"Roll: {self.settings.imuAnglesMsg.Roll}[deg]")
+        self.labels.pitch.setText (f"Pitch: {self.settings.imuAnglesMsg.Pitch}[deg]")
+        self.labels.yaw  .setText (f"Yaw: {self.settings.imuAnglesMsg.Yaw}[deg]")
 
     def validateDuty (self):
         if self.settings.vehicleMsg.Duty > Settings.Duty.RANGE ["Top"]:
@@ -121,8 +133,6 @@ class ControlPanel (QMainWindow):
 
     def leftButtonPressed (self):
         self.buttons.changeColor (self.buttons.left, True)
-        msg = self.cmdSerializer.cmd ()
-        self.bleComm.send (msg)
 
     def leftButtonReleased (self):
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
@@ -130,8 +140,6 @@ class ControlPanel (QMainWindow):
     
     def rightButtonPressed (self):
         self.buttons.changeColor (self.buttons.right, True)
-        msg = self.cmdSerializer.cmd ()
-        self.bleComm.send (msg)
     
     def rightButtonReleased (self):
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
@@ -141,8 +149,6 @@ class ControlPanel (QMainWindow):
         self.moveDirection                 = True
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
         self.buttons.changeColor (self.buttons.forward, True)
-        msg = self.cmdSerializer.cmd ()
-        self.bleComm.send (msg)
     
     def forwardButtonReleased (self):
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
@@ -152,8 +158,6 @@ class ControlPanel (QMainWindow):
         self.moveDirection                 = False
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
         self.buttons.changeColor (self.buttons.backward, True)
-        msg = self.cmdSerializer.cmd ()
-        self.bleComm.send (msg)
     
     def backwardButtonReleased (self):
         self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index

@@ -6,9 +6,6 @@ class Rtos:
         self.bleMsgQueue.join          ()
         self.mutex = threading.Lock    ()
     
-    def createThread (self, vHandler):
-        return threading.Thread (target = vHandler, daemon = True)
-    
     def addQueueMsg (self, vMsg):
         self.bleMsgQueue.put (vMsg)
     

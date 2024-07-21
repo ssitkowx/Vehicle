@@ -8,7 +8,7 @@ class BleComm (Ble):
     isConnected = False
 
     def __init__ (self):
-        self.rtos = Rtos ()
+        self.rtos = Rtos ()    # rtos defined but used in process also
 
     def open (self, vUuid: str, vAddress: str) -> bool:
         serviceMatches = bluetooth.find_service (uuid = vUuid, address = vAddress)
@@ -23,7 +23,6 @@ class BleComm (Ble):
         
         LOGI (self.module, "Found \"{0}\" on {1}".format (name, host))
         
-        # Create the client socket
         self.sock = bluetooth.BluetoothSocket (bluetooth.RFCOMM)
         self.sock.connect                     ((host, port))
         self.isConnected = True
@@ -40,6 +39,12 @@ class BleComm (Ble):
     def close (self):
         self.isConnected = False
         self.sock.close ()
+
+    def receive (self):
+        if self.isConnected == False:
+            LOGE (self.module, "Bluetooth unconnected")
+            return ""
+        return self.bleComm.sock.recv (1024)
     
     def isRunning (self):
         return True
