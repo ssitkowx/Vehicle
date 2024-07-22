@@ -22,7 +22,7 @@ from Logic.Gui.Panels.Uart.UartPanel import UartPanel
 class ControlPanel (QMainWindow):
     module = __name__
 
-    def __init__ (self, vSettings: Settings, vBleComm: BleComm):
+    def __init__ (self, vSettings: Settings, vRtos: Rtos, vBleComm: BleComm):
         QMainWindow.__init__ (self)
         self.moveDirection = False
         self.settings      = vSettings
@@ -32,7 +32,6 @@ class ControlPanel (QMainWindow):
         self.textBrowser   = TextBrowser ()
         self.groupBoxes    = GroupBoxes  (self.labels, self.buttons, self.textBrowser.obj)
         self.timer         = Timer       ()
-        self.rtos          = Rtos        ()
 
         self.buttons.left           .pressed  .connect (self.leftButtonPressed)
         self.buttons.left           .released .connect (self.leftButtonReleased)
@@ -52,8 +51,9 @@ class ControlPanel (QMainWindow):
         loggerHw = LoggerHw (self.textBrowser.obj)
         Logger.setInst (loggerHw)
 
-        self.uart             = Uart             ()
+        self.rtos             = vRtos
         self.bleComm          = vBleComm
+        self.uart             = Uart             ()
         self.blePanel         = BlePanel         (self.bleComm, self.settings)
         self.uartPanel        = UartPanel        (self.uart)
         self.commandConverter = CommandConverter (self.settings)
@@ -83,10 +83,10 @@ class ControlPanel (QMainWindow):
 
         if send == True:
             msg = self.cmdSerializer.cmd ()
+            self.validateDuty ()
+            self.labels.duty.setText (f"Duty: {self.settings.vehicleMsg.Duty}[%]")
             self.rtos.addQueueMsg (msg)
 
-        self.validateDuty ()
-        self.labels.duty .setText (f"Duty: {self.settings.vehicleMsg.Duty}[%]")
         self.labels.roll .setText (f"Roll: {self.settings.imuAnglesMsg.Roll}[deg]")
         self.labels.pitch.setText (f"Pitch: {self.settings.imuAnglesMsg.Pitch}[deg]")
         self.labels.yaw  .setText (f"Yaw: {self.settings.imuAnglesMsg.Yaw}[deg]")
@@ -99,14 +99,6 @@ class ControlPanel (QMainWindow):
 
     def logData (self):
         self.textBrowser.append (str (self.uart.Receive ()))
-
-    def sendButtonClicked (self, vChecked):
-        data = self.commandLineEdit.text ()
-        self.commandConverter.convert (data)
-
-        json = self.cmdSerializer.cmd ()
-        LOGI (self.module, "Send {0}".format (json))
-        self.panel.send (json)
 
     def connectButtonClicked (self, vChecked):
         if (self.connectButton.text () == "Connect"):
@@ -132,6 +124,7 @@ class ControlPanel (QMainWindow):
             self.interfaceCheckBox.setText ("Car")
 
     def leftButtonPressed (self):
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Left'].index
         self.buttons.changeColor (self.buttons.left, True)
 
     def leftButtonReleased (self):
@@ -139,6 +132,7 @@ class ControlPanel (QMainWindow):
         self.buttons.changeColor (self.buttons.left, False)
     
     def rightButtonPressed (self):
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Right'].index
         self.buttons.changeColor (self.buttons.right, True)
     
     def rightButtonReleased (self):

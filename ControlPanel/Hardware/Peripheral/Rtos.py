@@ -7,7 +7,8 @@ class Rtos:
         self.mutex = threading.Lock    ()
     
     def addQueueMsg (self, vMsg):
-        self.bleMsgQueue.put (vMsg)
+        if not self.bleMsgQueue.full():
+            self.bleMsgQueue.put (vMsg)
     
     def getQueueMsg (self):
         return self.bleMsgQueue.get ()

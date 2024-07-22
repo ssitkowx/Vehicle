@@ -2,6 +2,7 @@ import sys
 import time
 import Paths
 
+from   Rtos              import Rtos
 from   BleComm           import BleComm
 from   LoggerHw          import *
 from   Settings          import Settings
@@ -12,50 +13,51 @@ from   PySide6.QtWidgets import QApplication
 
 class Process:
     def __init__ (self):
+        self.rtos                  = Rtos                ()
         self.settings              = Settings            ()
-        self.bleComm               = BleComm             ()
+        self.bleComm               = BleComm             (self.rtos)
         self.cmdParser             = CmdParser           (self.settings)
         app                        = QApplication        (sys.argv)
-        controlPanel               = ControlPanel        (self.settings, self.bleComm)
-        self.bleCommSendProcess    = self.bleCommSend    (self.bleComm, self.cmdParser)
-        self.bleCommReceiveProcess = self.bleCommReceive (self.bleComm, self.cmdParser)
+        controlPanel               = ControlPanel        (self.settings, self.rtos, self.bleComm)
+        self.bleCommSendProcess    = self.bleCommSend    (self.rtos, self.bleComm, self.cmdParser)
+        #self.bleCommReceiveProcess = self.bleCommReceive (self.rtos, self.bleComm, self.cmdParser)
         controlPanel.show ()
         app         .exec ()
 
     class bleCommSend (QObject):
         module = __name__
 
-        def __init__ (self, vBleComm: BleComm, vCmdParser: CmdParser):
+        def __init__ (self, vRtos: Rtos, vBleComm: BleComm, vCmdParser: CmdParser):
             super ().__init__ ()
+            self.rtos      = vRtos
             self.bleComm   = vBleComm
             self.cmdParser = vCmdParser
-            self.thread    = QThread ()
+            self.thread    = QThread     ()
             self.task      = self
-
-            self.task.moveToThread        (self.thread)
-            self.thread .started .connect (self.task.process)
-            self.thread .start            ()
+            self.task.moveToThread       (self.thread)
+            self.thread .started.connect (self.task.process)
+            self.thread .start           ()
         
         def process (self):
             LOGI (self.module, "bleCommSend")
 
             while self.bleComm.isRunning ():
-                msg = self.rtos.getQueueMsg ()    # rtos not defined
+                msg = self.rtos.getQueueMsg ()
                 self.bleComm.send (msg)
 
     class bleCommReceive (QObject):
         module = __name__
 
-        def __init__ (self, vBleComm: BleComm, vCmdParser: CmdParser):
+        def __init__ (self, vRtos: Rtos, vBleComm: BleComm, vCmdParser: CmdParser):
             super ().__init__ ()
+            self.rtos      = vRtos
             self.bleComm   = vBleComm
             self.cmdParser = vCmdParser
-            self.thread    = QThread      ()
+            self.thread    = QThread    ()
             self.task      = self
-
-            self.task.moveToThread       (self.thread)
-            self.thread.started .connect (self.task.process)
-            self.thread.start            ()
+            self.task.moveToThread      (self.thread)
+            self.thread.started.connect (self.task.process)
+            self.thread.start           ()
         
         def process (self):
             LOGI (self.module, "bleCommReceive")

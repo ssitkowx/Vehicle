@@ -4,11 +4,11 @@ from   Rtos   import Rtos
 from   Logger import *
 
 class BleComm (Ble):
-    module = __name__
+    module      = __name__
     isConnected = False
 
-    def __init__ (self):
-        self.rtos = Rtos ()    # rtos defined but used in process also
+    def __init__ (self, vRtos: Rtos):
+        self.rtos = vRtos
 
     def open (self, vUuid: str, vAddress: str) -> bool:
         serviceMatches = bluetooth.find_service (uuid = vUuid, address = vAddress)
@@ -17,9 +17,9 @@ class BleComm (Ble):
             return False
         
         firstMatch = serviceMatches [0]
-        port       = firstMatch ["port"]
-        name       = firstMatch ["name"]
-        host       = firstMatch ["host"]
+        port = firstMatch ["port"]
+        name = firstMatch ["name"]
+        host = firstMatch ["host"]
         
         LOGI (self.module, "Found \"{0}\" on {1}".format (name, host))
         
@@ -43,7 +43,7 @@ class BleComm (Ble):
     def receive (self):
         if self.isConnected == False:
             LOGE (self.module, "Bluetooth unconnected")
-            return ""
+            return b''
         return self.bleComm.sock.recv (1024)
     
     def isRunning (self):
