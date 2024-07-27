@@ -62,7 +62,7 @@ class Process:
                 self.imu.process ()
                 msg = self.cmdSerializer.imu ()
                 self.rtos.addImuQueue (msg)
-                LOGI (self.module, "Imu!!!!!!!!!!")
+                LOGI (self.module, f"Imu: {msg}")
                 time.sleep (5)
             except OSError:
                 break
@@ -77,6 +77,7 @@ class Process:
                                                                                   round (self.settings.imuAnglesMsg.Pitch, 1),
                                                                                   round (self.settings.imuAnglesMsg.Yaw  , 1)))
                 self.bleComm.send (msg)
+                LOGI (self.module, f"Imu:!!!!!!!!!!!!")
             except OSError:
                 break
     
