@@ -62,7 +62,7 @@ class Process:
                 self.imu.process ()
                 msg = self.cmdSerializer.imu ()
                 self.rtos.addImuQueue (msg)
-                LOGI (self.mode, "Imu!!!!!!!!!!")
+                LOGI (self.module, "Imu!!!!!!!!!!")
                 time.sleep (5)
             except OSError:
                 break
