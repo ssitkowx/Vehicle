@@ -12,7 +12,7 @@ class Settings:
         self.imuAnglesMsg.Yaw     = 0
         self.vehicleMsg           = CmdProto.Vehicle ()
         self.vehicleMsg.Duty      = 0
-        self.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
+        self.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Idle'].index
     
     @unique
     class EChannel (IntEnum):
