@@ -125,7 +125,7 @@ class ControlPanel (QMainWindow):
             self.interfaceCheckBox.setText ("Car")
 
     def leftButtonPressed (self):
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Left'].index
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Right'].index
         self.buttons.changeColor (self.buttons.left, True)
 
     def leftButtonReleased (self):
@@ -133,7 +133,7 @@ class ControlPanel (QMainWindow):
         self.buttons.changeColor (self.buttons.left, False)
     
     def rightButtonPressed (self):
-        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Right'].index
+        self.settings.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Left'].index
         self.buttons.changeColor (self.buttons.right, True)
     
     def rightButtonReleased (self):
