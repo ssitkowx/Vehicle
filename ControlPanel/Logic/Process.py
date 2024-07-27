@@ -29,15 +29,15 @@ class Process:
 
         def __init__ (self, vRtos: Rtos, vBleComm: BleComm, vCmdParser: CmdParser):
             super ().__init__ ()
+            self.task      = self
             self.rtos      = vRtos
             self.bleComm   = vBleComm
             self.cmdParser = vCmdParser
             self.thread    = QThread     ()
-            self.task      = self
             self.task.moveToThread       (self.thread)
             self.thread .started.connect (self.task.process)
             self.thread .start           ()
-        
+
         def process (self):
             LOGI (self.module, "bleCommSend")
 
@@ -45,8 +45,8 @@ class Process:
                 try:
                     msg = self.rtos.getCmdQueue ()
                     self.bleComm.send (msg)
-                except self.queue.Empty:
-                    continue
+                except OSError:
+                    break
 
     class bleCommReceive (QObject):
         module = __name__
@@ -61,7 +61,7 @@ class Process:
             self.task.moveToThread      (self.thread)
             self.thread.started.connect (self.task.process)
             self.thread.start           ()
-        
+
         def process (self):
             LOGI (self.module, "bleCommReceive")
 
