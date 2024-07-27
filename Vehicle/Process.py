@@ -73,8 +73,8 @@ class Process:
             try:
                 msg = self.rtos.getImuQueue ()
                 self.bleComm.send (msg)
-            except self.rtos.imuQueue.Empty:
-                continue
+            except OSError:
+                break
     
     def bleReceiveProcess (self):
         LOGI (self.module, "bleReceiveProcess")
