@@ -72,6 +72,9 @@ class Process:
         while self.bleComm.isSendRunning ():
             try:
                 msg = self.rtos.getImuQueue ()
+                LOGI (self.module, 'Imu: x:{0:1}, y:{1:1}, z:{2:1} [deg]'.format (round (self.settings.imuAnglesMsg.Roll , 1),
+                                                                                  round (self.settings.imuAnglesMsg.Pitch, 1),
+                                                                                  round (self.settings.imuAnglesMsg.Yaw  , 1)))
                 self.bleComm.send (msg)
             except OSError:
                 break
@@ -87,6 +90,5 @@ class Process:
                     continue
                 self.rtos.addCmdQueue (msg)
             except OSError:
-                #self.bleComm.clientSock.close ()
-                #self.bleComm.sock      .close ()
+                self.bleComm.close ()
                 break

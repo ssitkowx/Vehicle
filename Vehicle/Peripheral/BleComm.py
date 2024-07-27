@@ -41,6 +41,10 @@ class BleComm (Ble):
         self.isConnected = True
         LOGI (self.module, f"Accepted connection from. Client info: {clientInfo}")
 
+    def close (self):
+        self.clientSock.close ()
+        self.sock      .close ()
+
     def send (self, vData):
         if self.isConnected == False:
             return

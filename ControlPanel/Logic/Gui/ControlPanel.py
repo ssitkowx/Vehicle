@@ -59,7 +59,8 @@ class ControlPanel (QMainWindow):
         self.commandConverter = CommandConverter (self.settings)
         self.cmdSerializer    = CmdSerializer    (self.settings)
         self.panel            = self.uartPanel
-
+        
+        self.labels.duty.setText (f"Duty: {self.settings.vehicleMsg.Duty}[%]")
         self.setGeometry      (500, 200, 500, 500)
         self.setWindowTitle   ('Control Panel')
         self.setStyleSheet    ('background-color:white;'
