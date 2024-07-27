@@ -18,7 +18,7 @@ from CommandConverter                import CommandConverter
 from PySide6.QtWidgets               import QMainWindow, QWidget
 from Logic.Gui.Panels.Ble.BlePanel   import BlePanel
 from Logic.Gui.Panels.Uart.UartPanel import UartPanel
-
+import time
 class ControlPanel (QMainWindow):
     module = __name__
 
@@ -47,7 +47,7 @@ class ControlPanel (QMainWindow):
         self.menuBar.bluetoothAction.triggered.connect (self.openBluetoothInterface)
         self.setMenuBar                                (self.menuBar.obj)
         self.timer.obj              .timeout.connect   (self.timerIsr)
-        
+
         loggerHw = LoggerHw (self.textBrowser.obj)
         Logger.setInst (loggerHw)
 
@@ -85,7 +85,7 @@ class ControlPanel (QMainWindow):
             msg = self.cmdSerializer.cmd ()
             self.validateDuty ()
             self.labels.duty.setText (f"Duty: {self.settings.vehicleMsg.Duty}[%]")
-            self.rtos.addQueueMsg (msg)
+            self.rtos.addCmdQueue (msg)
 
         self.labels.roll .setText (f"Roll: {self.settings.imuAnglesMsg.Roll}[deg]")
         self.labels.pitch.setText (f"Pitch: {self.settings.imuAnglesMsg.Pitch}[deg]")

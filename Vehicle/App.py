@@ -10,23 +10,15 @@ class App:
     module    = __name__
     turnLeft  = False
     turnRight = False
-    
+
+    @staticmethod
+    def isRunning ():
+        return rcpy.get_state () != rcpy.EXITING
+
     def __init__ (self, vSettings: Settings):
         self.settings = vSettings
         rcpy.set_state (rcpy.RUNNING)
 
-    @staticmethod
-    def isExiting ():
-        return rcpy.get_state () == rcpy.EXITING
-
-    @staticmethod
-    def isRunning ():
-        return rcpy.get_state () == rcpy.RUNNING
-
-    @staticmethod
-    def isPaused ():
-        return rcpy.get_state () == rcpy.PAUSED
-    
     def update (self):
         self.validate ()
         
@@ -51,7 +43,7 @@ class App:
         else:
             motor2.set (duty)
         time.sleep (0.1)
-
+        
         if self.settings.brake == True:
             self.settings.brake = False
             motor1.brake ()
@@ -61,7 +53,7 @@ class App:
             self.settings.freeSpin = False
             motor1.free_spin ()
             motor2.free_spin ()
-        
+
     def validate (self):
         topMax    = self.settings.Duty.RANGE ["Top"]
         bottomMax = self.settings.Duty.RANGE ["Bottom"]
@@ -70,7 +62,7 @@ class App:
         
         if self.settings.vehicleMsg.Duty <= bottomMax:
             self.settings.vehicleMsg.Duty = bottomMax
-    
+
     def process (self):
         if self.settings.vehicleMsg.Direction == CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index:
             pass

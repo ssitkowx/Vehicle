@@ -12,7 +12,7 @@ class Settings:
         self.imuAnglesMsg.Yaw     = 0
         self.vehicleMsg           = CmdProto.Vehicle ()
         self.vehicleMsg.Duty      = 0
-        self.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Stop'].index
+        self.vehicleMsg.Direction = CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index
     
     @unique
     class EChannel (IntEnum):
@@ -24,7 +24,7 @@ class Settings:
         RANGE = { "Top"    : 100,
                   "Bottom" : -100
                 }
-        TIMEOUT = 100
+        TIMEOUT  = 100
         DEV_COEF = RANGE ["Top"]
 
     brake     = False

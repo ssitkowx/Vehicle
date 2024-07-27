@@ -1,3 +1,4 @@
+import threading
 from abc import ABC, abstractmethod
 
 def LOGD (vModule: str, vMsg: str): Logger.getInst ().log ("Debug"   , vModule, vMsg)
@@ -8,9 +9,6 @@ def LOGC (vModule: str, vMsg: str): Logger.getInst ().log ("Critical", vModule, 
 
 class Logger (ABC):
     _inst = None
-
-    def __init__ ():
-        print ("Init was called unfortunatelly")
 
     @classmethod
     def setInst (cls, vInst):

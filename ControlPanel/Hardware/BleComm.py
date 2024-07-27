@@ -29,12 +29,10 @@ class BleComm (Ble):
         return True
 
     def send (self, vData):
-        with self.rtos.mutex:
-            if self.isConnected == False:
-                LOGE (self.module, "Bluetooth unconnected")
-                return
+        if self.isConnected == False:
+            return
         
-            self.sock.send (vData)
+        self.sock.send (vData)
 
     def close (self):
         self.isConnected = False
@@ -42,9 +40,8 @@ class BleComm (Ble):
 
     def receive (self):
         if self.isConnected == False:
-            LOGE (self.module, "Bluetooth unconnected")
-            return b''
-        return self.bleComm.sock.recv (1024)
+            return "Unconnected"
+        return self.sock.recv (1024)
     
     def isRunning (self):
         return True

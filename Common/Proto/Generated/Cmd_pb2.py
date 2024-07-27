@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\tCmd.proto\"7\n\x07Vehicle\x12\x0c\n\x04\x44uty\x18\x01 \x01(\x05\x12\x1e\n\tDirection\x18\x02 \x01(\x0e\x32\x0b.EDirection\"5\n\tImuAngles\x12\x0c\n\x04Roll\x18\x01 \x01(\x05\x12\r\n\x05Pitch\x18\x02 \x01(\x05\x12\x0b\n\x03Yaw\x18\x03 \x01(\x05\"L\n\x03Msg\x12\x1b\n\x07Vehicle\x18\x01 \x01(\x0b\x32\x08.VehicleH\x00\x12\x1f\n\tImuAngles\x18\x02 \x01(\x0b\x32\n.ImuAnglesH\x00\x42\x07\n\x05Types*?\n\nEDirection\x12\x08\n\x04Idle\x10\x00\x12\x08\n\x04Stop\x10\x01\x12\x08\n\x04Move\x10\x02\x12\x08\n\x04Left\x10\x03\x12\t\n\x05Right\x10\x04\x62\x06proto3')
+  serialized_pb=_b('\n\tCmd.proto\"7\n\x07Vehicle\x12\x0c\n\x04\x44uty\x18\x01 \x01(\x05\x12\x1e\n\tDirection\x18\x02 \x01(\x0e\x32\x0b.EDirection\"5\n\tImuAngles\x12\x0c\n\x04Roll\x18\x01 \x01(\x05\x12\r\n\x05Pitch\x18\x02 \x01(\x05\x12\x0b\n\x03Yaw\x18\x03 \x01(\x05\"L\n\x03Msg\x12\x1b\n\x07Vehicle\x18\x01 \x01(\x0b\x32\x08.VehicleH\x00\x12\x1f\n\tImuAngles\x18\x02 \x01(\x0b\x32\n.ImuAnglesH\x00\x42\x07\n\x05Types*5\n\nEDirection\x12\x08\n\x04Idle\x10\x00\x12\x08\n\x04Move\x10\x01\x12\x08\n\x04Left\x10\x02\x12\t\n\x05Right\x10\x03\x62\x06proto3')
 )
 
 _EDIRECTION = _descriptor.EnumDescriptor(
@@ -34,35 +34,30 @@ _EDIRECTION = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='Stop', index=1, number=1,
+      name='Move', index=1, number=1,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='Move', index=2, number=2,
+      name='Left', index=2, number=2,
       serialized_options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='Left', index=3, number=3,
-      serialized_options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='Right', index=4, number=4,
+      name='Right', index=3, number=3,
       serialized_options=None,
       type=None),
   ],
   containing_type=None,
   serialized_options=None,
   serialized_start=203,
-  serialized_end=266,
+  serialized_end=256,
 )
 _sym_db.RegisterEnumDescriptor(_EDIRECTION)
 
 EDirection = enum_type_wrapper.EnumTypeWrapper(_EDIRECTION)
 Idle = 0
-Stop = 1
-Move = 2
-Left = 3
-Right = 4
+Move = 1
+Left = 2
+Right = 3
 
 
 

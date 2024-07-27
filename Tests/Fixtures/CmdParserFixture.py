@@ -13,11 +13,19 @@ class CmdParserFixture (unittest.TestCase):
         self.settings  = Settings ()
         self.cmdParser = CmdParser (self.settings)
         return super ().setUp ()
+    
+    def parseStop (self):
+        LOGI (self.module, 'Parse stop')
+        
+        serialized = b'\n\x02\x10\x01'
+        self.cmdParser.parse (serialized)
+        self.assertEqual (self.settings.vehicleMsg.Duty, 0)
+        self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index)
 
     def parseForward (self):
         LOGI (self.module, 'Parse forward')
         
-        serialized = b'\n\x04\x08d\x10\x02'
+        serialized = b'\n\x04\x08d\x10\x01'
         self.cmdParser.parse (serialized)
         self.assertEqual (self.settings.vehicleMsg.Duty, 100)
         self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index)
@@ -25,7 +33,7 @@ class CmdParserFixture (unittest.TestCase):
     def parseBackward (self):
         LOGI (self.module, 'Parse backward')
         
-        serialized = b'\n\r\x08\x9c\xff\xff\xff\xff\xff\xff\xff\xff\x01\x10\x02'
+        serialized = b'\n\r\x08\x9c\xff\xff\xff\xff\xff\xff\xff\xff\x01\x10\x01'
         self.cmdParser.parse (serialized)
         self.assertEqual (self.settings.vehicleMsg.Duty, -100)
         self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.DESCRIPTOR.values_by_name['Move'].index)
@@ -33,7 +41,7 @@ class CmdParserFixture (unittest.TestCase):
     def parseLeft(self):
         LOGI (self.module, 'Parse left')
         
-        serialized = b'\n\x02\x10\x03'
+        serialized = b'\n\x02\x10\x02'
         self.cmdParser.parse (serialized)
         self.assertEqual (self.settings.vehicleMsg.Duty, 0)
         self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.DESCRIPTOR.values_by_name['Left'].index)
@@ -41,7 +49,7 @@ class CmdParserFixture (unittest.TestCase):
     def parseRight (self):
         LOGI (self.module, 'Parse right')
         
-        serialized = b'\n\x02\x10\x04'
+        serialized = b'\n\x02\x10\x03'
         self.cmdParser.parse (serialized)
         self.assertEqual (self.settings.vehicleMsg.Duty, 0)
         self.assertEqual (self.settings.vehicleMsg.Direction, CmdProto.EDirection.DESCRIPTOR.values_by_name['Right'].index)

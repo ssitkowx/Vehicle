@@ -20,7 +20,7 @@ class Process:
         app                        = QApplication        (sys.argv)
         controlPanel               = ControlPanel        (self.settings, self.rtos, self.bleComm)
         self.bleCommSendProcess    = self.bleCommSend    (self.rtos, self.bleComm, self.cmdParser)
-        #self.bleCommReceiveProcess = self.bleCommReceive (self.rtos, self.bleComm, self.cmdParser)
+        self.bleCommReceiveProcess = self.bleCommReceive (self.rtos, self.bleComm, self.cmdParser)
         controlPanel.show ()
         app         .exec ()
 
@@ -42,19 +42,22 @@ class Process:
             LOGI (self.module, "bleCommSend")
 
             while self.bleComm.isRunning ():
-                msg = self.rtos.getQueueMsg ()
-                self.bleComm.send (msg)
+                try:
+                    msg = self.rtos.getCmdQueue ()
+                    self.bleComm.send (msg)
+                except self.queue.Empty:
+                    continue
 
     class bleCommReceive (QObject):
         module = __name__
 
         def __init__ (self, vRtos: Rtos, vBleComm: BleComm, vCmdParser: CmdParser):
             super ().__init__ ()
+            self.task      = self
             self.rtos      = vRtos
             self.bleComm   = vBleComm
             self.cmdParser = vCmdParser
             self.thread    = QThread    ()
-            self.task      = self
             self.task.moveToThread      (self.thread)
             self.thread.started.connect (self.task.process)
             self.thread.start           ()
@@ -65,10 +68,11 @@ class Process:
             while self.bleComm.isRunning ():
                 try:
                     msg = self.bleComm.receive ()
+                    if msg == "Unconnected":
+                        time.sleep (1)
+                        continue
                     self.cmdParser.parse (msg)
-
                 except OSError:
-                    LOGE (self.module, "bleCommReceive disconnected")
                     #self.bleComm.clientSock.close ()
                     #self.bleComm.sock      .close ()
                     break

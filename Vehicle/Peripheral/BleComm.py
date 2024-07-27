@@ -10,7 +10,15 @@ class BleComm (Ble):
     sock        = 0
     clientSock  = 0
     isConnected = False
+
+    @staticmethod
+    def isSendRunning (self):
+        return True
     
+    @staticmethod
+    def isReceiveRunning (self):
+        return True
+
     def __init__ (self, vRtos: Rtos, vSettings: Settings):
         super ().__init__ ()
         self.rtos = vRtos
@@ -34,12 +42,12 @@ class BleComm (Ble):
         LOGI (self.module, f"Accepted connection from. Client info: {clientInfo}")
 
     def send (self, vData):
-        with self.rtos.mutex:
-            if self.isConnected == False:
-                LOGE (self.module, "Bluetooth unconnected")
-                return
+        if self.isConnected == False:
+            return
         
-            self.sock.send (vData)
+        self.sock.send (vData)
 
-    def isRunning (self):
-        return True
+    def receive (self):
+        if self.isConnected == False:
+            return "Unconnected"
+        return self.clientSock.recv (1024)

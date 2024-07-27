@@ -25,8 +25,8 @@ class Mpu9250 (Imu):
         return ((int)(imuX * self.RAD_TO_DEG), (int)(imuY * self.RAD_TO_DEG), (int)(imuZ * self.RAD_TO_DEG))
 
     @staticmethod
-    def isExiting ():
-        return rcpy.get_state () == rcpy.EXITING
+    def isRunning ():
+        return rcpy.get_state () != rcpy.EXITING
 
     def process (self):
         [self.settings.imuAnglesMsg.Roll,

@@ -22,62 +22,71 @@ class Process:
         self.app           = App           (self.settings)
         self.cmdParser     = CmdParser     (self.settings)
         self.cmdSerializer = CmdSerializer (self.settings)
-        self.bleComm       = BleComm (self.rtos, self.settings)
-        self.imu           = Mpu9250 (self.settings)
+        self.bleComm       = BleComm       (self.rtos, self.settings)
+        self.imu           = Mpu9250       (self.settings)
 
         self.appThread = self.rtos.createThread (self.appProcess)
         self.appThread.start ()
 
         self.imuThread = self.rtos.createThread (self.imuProcess)
         self.imuThread.start ()
+
+        self.bleSendThread = self.rtos.createThread (self.bleSendProcess)
+        self.bleSendThread.start ()
         
-        self.bleServerThread = self.rtos.createThread (self.bleServerProcess)
-        self.bleServerThread.start ()
+        self.bleReceiveThread = self.rtos.createThread (self.bleReceiveProcess)
+        self.bleReceiveThread.start ()
     
-        self.appThread      .join  ()
-        self.imuThread      .join  ()
-        self.bleServerThread.join  ()
-    
-    def bleServerProcess (self):
-        LOGI (self.module, "bleServerProcess")
-        
-        while self.bleComm.isRunning ():
-            try:
-                msg = self.bleComm.clientSock.recv (1024)
-                self.rtos.addQueueMsg (msg)
-            except OSError:
-                LOGE (self.module, "bleServerProcess disconnected")
-                #self.bleComm.clientSock.close ()
-                #self.bleComm.sock      .close ()
-                break
+        self.appThread       .join  ()
+        self.imuThread       .join  ()
+        self.bleSendThread   .join  ()
+        self.bleReceiveThread.join  ()
 
     def appProcess (self):
         LOGI (self.module, "appProcess")
         
-        while self.app.isExiting () == False:
+        while self.app.isRunning ():
             try:
-                if self.app.isRunning () == True:
-                    msg = self.rtos.getQueueMsg ()
+                    msg = self.rtos.getCmdQueue ()
                     LOGI (self.module, f"Received: {msg}")
                     self.cmdParser.parse (msg)
-                    self.bleComm.send (msg)
                     self.app.process ()
-                elif self.app.isPaused () == True:
-                    self.settings.freeSpin = True
-
             except OSError:
-                LOGE (self.module, "appProcess disconnected")
                 break
     
     def imuProcess (self):
         LOGI (self.module, "imuProcess")
         
-        while self.imu.isExiting () == False:
+        while self.imu.isRunning ():
             try:
                 self.imu.process ()
                 msg = self.cmdSerializer.imu ()
-                self.rtos.addQueueMsg (msg)
+                self.rtos.addImuQueue (msg)
                 time.sleep (5)
             except OSError:
-                LOGE (self.module, "imuProcess disconnected")
+                break
+
+    def bleSendProcess (self):
+        LOGI (self.module, "bleSendProcess")
+
+        while self.bleComm.isSendRunning ():
+            try:
+                msg = self.rtos.getImuQueue ()
+                self.bleComm.send (msg)
+            except self.queue.Empty:
+                continue
+    
+    def bleReceiveProcess (self):
+        LOGI (self.module, "bleReceiveProcess")
+        
+        while self.bleComm.isReceiveRunning ():
+            try:
+                msg = self.bleComm.receive ()
+                if msg == "Unconnected":
+                    time.sleep (1)
+                    continue
+                self.rtos.addCmdQueue (msg)
+            except OSError:
+                #self.bleComm.clientSock.close ()
+                #self.bleComm.sock      .close ()
                 break
