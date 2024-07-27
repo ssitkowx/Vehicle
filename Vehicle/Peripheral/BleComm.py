@@ -12,11 +12,11 @@ class BleComm (Ble):
     isConnected = False
 
     @staticmethod
-    def isSendRunning (self):
+    def isSendRunning ():
         return True
     
     @staticmethod
-    def isReceiveRunning (self):
+    def isReceiveRunning ():
         return True
 
     def __init__ (self, vRtos: Rtos, vSettings: Settings):

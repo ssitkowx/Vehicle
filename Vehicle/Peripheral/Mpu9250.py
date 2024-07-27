@@ -10,6 +10,10 @@ class Mpu9250 (Imu):
     module = __name__
     data   = 0
 
+    @staticmethod
+    def isRunning ():
+        return rcpy.get_state () != rcpy.EXITING
+
     def __init__ (self, vSettings: Settings):
         self.data = mpu9250.initialize (accel_fsr       = True,
                                         gyro_fsr        = True,
@@ -23,10 +27,6 @@ class Mpu9250 (Imu):
         
         (imuX, imuY, imuZ) = mpu9250.read () ['tb']
         return ((int)(imuX * self.RAD_TO_DEG), (int)(imuY * self.RAD_TO_DEG), (int)(imuZ * self.RAD_TO_DEG))
-
-    @staticmethod
-    def isRunning ():
-        return rcpy.get_state () != rcpy.EXITING
 
     def process (self):
         [self.settings.imuAnglesMsg.Roll,
