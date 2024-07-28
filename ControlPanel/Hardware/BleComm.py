@@ -40,7 +40,7 @@ class BleComm (Ble):
 
     def receive (self):
         if self.isConnected == False:
-            return "Unconnected"
+            return
         return self.sock.recv (1024)
     
     def isRunning (self):

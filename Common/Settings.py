@@ -24,7 +24,7 @@ class Settings:
         RANGE = { "Top"    : 100,
                   "Bottom" : -100
                 }
-        TIMEOUT  = 0.3
+        TIMEOUT  = 0.15
         DEV_COEF = RANGE ["Top"]
 
     brake     = False
