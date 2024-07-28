@@ -72,6 +72,9 @@ class Process:
         try:
             while self.bleComm.isSendRunning ():
                 msg = self.rtos.getImuQueue ()
+                if not msg:
+                    time.sleep (1)
+                    break
                 self.bleComm.send (msg)
         except OSError:
             pass
@@ -82,9 +85,9 @@ class Process:
         try:
             while self.bleComm.isReceiveRunning ():
                 msg = self.bleComm.receive ()
-                if msg == "Unconnected":
+                if not msg:
                     time.sleep (1)
-                    continue
+                    break
                 self.rtos.addCmdQueue (msg)
         except OSError:
             self.bleComm.close ()
