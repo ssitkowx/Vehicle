@@ -71,7 +71,7 @@ class Process:
         LOGI (self.module, "bleSendProcess")
 
         try:
-            while self.bleComm.isSendRunning:
+            while self.bleComm.isSendRunning ():
             #    msg = self.rtos.getImuQueue ()
             #    self.bleComm.send (msg)
                 LOGI (self.module, "Ala ma kota")
