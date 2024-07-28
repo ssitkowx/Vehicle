@@ -32,3 +32,7 @@ class Mpu9250 (Imu):
         [self.settings.imuAnglesMsg.Roll,
          self.settings.imuAnglesMsg.Pitch,
          self.settings.imuAnglesMsg.Yaw] = self.getAngles ()
+        
+        LOGI (self.module, 'Imu: x:{0:1}, y:{1:1}, z:{2:1} [deg]'.format (round (self.settings.imuAnglesMsg.Roll , 1),
+                                                                          round (self.settings.imuAnglesMsg.Pitch, 1),
+                                                                          round (self.settings.imuAnglesMsg.Yaw  , 1)))

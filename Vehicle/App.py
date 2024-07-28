@@ -33,7 +33,6 @@ class App:
             motor1.set (duty)
         else:
             motor1.set (duty)
-        #time.sleep (0.1)
         
         if self.turnRight == True:
             self.turnRight = False
@@ -42,7 +41,6 @@ class App:
             motor2.set (duty)
         else:
             motor2.set (duty)
-        #time.sleep (0.1)
         
         if self.settings.brake == True:
             self.settings.brake = False

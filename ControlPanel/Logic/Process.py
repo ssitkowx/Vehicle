@@ -65,14 +65,15 @@ class Process:
         def process (self):
             LOGI (self.module, "bleCommReceive")
 
-            while self.bleComm.isRunning ():
-                try:
+            try:
+                while self.bleComm.isRunning ():
                     msg = self.bleComm.receive ()
                     if msg == "Unconnected":
                         time.sleep (1)
                         continue
+                    LOGI (self.module, "Got Imu!!!!!!!!!!!!!!!!!")
                     self.cmdParser.parse (msg)
-                except OSError:
-                    #self.bleComm.clientSock.close ()
-                    #self.bleComm.sock      .close ()
-                    break
+            except OSError:
+                #self.bleComm.clientSock.close ()
+                #self.bleComm.sock      .close ()
+                pass

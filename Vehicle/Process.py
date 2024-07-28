@@ -45,52 +45,50 @@ class Process:
     def appProcess (self):
         LOGI (self.module, "appProcess")
         
-        while self.app.isRunning ():
-            try:
-                    msg = self.rtos.getCmdQueue ()
-                    LOGI (self.module, f"Received: {msg}")
-                    self.cmdParser.parse (msg)
-                    self.app.process ()
-            except OSError:
-                break
+        try:
+            while self.app.isRunning ():
+                msg = self.rtos.getCmdQueue ()
+                LOGI (self.module, f"Received: {msg}")
+                self.cmdParser.parse (msg)
+                self.app.process ()
+        except OSError:
+            pass
     
     def imuProcess (self):
         LOGI (self.module, "imuProcess")
         
-        while self.imu.isRunning ():
-            try:
+        try:
+            while self.imu.isRunning ():
                 self.imu.process ()
                 msg = self.cmdSerializer.imu ()
                 self.rtos.addImuQueue (msg)
                 LOGI (self.module, f"Imu: {msg}")
                 time.sleep (5)
-            except OSError:
-                break
+        except OSError:
+            pass
 
     def bleSendProcess (self):
         LOGI (self.module, "bleSendProcess")
 
-        while self.bleComm.isSendRunning ():
-            try:
-                msg = self.rtos.getImuQueue ()
-                LOGI (self.module, 'Imu: x:{0:1}, y:{1:1}, z:{2:1} [deg]'.format (round (self.settings.imuAnglesMsg.Roll , 1),
-                                                                                  round (self.settings.imuAnglesMsg.Pitch, 1),
-                                                                                  round (self.settings.imuAnglesMsg.Yaw  , 1)))
-                self.bleComm.send (msg)
-                LOGI (self.module, f"Imu:!!!!!!!!!!!!")
-            except OSError:
-                break
+        try:
+            #while self.bleComm.isSendRunning:
+            #    msg = self.rtos.getImuQueue ()
+            #    self.bleComm.send (msg)
+          self.bleComm.send ("Ala ma kota")
+          time.sleep (5)
+        except OSError:
+            pass
     
     def bleReceiveProcess (self):
         LOGI (self.module, "bleReceiveProcess")
         
-        while self.bleComm.isReceiveRunning ():
-            try:
+        try:
+            while self.bleComm.isReceiveRunning ():
                 msg = self.bleComm.receive ()
                 if msg == "Unconnected":
                     time.sleep (1)
                     continue
                 self.rtos.addCmdQueue (msg)
-            except OSError:
-                self.bleComm.close ()
-                break
+        except OSError:
+            self.bleComm.close ()
+            pass
