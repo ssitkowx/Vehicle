@@ -48,7 +48,6 @@ class Process:
         try:
             while self.app.isRunning ():
                 msg = self.rtos.getCmdQueue ()
-                LOGI (self.module, f"Received: {msg}")
                 self.cmdParser.parse (msg)
                 self.app.process ()
         except OSError:
@@ -74,7 +73,7 @@ class Process:
                 msg = self.rtos.getImuQueue ()
                 if not msg:
                     time.sleep (1)
-                    break
+                    continue
                 self.bleComm.send (msg)
         except OSError:
             pass
@@ -87,7 +86,7 @@ class Process:
                 msg = self.bleComm.receive ()
                 if not msg:
                     time.sleep (1)
-                    break
+                    continue
                 self.rtos.addCmdQueue (msg)
         except OSError:
             self.bleComm.close ()

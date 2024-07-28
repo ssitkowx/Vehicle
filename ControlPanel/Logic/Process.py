@@ -44,6 +44,9 @@ class Process:
             while self.bleComm.isRunning ():
                 try:
                     msg = self.rtos.getCmdQueue ()
+                    if not msg:
+                        time.sleep (1)
+                        continue
                     self.bleComm.send (msg)
                 except OSError:
                     break
@@ -68,7 +71,7 @@ class Process:
             try:
                 while self.bleComm.isRunning ():
                     msg = self.bleComm.receive ()
-                    if msg == "Unconnected":
+                    if not msg:
                         time.sleep (1)
                         continue
                     self.cmdParser.parse (msg)
