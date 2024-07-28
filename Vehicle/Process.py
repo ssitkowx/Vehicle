@@ -62,7 +62,7 @@ class Process:
                 self.imu.process ()
                 msg = self.cmdSerializer.imu ()
                 self.rtos.addImuQueue (msg)
-                LOGI (self.module, f"Imu: {msg}")
+                #LOGI (self.module, f"Imu: {msg}")
                 time.sleep (5)
         except OSError:
             pass
@@ -71,11 +71,12 @@ class Process:
         LOGI (self.module, "bleSendProcess")
 
         try:
-            #while self.bleComm.isSendRunning:
+            while self.bleComm.isSendRunning:
             #    msg = self.rtos.getImuQueue ()
             #    self.bleComm.send (msg)
-          self.bleComm.send ("Ala ma kota")
-          time.sleep (5)
+                LOGI (self.module, "Ala ma kota")
+                self.bleComm.send ("Ala ma kota")
+                time.sleep (5)
         except OSError:
             pass
     
