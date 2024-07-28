@@ -24,8 +24,11 @@ class Settings:
         RANGE = { "Top"    : 100,
                   "Bottom" : -100
                 }
-        TIMEOUT  = 0.1
         DEV_COEF = RANGE ["Top"]
+
+        class Timeout:
+            MOVE  = 0.1
+            TURN  = 0.3
 
     brake     = False
     freeSpin  = False

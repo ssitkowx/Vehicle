@@ -28,16 +28,16 @@ class App:
 
         if self.turnLeft == True:
             self.turnLeft = False
-            motor1.set (duty * 0.3)
-            time.sleep (Settings.Duty.TIMEOUT)
+            motor1.set (duty * Settings.Duty.Timeout.TURN)
+            time.sleep (Settings.Duty.Timeout.MOVE)
             motor1.set (duty)
         else:
             motor1.set (duty)
         
         if self.turnRight == True:
             self.turnRight = False
-            motor2.set (duty * 0.3)
-            time.sleep (Settings.Duty.TIMEOUT)
+            motor2.set (duty * Settings.Duty.Timeout.TURN)
+            time.sleep (Settings.Duty.Timeout.MOVE)
             motor2.set (duty)
         else:
             motor2.set (duty)

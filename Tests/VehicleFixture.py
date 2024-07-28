@@ -123,14 +123,15 @@ class VehicleFixture (unittest.TestCase):
                         vIsConnectedInBleComm, vReciveInBleComm, vSendInBleComm, vInitInBleComm, vIsRunningInApp,
                         vMotor2, vMotor1, vSleepInApp):
         LOGI (self.module, "turnLeft")
+        expectedDuty          = 0.5
         serializedImu         = b'\x12\x0f\x08\n\x10\xba\xff\xff\xff\xff\xff\xff\xff\xff\x01\x18<'
         serializedTurnLeftMsg = b'\n\x04\x082\x10\x02'
         vReciveInBleComm.return_value = serializedTurnLeftMsg
 
         self.process.__init__ ()
-        vMotor1       .set.assert_any_call (0)
-        vMotor1       .set.assert_any_call (0.5)
-        vMotor2       .set.assert_any_call (0.5)
+        vMotor1       .set.assert_any_call (expectedDuty * Settings.Duty.Timeout.TURN)
+        vMotor1       .set.assert_any_call (expectedDuty)
+        vMotor2       .set.assert_any_call (expectedDuty)
         vSendInBleComm.assert_called_with  (serializedImu)
 
     @mock.patch ('App.time.sleep')
@@ -149,14 +150,15 @@ class VehicleFixture (unittest.TestCase):
                          vIsConnectedInBleComm, vReciveInBleComm, vSendInBleComm, vInitInBleComm, vIsRunningInApp,
                          vMotor2, vMotor1, vSleepInApp):
         LOGI (self.module, "turnRight")
+        expectedDuty           = -0.5
         serializedImu          = b'\x12\x0f\x08\n\x10\xba\xff\xff\xff\xff\xff\xff\xff\xff\x01\x18<'
         serializedTurnRightMsg = b'\n\r\x08\xce\xff\xff\xff\xff\xff\xff\xff\xff\x01\x10\x03'
         vReciveInBleComm.return_value = serializedTurnRightMsg
 
         self.process.__init__ ()
-        vMotor1       .set.assert_any_call (-0.5)
-        vMotor2       .set.assert_any_call (0)
-        vMotor2       .set.assert_any_call (-0.5)
+        vMotor1       .set.assert_any_call (expectedDuty)
+        vMotor2       .set.assert_any_call (expectedDuty * Settings.Duty.Timeout.TURN)
+        vMotor2       .set.assert_any_call (expectedDuty)
         vSendInBleComm.assert_called_with  (serializedImu)
 
     @mock.patch ('App.time.sleep')

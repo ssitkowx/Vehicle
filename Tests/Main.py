@@ -15,19 +15,19 @@ def testSuit ():
     testSuit.addTest (CmdSerializerFixture ('serializeRight'))
     testSuit.addTest (CmdSerializerFixture ('serializeImu'))
 
-    testSuit.addTest (CmdParserFixture     ('parseStop'))
-    testSuit.addTest (CmdParserFixture     ('parseForward'))
-    testSuit.addTest (CmdParserFixture     ('parseBackward'))
-    testSuit.addTest (CmdParserFixture     ('parseLeft'))
-    testSuit.addTest (CmdParserFixture     ('parseRight'))
-    testSuit.addTest (CmdParserFixture     ('parseImu'))
+    testSuit.addTest (CmdParserFixture ('parseStop'))
+    testSuit.addTest (CmdParserFixture ('parseForward'))
+    testSuit.addTest (CmdParserFixture ('parseBackward'))
+    testSuit.addTest (CmdParserFixture ('parseLeft'))
+    testSuit.addTest (CmdParserFixture ('parseRight'))
+    testSuit.addTest (CmdParserFixture ('parseImu'))
 
-    testSuit.addTest (VehicleFixture       ('stop'))
-    testSuit.addTest (VehicleFixture       ('moveForwardWithDuty'))
-    testSuit.addTest (VehicleFixture       ('moveBackwardWithDuty'))
-    testSuit.addTest (VehicleFixture       ('turnLeft'))
-    testSuit.addTest (VehicleFixture       ('turnRight'))
-    testSuit.addTest (VehicleFixture       ('getImuAngles'))
+    testSuit.addTest (VehicleFixture ('stop'))
+    testSuit.addTest (VehicleFixture ('moveForwardWithDuty'))
+    testSuit.addTest (VehicleFixture ('moveBackwardWithDuty'))
+    testSuit.addTest (VehicleFixture ('turnLeft'))
+    testSuit.addTest (VehicleFixture ('turnRight'))
+    testSuit.addTest (VehicleFixture ('getImuAngles'))
     return testSuit
 
 if __name__ == "__main__":
