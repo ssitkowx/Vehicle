@@ -71,9 +71,7 @@ class Process:
                     if msg == "Unconnected":
                         time.sleep (1)
                         continue
-                    LOGI (self.module, "Got Imu!!!!!!!!!!!!!!!!!")
-                    #self.cmdParser.parse (msg)
+                    self.cmdParser.parse (msg)
             except OSError:
-                #self.bleComm.clientSock.close ()
-                #self.bleComm.sock      .close ()
+                self.bleComm.close ()
                 pass

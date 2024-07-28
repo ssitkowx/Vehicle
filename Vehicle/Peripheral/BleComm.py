@@ -49,7 +49,7 @@ class BleComm (Ble):
         if self.isConnected == False:
             return
         
-        self.sock.send (vData)
+        self.clientSock.send (vData)
 
     def receive (self):
         if self.isConnected == False:
